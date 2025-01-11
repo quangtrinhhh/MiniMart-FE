@@ -1,0 +1,28 @@
+.swiper .swiper-pagination .swiper-pagination-bullet {
+  background-color: white !important;
+}
+
+.swiper-DiscountCodeRow .swiper-pagination {
+  margin-top: 10px;
+  position: static !important;
+}
+.swiper-DiscountCodeRow .swiper-pagination .swiper-pagination-bullet {
+  background-color: rgb(77, 62, 62) !important;
+}
+.swiper-DiscountCodeRow .swiper-pagination .swiper-pagination-bullet-active {
+  background-color: #666666 !important;
+  width: 20px !important;
+  border-radius: 10px !important;
+  transition-duration: 500ms !important;
+  transform: translate3d(0px, 0px, 0px) !important;
+  transition-delay: 0ms !important;
+}
+/* Đảm bảo các thanh cuộn bị ẩn */
+.no-scrollbar {
+  -ms-overflow-style: none; /* Cho IE và Edge */
+  scrollbar-width: none; /* Cho Firefox */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Cho Chrome, Safari và các trình duyệt Webkit khác */
+}

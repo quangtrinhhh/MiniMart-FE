@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: #ffffff;
+    --foreground: #171717;
+  }
+}
+
+@media (max-width: 976px) {
+  .left-reponsive {
+    @apply flex justify-start w-full;
+  }
+  .width-full-976 {
+    @apply w-full;
+  }
+}
+@media (max-width: 528px) {
+  .banner-group .swiper-wrapper .swiper-slide {
+    width: 70% !important;
+  }
+}
+* {
+  font-family: "Quicksand";
+}
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-weight: 400;
+  min-height: 100%;
+  line-height: calc(20 / 14);
+  margin: 0;
+  letter-spacing: -0.004em;
+  scroll-behavior: smooth;
+}
+
+.border_icon_gray_rounded {
+  @apply border border-[#ebebeb] p-1 rounded-full;
+}
+.before-heading {
+  @apply before:content-normal before:block before:w-full before:border-t-2 before:border-b-2 before:border-[#016735] before:opacity-10 before:h-[10px] before:absolute before:top-1/2 before:left-0;
+}
