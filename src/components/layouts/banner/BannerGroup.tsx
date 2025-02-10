@@ -8,7 +8,7 @@ import { Autoplay, Navigation, Pagination } from "swiper/modules";
 
 const BannerGroup: React.FC = ({}) => {
   return (
-    <div className="">
+    <div className="ccc">
       <Swiper
         slidesPerView={"auto"}
         spaceBetween={30}

@@ -7,6 +7,8 @@ import AppFooter from "@/components/layouts/footer/App_footer";
 import { quicksand } from "@/fonts";
 import Sidebar from "@/components/layouts/sidebar/Sidebar";
 import { SidebarProvider } from "@/context/SidebarContext";
+import MiniCard from "@/components/layouts/mini_card/MiniCard";
+import { UIProvider } from "@/context/UIProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -25,15 +27,18 @@ export default function RootLayout({
         style={{ fontFamily: quicksand.style.fontFamily }}
       >
         <SidebarProvider>
-          <div className="absolute">
-            <Sidebar />
-          </div>
-          <div className="relative ml-0 transition-all duration-300">
-            {/* Nội dung của bạn sẽ di chuyển sang bên phải khi sidebar mở */}
-            <AppHeader />
-            {children}
-            <AppFooter />
-          </div>
+          <UIProvider>
+            <div className="absolute">
+              <Sidebar />
+              <MiniCard />
+            </div>
+            <div className="relative ml-0 transition-all duration-300">
+              {/* Nội dung của bạn sẽ di chuyển sang bên phải khi sidebar mở */}
+              <AppHeader />
+              {children}
+              <AppFooter />
+            </div>
+          </UIProvider>
         </SidebarProvider>
       </body>
     </html>

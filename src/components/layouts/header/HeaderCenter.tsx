@@ -4,9 +4,11 @@ import { IoIosMenu } from "react-icons/io";
 import Card_mini from "./Card_mini";
 import Link from "next/link";
 import { useSidebar } from "@/context/SidebarContext";
+import { useUI } from "@/context/UIProvider";
 
 const HeaderCenter: React.FC = () => {
   const { toggleSidebar } = useSidebar();
+  const { toggleMiniCard } = useUI();
   return (
     <div className="w-full bg-white">
       <div className="flex justify-between items-center text-center p-2 py-4 max-w-7xl mx-auto gap-5">
@@ -40,7 +42,10 @@ const HeaderCenter: React.FC = () => {
             </span>
           </div>
 
-          <div className="flex items-center  hover:bg-[#ebebeb] rounded-md p-1">
+          <div
+            className="flex items-center  hover:bg-[#ebebeb] rounded-md p-1 cursor-pointer"
+            onClick={toggleMiniCard}
+          >
             <Card_mini numberItem={0} />
           </div>
         </div>

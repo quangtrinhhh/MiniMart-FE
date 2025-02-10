@@ -9,9 +9,8 @@ const SectionCollectionList: React.FC = ({}) => {
         <Image
           src="/asset/coll_bg.jpg"
           alt="Collection background"
-          layout="fill"
-          objectFit="cover"
-          className="absolute top-0 left-0"
+          fill
+          className="absolute top-0 left-0 object-cover"
         />
       </div>
 
