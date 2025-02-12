@@ -36,11 +36,13 @@ const HeaderCenter: React.FC = () => {
             </span>
           </div>
 
-          <div className="flex items-center hover:bg-[#ebebeb] rounded-md p-1">
-            <span className="border_icon_gray_rounded">
-              <CiUser size={20} />
-            </span>
-          </div>
+          <Link href="/account/login">
+            <div className="flex items-center hover:bg-[#ebebeb] rounded-md p-1">
+              <span className="border_icon_gray_rounded">
+                <CiUser size={20} />
+              </span>
+            </div>
+          </Link>
 
           <div
             className="flex items-center  hover:bg-[#ebebeb] rounded-md p-1 cursor-pointer"
