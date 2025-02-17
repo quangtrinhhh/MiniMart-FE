@@ -1,5 +1,5 @@
-import Breadcrumbs from "@/components/Breadcrumbs";
-import DiscountCodeRow from "@/components/DiscountCodeRow";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import DiscountCodeRow from "@/components/ui/DiscountCodeRow";
 import Arrange from "@/components/layouts/collections/Arrange";
 import ProductList from "@/components/layouts/collections/ProductList";
 import Siderbar from "@/components/layouts/collections/Siderbar";

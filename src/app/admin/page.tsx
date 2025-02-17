@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 export default function AdminPage() {
-  return <h1>Trang quản lý bán hàng</h1>;
+  redirect("/admin/dashboard");
 }

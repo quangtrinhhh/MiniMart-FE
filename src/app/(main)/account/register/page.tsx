@@ -1,4 +1,4 @@
-import Breadcrumbs from "@/components/Breadcrumbs";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import RegisterForm from "@/components/layouts/account/RegisterForm";
 import { NextPage } from "next";
 

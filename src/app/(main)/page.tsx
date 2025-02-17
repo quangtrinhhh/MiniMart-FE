@@ -1,15 +1,15 @@
-import BenefitsRow from "@/components/BenefitsRow";
-import BrandLogoList from "@/components/BrandLogoList";
-import DiscountCodeRow from "@/components/DiscountCodeRow";
-import DiscountedProducts from "@/components/DiscountedProducts";
+import BenefitsRow from "@/components/ui/BenefitsRow";
+import BrandLogoList from "@/components/ui/BrandLogoList";
+import DiscountCodeRow from "@/components/ui/DiscountCodeRow";
+import DiscountedProducts from "@/components/ui/DiscountedProducts";
 import BannerGroup from "@/components/layouts/banner/BannerGroup";
 import BannerGroupTwo from "@/components/layouts/banner/BannerGroupTwo";
 import BannerSwiperClient from "@/components/layouts/banner/BannerSwiperClient";
-import ProductsOfInterest from "@/components/ProductsOfInterest";
-import SectionCollectionList from "@/components/SectionCollectionList";
-import SectionNews from "@/components/SectionNews";
-import SectionVideoRview from "@/components/SectionVideoRview";
-import TakeCareOfFamily from "@/components/TakeCareOfFamily";
+import ProductsOfInterest from "@/components/ui/ProductsOfInterest";
+import SectionCollectionList from "@/components/ui/SectionCollectionList";
+import SectionNews from "@/components/ui/SectionNews";
+import SectionVideoRview from "@/components/ui/SectionVideoRview";
+import TakeCareOfFamily from "@/components/ui/TakeCareOfFamily";
 import { FEATURES } from "@/constants/features";
 import { NextPage } from "next";
 

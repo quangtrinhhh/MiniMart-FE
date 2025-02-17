@@ -1,4 +1,4 @@
-import Breadcrumbs from "@/components/Breadcrumbs";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import FormLogin from "@/components/layouts/account/FormLogin";
 import { NextPage } from "next";
 const PageLogin: NextPage = ({}) => {

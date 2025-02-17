@@ -1,4 +1,4 @@
-import Breadcrumbs from "@/components/Breadcrumbs";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Benefit from "@/components/layouts/product_details/Benefit";
 import BrandAndCode from "@/components/layouts/product_details/BrandAndCode";
 import ButtonProductDetails from "@/components/layouts/product_details/Button";

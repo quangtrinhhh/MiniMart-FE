@@ -1,5 +1,5 @@
-import Product from "@/components/Product";
-import TitleHeading from "@/components/TitleHeading";
+import Product from "@/components/ui/Product";
+import TitleHeading from "@/components/ui/TitleHeading";
 
 const ProductSuggestions: React.FC = ({}) => {
   return (

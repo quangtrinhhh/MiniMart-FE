@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import Breadcrumbs from "@/components/Breadcrumbs";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import AccountSidebar from "@/components/layouts/sidebar/AccountSidebar";
 import AccountContent from "@/components/layouts/account/AccountContent";
 

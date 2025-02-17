@@ -2,13 +2,7 @@ import type { Metadata } from "next";
 
 import "@/app/styles/globals.css";
 import "@/app/styles/style.css";
-import AppHeader from "@/components/layouts/header/App_header";
-import AppFooter from "@/components/layouts/footer/App_footer";
 import { quicksand } from "@/fonts";
-import Sidebar from "@/components/layouts/sidebar/Sidebar";
-import { SidebarProvider } from "@/context/SidebarContext";
-import MiniCard from "@/components/layouts/mini_card/MiniCard";
-import { UIProvider } from "@/context/UIProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -26,20 +20,7 @@ export default function RootLayout({
         className={`antialiased w-full h-full overflow-auto`}
         style={{ fontFamily: quicksand.style.fontFamily }}
       >
-        <SidebarProvider>
-          <UIProvider>
-            <div className="absolute">
-              <Sidebar />
-              <MiniCard />
-            </div>
-            <div className="relative ml-0 transition-all duration-300">
-              {/* Nội dung của bạn sẽ di chuyển sang bên phải khi sidebar mở */}
-              <AppHeader />
-              {children}
-              <AppFooter />
-            </div>
-          </UIProvider>
-        </SidebarProvider>
+        {children}
       </body>
     </html>
   );
