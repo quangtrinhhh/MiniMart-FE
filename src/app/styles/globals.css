@@ -53,3 +53,19 @@ body {
 .before-heading {
   @apply before:content-normal before:block before:w-full before:border-t-2 before:border-b-2 before:border-[#016735] before:opacity-10 before:h-[10px] before:absolute before:top-1/2 before:left-0;
 }
+.btn-custome {
+  @apply border rounded-xl border-[#2275fc] bg-white flex justify-center items-center text-[#2275fc] hover:text-white hover:bg-[#2275fc] duration-300 px-8 py-4 font-bold;
+}
+.scrollbar-custome::-webkit-scrollbar {
+  height: 8px; /* Kích thước của thanh cuộn */
+}
+
+.scrollbar-custome::-webkit-scrollbar-thumb {
+  background-color: #6b7280; /* Màu của thanh cuộn */
+  border-radius: 10px; /* Bo tròn thanh cuộn */
+}
+
+.scrollbar-custome::-webkit-scrollbar-track {
+  background: #f0f0f0; /* Màu nền của thanh cuộn */
+  border-radius: 10px;
+}

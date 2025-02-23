@@ -16,8 +16,8 @@ const SidebarAdmin: React.FC = ({}) => {
 
   return (
     <div
-      className={`bg-white h-screen p-3 pt-5 border-r ${
-        open ? "w-72" : "w-20"
+      className={`bg-white h-screen p-3 pt-5 border-r flex-shrink-0 ${
+        open ? "w-64" : "w-20"
       } duration-300 relative`}
     >
       <BsArrowLeftShort
@@ -68,16 +68,15 @@ const SidebarAdmin: React.FC = ({}) => {
             </Link>
 
             {menu.submenu && activeSubMenu === index && open && (
-              <ul className="pl-6 mt-2">
+              <ul className="pl-6 mt-2 flex flex-col">
                 {menu.submenuItems.map((submenuItem, subIndex) => (
-                  <li
+                  <Link
+                    href={submenuItem.href || "#"}
                     key={subIndex}
                     className=" text-sm cursor-pointer p-2 rounded-md hover:bg-slate-100"
                   >
-                    <Link href={submenuItem.href || "#"}>
-                      {submenuItem.title}
-                    </Link>
-                  </li>
+                    {submenuItem.title}
+                  </Link>
                 ))}
               </ul>
             )}
