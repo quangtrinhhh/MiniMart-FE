@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="">
+    <div className="font-mono">
       <SidebarProvider>
         <UIProvider>
           <div className="absolute">

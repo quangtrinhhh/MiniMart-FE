@@ -1,11 +1,22 @@
+"use client";
+import { useState } from "react";
 import InputField from "./InputField";
+import { authenticate } from "@/ulils/actions";
 
 const FormLogin: React.FC = ({}) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async () => {
+    const res = await authenticate(email, password);
+    console.log(">>> check data: ", res);
+  };
   return (
     <div className="form">
       <div className="grid grid-cols-1  lg:grid-cols-[50%] justify-center gap-gutter">
         <div className="bg-white rounded-lg px-3 py-4 md:p-6 mb-6">
           <div className="space-y-4">
+            {/*  */}
             <div className="text-center">
               <h1 className="text-2xl font-semibold mb-2">
                 Đăng nhập tài khoản
@@ -20,12 +31,14 @@ const FormLogin: React.FC = ({}) => {
                 </a>
               </p>
             </div>
+            {/*  */}
             <div className="">
               <InputField
                 id="email"
                 label="Email *"
                 type="email"
                 placeholder="Email"
+                onChange={(e) => setEmail(e.target.value)}
               />
               <div className="mt-5">
                 <InputField
@@ -33,6 +46,7 @@ const FormLogin: React.FC = ({}) => {
                   label="Password *"
                   type="password"
                   placeholder="Mật khẩu"
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
               <span className="block mt-2 text-sm">
@@ -46,6 +60,7 @@ const FormLogin: React.FC = ({}) => {
                   className="btn bg-green-900 text-white rounded-full p-2 w-full font-semibold max-w-[20rem] hover:bg-green-600 "
                   type="submit"
                   value="Đăng nhập"
+                  onClick={handleLogin}
                 >
                   Đăng nhập
                 </button>
