@@ -1,5 +1,7 @@
 "use client";
 
+import { signOut, useSession } from "next-auth/react";
+
 interface AccountSidebarProps {
   activeSection: string;
   setActiveSection: (section: string) => void;
@@ -9,11 +11,13 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({
   activeSection,
   setActiveSection,
 }) => {
+  const { data: session } = useSession();
+
   return (
     <div className="lg:border-r border-neutral-300 pr-6">
       <h5 className="text-lg font-semibold text-secondary">Trang tài khoản</h5>
       <p className="text-gray-600">
-        Xin chào, <span className="font-semibold">ttt ttt</span>!
+        Xin chào, <span className="font-semibold">{session?.user.name}</span>!
       </p>
       <ul className="space-y-3 mt-5 list-disc pl-4 text-sm">
         {[
@@ -21,7 +25,6 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({
           { key: "orders", label: "Đơn hàng của bạn" },
           { key: "changepassword", label: "Đổi mật khẩu" },
           { key: "addresses", label: "Sổ địa chỉ (0)" },
-          { key: "logout", label: "Đăng xuất", extraClass: "text-error" },
         ].map((item) => (
           <li key={item.key}>
             <button
@@ -29,13 +32,23 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({
                 activeSection === item.key
                   ? "text-orange-500"
                   : "hover:text-orange-400"
-              } ${item.extraClass || ""}`}
+              }`}
               onClick={() => setActiveSection(item.key)}
             >
               {item.label}
             </button>
           </li>
         ))}
+
+        {/* Xử lý riêng cho Đăng xuất */}
+        <li>
+          <button
+            className="font-semibold text-error hover:text-red-600"
+            onClick={() => signOut()}
+          >
+            Đăng xuất
+          </button>
+        </li>
       </ul>
     </div>
   );

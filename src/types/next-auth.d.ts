@@ -2,8 +2,8 @@ import NextAuth, { DefaultSession } from "next-auth";
 import { JWT } from "next-auth/jwt";
 
 interface IUser {
-  _id: string;
-  username: string;
+  id: string;
+  name: string;
   email: string;
   isVerify: boolean;
   type: string;

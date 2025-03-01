@@ -12,21 +12,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // You can specify which fields should be submitted, by adding keys to the `credentials` object.
       // e.g. domain, username, password, 2FA token, etc.
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
+        email: {},
+        password: {},
       },
       authorize: async (credentials) => {
         const res = await sendRequest<IBackendRes<ILogin>>({
           method: "POST",
-          url: "http://localhost:8080/api/v1/auth/login",
+          url: `${process.env.NEXT_PUBLIC_BACECKEND_URL}/api/v1/auth/login`,
           body: { username: credentials.email, password: credentials.password },
         });
 
-        if (!res.statusCode) {
+        if (res.statusCode === 201) {
           return {
             id: res.data?.user.id,
             name: res.data?.user.name,
             email: res.data?.user.email,
+            role: res.data?.user.role,
             access_token: res.data?.access_token,
           };
         } else if (+res.statusCode === 401) {
@@ -53,6 +54,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     session({ session, token }) {
       (session.user as IUser) = token.user;
       return session;
+    },
+    authorized: async ({ auth }) => {
+      // Logged in users are authenticated, otherwise redirect to login page
+      return !!auth;
     },
   },
 });

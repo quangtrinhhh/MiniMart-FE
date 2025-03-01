@@ -2,14 +2,22 @@
 import { useState } from "react";
 import InputField from "./InputField";
 import { authenticate } from "@/ulils/actions";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const FormLogin: React.FC = ({}) => {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
     const res = await authenticate(email, password);
-    console.log(">>> check data: ", res);
+    if (res?.error) {
+      toast.error(res?.error);
+    } else {
+      toast("Đăng nhập thành công");
+      router.push("/admin/dashboard");
+    }
   };
   return (
     <div className="form">

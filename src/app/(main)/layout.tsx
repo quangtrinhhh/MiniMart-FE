@@ -8,6 +8,7 @@ import Sidebar from "@/components/layouts/sidebar/Sidebar";
 import { SidebarProvider } from "@/context/SidebarContext";
 import MiniCard from "@/components/layouts/mini_card/MiniCard";
 import { UIProvider } from "@/context/UIProvider";
+import { ToastContainer } from "react-toastify";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,6 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <div className="font-mono">
+      <ToastContainer />
       <SidebarProvider>
         <UIProvider>
           <div className="absolute">

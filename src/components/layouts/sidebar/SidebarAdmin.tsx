@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { AiOutlineDashboard } from "react-icons/ai";
 import { BsArrowLeftShort, BsChevronDown } from "react-icons/bs";
+import { signOut } from "next-auth/react";
 
 const SidebarAdmin: React.FC = ({}) => {
   const [open, setOpen] = useState(true);
@@ -83,6 +84,9 @@ const SidebarAdmin: React.FC = ({}) => {
           </li>
         ))}
       </ul>
+      <button className="bg-red-500 mt-10" onClick={() => signOut()}>
+        Logout
+      </button>
     </div>
   );
 };

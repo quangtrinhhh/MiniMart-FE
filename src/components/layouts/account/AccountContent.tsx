@@ -15,7 +15,6 @@ const AccountContent: React.FC<AccountContentProps> = ({ activeSection }) => {
       {activeSection === "orders" && <AccountOrders />}
       {activeSection === "changepassword" && <ChangePassword />}
       {activeSection === "addresses" && <AccountAddresses />}
-      {activeSection === "logout" && "Đăng xuất"}
     </div>
   );
 };

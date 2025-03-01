@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import "@/app/styles/globals.css";
 import "@/app/styles/style.css";
 import { quicksand } from "@/fonts";
+import NextAuthWrapper from "@/lib/next_auth.wrapper";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -20,7 +21,7 @@ export default function RootLayout({
         className={`antialiased w-full h-full overflow-auto`}
         style={{ fontFamily: quicksand.style.fontFamily }}
       >
-        {children}
+        <NextAuthWrapper>{children}</NextAuthWrapper>
       </body>
     </html>
   );
