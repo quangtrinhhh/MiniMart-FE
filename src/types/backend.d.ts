@@ -47,3 +47,19 @@ declare global {
     access_token: string;
   }
 }
+interface Category {
+  id: number;
+  name: string;
+  slug: string;
+  description: string | null;
+  image: string;
+  status: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+interface APIResponse<T> {
+  success: boolean;
+  data: T;
+  message?: string;
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import { signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 
 interface AccountSidebarProps {
   activeSection: string;
@@ -41,6 +42,18 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({
         ))}
 
         {/* Xử lý riêng cho Đăng xuất */}
+        {(session?.user.role === "ADMIN" ||
+          session?.user.role === "MANAGER") && (
+          <li>
+            <Link
+              href="/admin"
+              className="font-semibold text-error hover:text-red-600"
+            >
+              Đến Admin
+            </Link>
+          </li>
+        )}
+
         <li>
           <button
             className="font-semibold text-error hover:text-red-600"

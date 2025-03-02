@@ -1,3 +1,4 @@
+import { getCategories } from "@/app/api/categories/category.api";
 import TableProductList from "@/components/layouts/table/TableProductList";
 import AddButton from "@/components/ui/AddButton";
 import EntriesSelector from "@/components/ui/EntriesSelector";
@@ -5,7 +6,10 @@ import SearchInput from "@/components/ui/SearchInput";
 import { NextPage } from "next";
 import { GoChevronRight } from "react-icons/go";
 
-const Page: NextPage = ({}) => {
+const Page: NextPage = async ({}) => {
+  const res = await getCategories(1, 10);
+  const { result, totalItems, totalPages } = res.data;
+
   return (
     <div>
       <div className="p-[30px] ">
@@ -33,7 +37,7 @@ const Page: NextPage = ({}) => {
             </li>
           </ul>
         </div>
-
+        {/*  */}
         <div className="bg-white rounded-md  p-5 mt-5">
           <div className="flex gap-5 ">
             <EntriesSelector />
@@ -43,7 +47,11 @@ const Page: NextPage = ({}) => {
             <AddButton />
           </div>
 
-          <TableProductList />
+          <TableProductList
+            data={result}
+            totalItemsProps={totalItems}
+            totalPagesProps={totalPages}
+          />
         </div>
       </div>
     </div>

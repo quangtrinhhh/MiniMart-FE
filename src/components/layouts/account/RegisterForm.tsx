@@ -23,7 +23,7 @@ const RegisterForm: React.FC = () => {
   };
 
   const handleRegister = async () => {
-    const res = await sendRequest<IBackendRes<any>>({
+    const res = await sendRequest<IBackendRes<undefined>>({
       url: `${process.env.NEXT_PUBLIC_BACECKEND_URL}/api/v1/auth/register`,
       method: "POST",
       body: {

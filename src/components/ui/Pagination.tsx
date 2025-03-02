@@ -2,9 +2,14 @@
 import { useState } from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 
-const Pagination: React.FC = () => {
+interface IProps {
+  totalPagesProps: number;
+  totalItemsProps: number;
+}
+
+const Pagination: React.FC<IProps> = ({ totalPagesProps, totalItemsProps }) => {
   const [currentPage, setCurrentPage] = useState(2); // Trang hiện tại
-  const totalPages = 3; // Tổng số trang
+  const totalPages = totalPagesProps; // Tổng số trang
 
   const handlePrevPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
@@ -21,7 +26,9 @@ const Pagination: React.FC = () => {
   return (
     <div className="mt-5 border-t">
       <div className="mt-3 flex justify-between items-center">
-        <div className="text-[#95989D] text-xs">Showing 10 entries</div>
+        <div className="text-[#95989D] text-xs">
+          Showing {totalItemsProps} entries
+        </div>
         <ul className="flex items-center gap-2">
           {/* Nút quay lại */}
           <li

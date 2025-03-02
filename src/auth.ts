@@ -48,11 +48,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) {
         // User is available during sign-in
         token.user = user as IUser;
+        token.access_token = user.access_token;
       }
       return token;
     },
     session({ session, token }) {
       (session.user as IUser) = token.user;
+      session.access_token = token.access_token;
       return session;
     },
     authorized: async ({ auth }) => {

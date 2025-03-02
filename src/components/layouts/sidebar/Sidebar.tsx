@@ -5,8 +5,17 @@ import { useSidebar } from "@/context/SidebarContext";
 import { IoIosClose } from "react-icons/io";
 import FoorterSidebar from "./FoorterSidebar";
 import NavigationVertical from "./NavigationVertical";
+import Link from "next/link";
+import { IUser } from "@/types/next-auth";
 
-const Sidebar: React.FC = () => {
+interface Session {
+  user: IUser;
+}
+
+interface SidebarProps {
+  session?: Session;
+}
+const Sidebar: React.FC<SidebarProps> = ({ session }) => {
   const { isSidebarOpen, toggleSidebar } = useSidebar();
 
   return (
@@ -30,10 +39,16 @@ const Sidebar: React.FC = () => {
             <div className="border p-1 rounded-lg">
               <CiUser size={25} />
             </div>
-            <div className="flex flex-col">
+            <Link
+              href="/account/login"
+              className="flex flex-col"
+              onClick={toggleSidebar}
+            >
               <span className="text-xs">Tài khoản</span>
-              <span className="font-semibold text-sm">Đăng nhập</span>
-            </div>
+              <span className="font-semibold text-sm">
+                {!session ? "Đăng nhập" : session.user.name}
+              </span>
+            </Link>
           </div>
           <button
             onClick={toggleSidebar}
