@@ -4,6 +4,7 @@ import "@/app/styles/globals.css";
 import "@/app/styles/style.css";
 import { quicksand } from "@/fonts";
 import NextAuthWrapper from "@/lib/next_auth.wrapper";
+import { ReactQueryProvider } from "@/context/ReactQueryProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,7 +22,9 @@ export default function RootLayout({
         className={`antialiased w-full h-full overflow-auto`}
         style={{ fontFamily: quicksand.style.fontFamily }}
       >
-        <NextAuthWrapper>{children}</NextAuthWrapper>
+        <NextAuthWrapper>
+          <ReactQueryProvider>{children}</ReactQueryProvider>
+        </NextAuthWrapper>
       </body>
     </html>
   );

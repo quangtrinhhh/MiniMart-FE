@@ -5,14 +5,28 @@ import { Category } from "@/types/backend";
 interface TableRowProps {
   data: Category;
   isEven: boolean;
+  isLoading?: boolean;
+  error?: unknown;
 }
 
-const TableRow: React.FC<TableRowProps> = ({ data, isEven }) => {
+const TableRow: React.FC<TableRowProps> = ({
+  data,
+  isEven,
+  isLoading,
+  error,
+}) => {
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Error</p>;
   return (
     <tr className={`${isEven ? "" : "bg-[#f6f8fbcc] "} hover:bg-[#e0e2e5cc]`}>
       <td className="px-4 py-2 flex items-center gap-3 font-bold rounded-full">
         <div>
-          <Image src={data.image} alt={data.name} width={50} height={50} />
+          <Image
+            src={data.image || "/no-image.png"}
+            alt={data.name}
+            width={50}
+            height={50}
+          />
         </div>
         <span>{data.name}</span>
       </td>
@@ -27,7 +41,7 @@ const TableRow: React.FC<TableRowProps> = ({ data, isEven }) => {
       </td>
 
       <td className="px-4 py-2 hidden md:table-cell">
-        <TableActions />
+        <TableActions id={data.id} />
       </td>
     </tr>
   );

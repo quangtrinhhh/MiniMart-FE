@@ -4,6 +4,7 @@ import "@/app/styles/globals.css";
 import "@/app/styles/style.css";
 import { AppSidebar } from "@/components/layouts/sidebar/sidebar.admin";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { Bounce, ToastContainer } from "react-toastify";
 
 export const metadata: Metadata = {
   title: "Admin ",
@@ -17,6 +18,20 @@ export default async function AdminLayout({
 }>) {
   return (
     <div className="flex min-h-screen bg-[#FFFFFF]">
+      <ToastContainer
+        stacked
+        position="bottom-left"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        transition={Bounce}
+      />
       <SidebarProvider>
         {/* Sidebar giữ nguyên kích thước, không co giãn */}
         <AppSidebar />

@@ -7,18 +7,20 @@ interface IProps {
   data: Category[];
   totalPagesProps: number;
   totalItemsProps: number;
+  isLoading?: boolean;
+  error?: unknown;
+  setCurrent?: (value: number) => void;
+  setPageSize?: (value: number) => void;
 }
 
 const TableCategoryList: React.FC<IProps> = ({
   data,
   totalPagesProps,
   totalItemsProps,
+  isLoading,
+  error,
+  setCurrent,
 }) => {
-  if (!Array.isArray(data)) {
-    console.error("Invalid data format. Expected an array of categories.");
-    return <p className="text-red-500">Invalid data format</p>;
-  }
-
   return (
     <div className="mt-5 w-full mb-2">
       <div className="w-full overflow-x-auto pb-3 scrollbar-custome">
@@ -31,6 +33,8 @@ const TableCategoryList: React.FC<IProps> = ({
                   key={category.id}
                   data={category}
                   isEven={index % 2 === 0}
+                  isLoading={isLoading}
+                  error={error}
                 />
               ))
             ) : (
@@ -46,6 +50,7 @@ const TableCategoryList: React.FC<IProps> = ({
       <Pagination
         totalPagesProps={totalPagesProps}
         totalItemsProps={totalItemsProps}
+        setCurrent={setCurrent}
       />
     </div>
   );
