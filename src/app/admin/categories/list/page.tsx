@@ -11,10 +11,14 @@ import { useState } from "react";
 const Page: React.FC = ({}) => {
   const [current, setCurrent] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [filter, setFilter] = useState("");
+
+  console.log(current, pageSize, filter);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["categories", current, pageSize],
-    queryFn: () => getCategories(current, pageSize),
+    queryKey: ["categories", filter, current, pageSize],
+    queryFn: () => getCategories(filter, current, pageSize),
+    staleTime: 5000,
   });
 
   return (
@@ -29,9 +33,9 @@ const Page: React.FC = ({}) => {
           <div className="flex gap-5 ">
             <EntriesSelector setPageSize={setPageSize} />
             {/*  */}
-            <SearchInput />
+            <SearchInput setFilter={setFilter} />
             {/*  */}
-            <AddButton />
+            <AddButton href="/admin/categories/create" />
           </div>
 
           <TableProductList

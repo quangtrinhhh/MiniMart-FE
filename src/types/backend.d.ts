@@ -14,11 +14,11 @@ declare global {
   interface IRequest {
     url: string;
     method: string;
-    body?: { [key: string]: any };
-    queryParams?: any;
+    body?: { [key: string]: unknown };
+    queryParams?: unknown;
     useCredentials?: boolean;
-    headers?: any;
-    nextOption?: any;
+    headers?: unknown;
+    nextOption?: unknown;
   }
 
   interface IBackendRes<T> {
@@ -62,4 +62,30 @@ interface APIResponse<T> {
   success: boolean;
   data: T;
   message?: string;
+}
+interface Product {
+  id: number;
+  category: Category;
+  name: string;
+  price: string; // Nếu cần xử lý số, có thể dùng number
+  slug: string;
+  description: string;
+  discount: string; // Nếu cần tính toán, có thể dùng number
+  quantity: number;
+  sold: number;
+  status: boolean;
+  featured: boolean;
+  created_at: string;
+  updated_at: string;
+  assets: Asset[];
+}
+
+interface Asset {
+  id: number;
+  filename: string;
+  path: string;
+  type: string;
+  size: number;
+  created_at: string;
+  updated_at: string;
 }

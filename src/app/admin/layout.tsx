@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import "@/app/styles/globals.css";
 import "@/app/styles/style.css";
 import { AppSidebar } from "@/components/layouts/sidebar/sidebar.admin";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { Bounce, ToastContainer } from "react-toastify";
 
 export const metadata: Metadata = {
@@ -20,7 +20,7 @@ export default async function AdminLayout({
     <div className="flex min-h-screen bg-[#FFFFFF]">
       <ToastContainer
         stacked
-        position="bottom-left"
+        position="top-center"
         autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
@@ -37,7 +37,6 @@ export default async function AdminLayout({
         <AppSidebar />
         {/* Main container chiếm phần còn lại */}
         <div className="flex flex-col flex-1 h-screen overflow-hidden bg-[#E2E8F0]">
-          <SidebarTrigger />
           {/* Nội dung cuộn riêng, tránh ảnh hưởng từ các thành phần khác */}
           <div className="p-3 flex-1 overflow-auto">{children}</div>
         </div>

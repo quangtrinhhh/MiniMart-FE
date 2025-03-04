@@ -7,8 +7,8 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { TeamSwitcher } from "@/components/ui/team-switcher";
 import { NavMain } from "@/components/ui/nav-main";
 import { NavUser } from "@/components/ui/nav-user";
 import { adminMenuItems } from "@/types/type";
@@ -17,7 +17,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={adminMenuItems.teams}></TeamSwitcher>
+        <SidebarTrigger className="ml-auto" />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={adminMenuItems.navMain} />

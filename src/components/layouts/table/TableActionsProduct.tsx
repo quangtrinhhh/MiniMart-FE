@@ -1,4 +1,4 @@
-import { deleteCategory } from "@/app/api/categories/category.api";
+import { deleteProduct } from "@/app/api/products/product.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FaRegEye } from "react-icons/fa6";
 import { LuPenLine } from "react-icons/lu";
@@ -9,11 +9,11 @@ interface IProps {
   id: number;
 }
 
-const TableActions: React.FC<IProps> = ({ id }) => {
+const TableActionsProduct: React.FC<IProps> = ({ id }) => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: () => deleteCategory(id),
+    mutationFn: () => deleteProduct(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
       toast.success("Category deleted successfully");
@@ -41,4 +41,4 @@ const TableActions: React.FC<IProps> = ({ id }) => {
   );
 };
 
-export default TableActions;
+export default TableActionsProduct;

@@ -11,8 +11,17 @@ interface CategoryResponse {
 /**
  * 🟢 Lấy danh sách danh mục
  */
-export const getCategories = async (current: number, pageSize: number) =>
-  apiClient.get<CategoryResponse>(`/api/v1/category`, { current, pageSize });
+export const getCategories = async (
+  search: string,
+  current: number,
+  pageSize: number
+) =>
+  apiClient.get<CategoryResponse>(`/api/v1/category`, {
+    search: search.trim() || undefined,
+    current,
+    pageSize,
+  });
+
 /**
  * 🟢 Tạo mới danh mục
  */

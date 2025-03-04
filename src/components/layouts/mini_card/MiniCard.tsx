@@ -12,7 +12,7 @@ const MiniCard: React.FC = () => {
       {/* Overlay */}
       {isMiniCardOpen && (
         <div
-          className={`fixed inset-0 bg-black z-40 opacity-70 transition-opacity duration-300`}
+          className={`fixed inset-0 bg-black z-50 opacity-70 transition-opacity duration-300`}
           onClick={toggleMiniCard} // Click vào nền sẽ đóng Mini Cart
         ></div>
       )}

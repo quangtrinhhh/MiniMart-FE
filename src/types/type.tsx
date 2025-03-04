@@ -1,9 +1,4 @@
-import {
-  AudioWaveform,
-  Command,
-  GalleryVerticalEnd,
-  Users,
-} from "lucide-react";
+import { Users } from "lucide-react";
 import { FaHome, FaUser, FaCog, FaEnvelope } from "react-icons/fa";
 import { FaProductHunt } from "react-icons/fa6";
 import { MdCategory, MdDashboard } from "react-icons/md";
@@ -26,29 +21,13 @@ export const adminMenuItems = {
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
+
   navMain: [
     {
       title: "Dashboard",
       url: "/admin",
       icon: MdDashboard,
-      isActive: false,
+      isActive: true,
     },
     {
       title: "Products",
@@ -61,7 +40,7 @@ export const adminMenuItems = {
         },
         {
           title: "Add Products",
-          url: "/admin/products/add",
+          url: "/admin/products/create",
         },
         {
           title: "Edit Products",
@@ -124,3 +103,36 @@ export const adminMenuItems = {
     },
   ],
 };
+
+export const CategoryColumns = [
+  { key: "name", label: "Category Name", className: "min-w-[250px]" },
+  { key: "ID", label: "ID", className: "min-w-[100px]" },
+  { key: "sulg", label: "sulg", className: "min-w-[100px]" },
+  { key: "description", label: "Description", className: "min-w-[100px]" },
+  { key: "status", label: "Status", className: "min-w-[100px]" },
+  { key: "created", label: "Created", className: "min-w-[100px]" },
+  {
+    key: "action",
+    label: "Action",
+    className: "min-w-[150px] hidden md:table-cell",
+  },
+];
+
+export const ProductColumns = [
+  { key: "name", label: "Product Name", className: "min-w-[250px]" },
+  { key: "id", label: "Id", className: "min-w-[100px]" },
+  { key: "price", label: "Price", className: "min-w-[100px]" },
+  { key: "slug", label: "slug", className: "min-w-[100px]" },
+  { key: "description", label: "Description", className: "min-w-[100px]" },
+  { key: "sold", label: "Sold", className: "min-w-[100px]" },
+  { key: "status", label: "Status", className: "min-w-[100px]" },
+  { key: "quantity", label: "quantity", className: "min-w-[100px]" },
+  { key: "featured", label: "featured", className: "min-w-[100px]" },
+  { key: "discount", label: "Discount", className: "min-w-[100px]" },
+  { key: "created", label: "Created", className: "min-w-[100px]" },
+  {
+    key: "action",
+    label: "Action",
+    className: "min-w-[150px] hidden md:table-cell",
+  },
+];

@@ -25,6 +25,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export function NavUser({
   user,
@@ -35,6 +36,8 @@ export function NavUser({
     avatar: string;
   };
 }) {
+  const router = useRouter();
+
   const { isMobile } = useSidebar();
   const { data: session } = useSession();
   return (
@@ -90,9 +93,9 @@ export function NavUser({
                 <BadgeCheck />
                 Account
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push("/")}>
                 <CreditCard />
-                Billing
+                Shop
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Bell />

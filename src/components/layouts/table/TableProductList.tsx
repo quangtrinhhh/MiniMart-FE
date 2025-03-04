@@ -1,11 +1,11 @@
-import { Category } from "@/types/backend";
+import { Product } from "@/types/backend";
 import TableHeader from "./TableHeader";
-import TableRow from "./TableRow";
 import Pagination from "@/components/ui/Pagination";
-import { CategoryColumns } from "@/types/type";
+import { ProductColumns } from "@/types/type";
+import TableRowProduct from "./TableRowProduct";
 
 interface IProps {
-  data: Category[];
+  data: Product[];
   totalPagesProps: number;
   totalItemsProps: number;
   isLoading?: boolean;
@@ -14,7 +14,7 @@ interface IProps {
   setPageSize?: (value: number) => void;
 }
 
-const TableCategoryList: React.FC<IProps> = ({
+const TableProductList: React.FC<IProps> = ({
   data,
   totalPagesProps,
   totalItemsProps,
@@ -26,13 +26,13 @@ const TableCategoryList: React.FC<IProps> = ({
     <div className="mt-5 w-full mb-2">
       <div className="w-full overflow-x-auto pb-3 scrollbar-custome">
         <table className="min-w-[1515px] w-full border-collapse">
-          <TableHeader columns={CategoryColumns} />
+          <TableHeader columns={ProductColumns} />
           <tbody>
             {data.length > 0 ? (
-              data.map((category, index) => (
-                <TableRow
-                  key={category.id}
-                  data={category}
+              data.map((product, index) => (
+                <TableRowProduct
+                  key={product.id}
+                  data={product}
                   isEven={index % 2 === 0}
                   isLoading={isLoading}
                   error={error}
@@ -57,4 +57,4 @@ const TableCategoryList: React.FC<IProps> = ({
   );
 };
 
-export default TableCategoryList;
+export default TableProductList;

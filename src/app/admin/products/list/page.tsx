@@ -1,8 +1,25 @@
+"use client";
+import { getProducts } from "@/app/api/products/product.api";
 import BreadcrumbAdmin from "@/components/layouts/admin/breadcrumb..admin";
+import TableProductList from "@/components/layouts/table/TableProductList";
 import AddButton from "@/components/ui/AddButton";
 import EntriesSelector from "@/components/ui/EntriesSelector";
 import SearchInput from "@/components/ui/SearchInput";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 const ListProductPage: React.FC = ({}) => {
+  const [current, setCurrent] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [filter, setFilter] = useState("");
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["categories", filter, current, pageSize],
+    queryFn: () => getProducts(filter, current, pageSize),
+    staleTime: 5000,
+  });
+
+  console.log("data", data);
+
   return (
     <div className="p-[30px] ">
       <div className="flex items-center flex-wrap justify-between gap20 mb-27">
@@ -12,14 +29,21 @@ const ListProductPage: React.FC = ({}) => {
 
       <div className="bg-white rounded-md  p-5 mt-5">
         <div className="flex gap-5 ">
-          <EntriesSelector />
+          <EntriesSelector setPageSize={setPageSize} />
           {/*  */}
-          <SearchInput />
+          <SearchInput setFilter={setFilter} />
           {/*  */}
-          <AddButton />
+          <AddButton href="/admin/products/create" />
         </div>
 
-        {/* <TableProductList /> */}
+        <TableProductList
+          data={data?.data.result ?? []}
+          totalItemsProps={Number(data?.data.totalItems)}
+          totalPagesProps={Number(data?.data.totalPages)}
+          isLoading={isLoading}
+          setCurrent={setCurrent}
+          error={error}
+        />
       </div>
     </div>
   );

@@ -13,7 +13,7 @@ interface Session {
 }
 
 interface SidebarProps {
-  session?: Session;
+  session?: Session | null;
 }
 const Sidebar: React.FC<SidebarProps> = ({ session }) => {
   const { isSidebarOpen, toggleSidebar } = useSidebar();
