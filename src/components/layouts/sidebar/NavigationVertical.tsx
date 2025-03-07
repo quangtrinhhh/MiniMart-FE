@@ -8,7 +8,7 @@ const NavigationVertical: React.FC = ({}) => {
         <li className="px-6 group hover:bg-neutral-200 -mt-[1px]">
           <Link
             className="flex items-center gap-3.5 py-3 font-semibold"
-            href="/"
+            href="/collections"
           >
             Tất cả sản phẩm
           </Link>

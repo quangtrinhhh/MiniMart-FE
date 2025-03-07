@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import Product from "./Product";
+import Product from "./CardProduct";
 import TitleHeading from "./TitleHeading";
 import Link from "next/link";
 import { IoIosArrowForward } from "react-icons/io";

@@ -1,6 +1,6 @@
 "use client";
 import { Swiper, SwiperSlide } from "swiper/react";
-import Product from "./Product";
+import Product from "./CardProduct";
 // import { Pagination } from "swiper/modules";
 
 const ProductSeles: React.FC = ({}) => {

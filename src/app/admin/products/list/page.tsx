@@ -13,7 +13,7 @@ const ListProductPage: React.FC = ({}) => {
   const [filter, setFilter] = useState("");
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["categories", filter, current, pageSize],
+    queryKey: ["products", filter, current, pageSize],
     queryFn: () => getProducts(filter, current, pageSize),
     staleTime: 5000,
   });

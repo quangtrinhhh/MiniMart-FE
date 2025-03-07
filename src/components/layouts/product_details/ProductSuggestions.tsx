@@ -1,4 +1,4 @@
-import Product from "@/components/ui/Product";
+import Product from "@/components/ui/CardProduct";
 import TitleHeading from "@/components/ui/TitleHeading";
 
 const ProductSuggestions: React.FC = ({}) => {

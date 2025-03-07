@@ -1,12 +1,27 @@
+"use client";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import DiscountCodeRow from "@/components/ui/DiscountCodeRow";
 import Arrange from "@/components/layouts/collections/Arrange";
 import ProductList from "@/components/layouts/collections/ProductList";
 import Siderbar from "@/components/layouts/collections/Siderbar";
-import { NextPage } from "next";
 import Image from "next/image";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getProducts } from "@/app/api/products/product.api";
 
-const PageCollections: NextPage = ({}) => {
+const PageCollections: React.FC = ({}) => {
+  const [current, setCurrent] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [filter, setFilter] = useState("");
+
+  console.log(current, pageSize, filter, setCurrent, setPageSize, setFilter);
+
+  const { data } = useQuery({
+    queryKey: ["products", filter, current, pageSize],
+    queryFn: () => getProducts(filter, current, pageSize),
+    staleTime: 5000,
+  });
+
   return (
     <div className="bg-[#f2f6f3]">
       <Breadcrumbs />
@@ -26,7 +41,11 @@ const PageCollections: NextPage = ({}) => {
               Tất cả sản phẩm
             </h1>
             <Arrange />
-            <ProductList />
+            <ProductList
+              dataList={data?.data.result || []}
+              totalItemsProps={Number(data?.data.totalItems)}
+              totalPagesProps={Number(data?.data.totalPages)}
+            />
           </div>
           <Siderbar />
         </div>

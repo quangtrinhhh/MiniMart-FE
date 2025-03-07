@@ -70,22 +70,50 @@ interface Product {
   price: string; // Nếu cần xử lý số, có thể dùng number
   slug: string;
   description: string;
-  discount: string; // Nếu cần tính toán, có thể dùng number
-  quantity: number;
+  discount: number; // Nếu cần tính toán, có thể dùng number
+  stock: number;
   sold: number;
   status: boolean;
   featured: boolean;
   created_at: string;
   updated_at: string;
-  assets: Asset[];
+  assets: Assets[];
+  attributes: Attributes[];
+  variants: Variant[];
+}
+interface VariantValue {
+  id: number;
+  attribute_name: string;
+  value: string;
 }
 
+interface Variant {
+  id: number;
+  name: string;
+  price: string;
+  old_price: string;
+  SKU: string;
+  stock: number;
+  values: VariantValue[];
+  created_at: string;
+}
+interface Attributes {
+  id: number;
+  name: string;
+  value: string;
+  created_at: Date;
+}
+interface Assets {
+  id: number;
+  type: string;
+  asset: Asset;
+}
 interface Asset {
   id: number;
   filename: string;
   path: string;
   type: string;
   size: number;
-  created_at: string;
-  updated_at: string;
+  created_at: Date;
+  updated_at: Date;
 }

@@ -22,7 +22,7 @@ const TableRowProduct: React.FC<TableRowProps> = ({
       <td className="px-4 py-2 flex items-center gap-3 font-bold rounded-full">
         <div>
           <Image
-            src={data.assets[0].path || "/no-image.png"}
+            src={data.assets[0].asset.path || "/no-image.png"}
             alt={data.name}
             width={50}
             height={50}

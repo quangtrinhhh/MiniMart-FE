@@ -8,6 +8,11 @@ interface ProductResponse {
     totalPages: number;
   };
 }
+interface OnlyProductResponse {
+  data: {
+    result: Product;
+  };
+}
 /**
  * 🟢 Lấy danh sách danh mục
  */
@@ -32,4 +37,10 @@ export const createproduct = async (productData: FormData) =>
  * 🟢 Xóa  */
 export const deleteProduct = async (id: number) => {
   return apiClient.delete<ProductResponse>(`/api/v1/product/${id}`);
+};
+/**
+ *🟢 lấy chi tiết 1 product
+ */
+export const getOnlyProduct = async (slug: string) => {
+  return apiClient.get<OnlyProductResponse>(`/api/v1/product/${slug}`);
 };
