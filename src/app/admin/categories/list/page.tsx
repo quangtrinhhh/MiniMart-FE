@@ -16,7 +16,7 @@ const Page: React.FC = ({}) => {
   console.log(current, pageSize, filter);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["categories", filter, current, pageSize],
+    queryKey: ["category", filter, current, pageSize],
     queryFn: () => getCategories(filter, current, pageSize),
     staleTime: 5000,
   });

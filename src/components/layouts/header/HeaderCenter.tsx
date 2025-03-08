@@ -5,10 +5,15 @@ import Card_mini from "./Card_mini";
 import Link from "next/link";
 import { useSidebar } from "@/context/SidebarContext";
 import { useUI } from "@/context/UIProvider";
+import { useCart } from "@/context/CartProvider";
 
 const HeaderCenter: React.FC = () => {
   const { toggleSidebar } = useSidebar();
   const { toggleMiniCard } = useUI();
+  const { cart } = useCart();
+
+  // 🛒 Tính tổng số lượng sản phẩm trong giỏ hàng
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
   return (
     <div className="w-full bg-white">
       <div className="flex justify-between items-center text-center p-2 py-4 max-w-7xl mx-auto gap-5">
@@ -48,7 +53,7 @@ const HeaderCenter: React.FC = () => {
             className="flex items-center  hover:bg-[#ebebeb] rounded-md p-1 cursor-pointer"
             onClick={toggleMiniCard}
           >
-            <Card_mini numberItem={0} />
+            <Card_mini numberItem={totalItems ?? 0} />
           </div>
         </div>
       </div>

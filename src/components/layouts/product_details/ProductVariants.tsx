@@ -1,12 +1,43 @@
-const ProductVariants: React.FC = ({}) => {
+import { Variant } from "@/types/backend";
+import { useState } from "react";
+
+interface ProductVariantsProps {
+  variants?: Variant[];
+  onSelectVariant: (variant: Variant) => void;
+}
+
+const ProductVariants: React.FC<ProductVariantsProps> = ({
+  variants = [],
+  onSelectVariant,
+}) => {
+  const [selected, setSelected] = useState<Variant | null>(variants[0] ?? null);
+
+  const handleSelect = (variant: Variant) => {
+    setSelected(variant);
+    onSelectVariant(variant);
+  };
+
   return (
     <div className="flex gap-5 mt-5 text-sm">
-      <div className="text-neutral-500 ">Dung tích:</div>
+      <div className="text-neutral-500">Loại:</div>
       <div className="flex gap-5">
-        <div className="box border px-4 py-2 cursor-pointer border-black">
-          2.2L
-        </div>
-        <div className="box border px-4 py-2 cursor-pointer">3L</div>
+        {variants.length > 0 ? (
+          variants.map((variant) => (
+            <div
+              key={variant.id}
+              className={`border px-4 py-2 cursor-pointer ${
+                selected?.id === variant.id
+                  ? "border-black bg-gray-100"
+                  : "border-gray-300"
+              }`}
+              onClick={() => handleSelect(variant)}
+            >
+              {variant.values.map((v) => v.value).join(", ")}
+            </div>
+          ))
+        ) : (
+          <div className="text-gray-500">Không có biến thể</div>
+        )}
       </div>
     </div>
   );

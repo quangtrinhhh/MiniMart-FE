@@ -1,11 +1,16 @@
+import { useSidebar } from "@/context/SidebarContext";
 import Link from "next/link";
 import { MdArrowForwardIos } from "react-icons/md";
 
 const NavigationVertical: React.FC = ({}) => {
+  const { toggleSidebar } = useSidebar();
   return (
     <div className="flex-grow overflow-y-auto no-scrollbar ">
       <ul className="relative">
-        <li className="px-6 group hover:bg-neutral-200 -mt-[1px]">
+        <li
+          className="px-6 group hover:bg-neutral-200 -mt-[1px]"
+          onClick={() => toggleSidebar}
+        >
           <Link
             className="flex items-center gap-3.5 py-3 font-semibold"
             href="/collections"

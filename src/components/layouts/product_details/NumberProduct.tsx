@@ -1,21 +1,24 @@
 "use client";
 import { FaMinus, FaPlus } from "react-icons/fa6";
-import { useState } from "react";
 
-const NumberProduct: React.FC = () => {
-  const [quantity, setQuantity] = useState<number>(1);
+interface IProps {
+  stock: number;
+  quantity: number;
+  setQuantity: (quantity: number) => void;
+}
 
+const NumberProduct: React.FC<IProps> = ({ stock, quantity, setQuantity }) => {
   const handleDecrease = () => {
     if (quantity > 1) setQuantity(quantity - 1);
   };
 
   const handleIncrease = () => {
-    setQuantity(quantity + 1);
+    if (quantity < stock) setQuantity(quantity + 1); // Không vượt quá tồn kho
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value, 10);
-    if (!isNaN(value) && value > 0) {
+    if (!isNaN(value) && value > 0 && value <= stock) {
       setQuantity(value);
     }
   };
@@ -43,6 +46,7 @@ const NumberProduct: React.FC = () => {
           onChange={handleChange}
           className="focus:outline-none w-full focus:ring-transparent text-base font-semibold text-md md:text-base cursor-default flex items-center outline-none bg-transparent border-none text-center no-arrows"
           min="1"
+          max={stock}
         />
 
         {/* Button tăng số lượng */}
@@ -54,7 +58,7 @@ const NumberProduct: React.FC = () => {
           <FaPlus size={16} />
         </button>
       </div>
-
+      <span>Có sẵn {stock} sản phẩm</span>
       {/* Custom CSS */}
       <style jsx>{`
         input[type="number"]::-webkit-inner-spin-button,

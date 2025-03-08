@@ -10,6 +10,7 @@ import MiniCard from "@/components/layouts/mini_card/MiniCard";
 import { UIProvider } from "@/context/UIProvider";
 import { Bounce, ToastContainer } from "react-toastify";
 import { auth } from "@/auth";
+import { CartProvider } from "@/context/CartProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -39,20 +40,22 @@ export default async function RootLayout({
         theme="colored"
         transition={Bounce}
       />
-      <SidebarProvider>
-        <UIProvider>
-          <div className="absolute">
-            <Sidebar session={session} />
-            <MiniCard />
-          </div>
-          <div className="relative ml-0 transition-all duration-300">
-            {/* Nội dung của bạn sẽ di chuyển sang bên phải khi sidebar mở */}
-            <AppHeader />
-            {children}
-            <AppFooter />
-          </div>
-        </UIProvider>
-      </SidebarProvider>
+      <CartProvider>
+        <SidebarProvider>
+          <UIProvider>
+            <div className="absolute">
+              <Sidebar session={session} />
+              <MiniCard />
+            </div>
+            <div className="relative ml-0 transition-all duration-300">
+              {/* Nội dung của bạn sẽ di chuyển sang bên phải khi sidebar mở */}
+              <AppHeader />
+              {children}
+              <AppFooter />
+            </div>
+          </UIProvider>
+        </SidebarProvider>
+      </CartProvider>
     </div>
   );
 }

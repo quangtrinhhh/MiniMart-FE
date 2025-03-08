@@ -117,3 +117,11 @@ interface Asset {
   created_at: Date;
   updated_at: Date;
 }
+interface CartItem {
+  id: number;
+  name: string;
+  image: Assets | null; // ⛔ Nhưng `image` trong `Product` là `Assets[]`
+  price: number;
+  quantity: number;
+  variant?: Variant;
+}

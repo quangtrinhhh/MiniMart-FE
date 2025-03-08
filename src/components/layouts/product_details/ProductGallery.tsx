@@ -10,14 +10,13 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
+import { Assets } from "@/types/backend";
 
-const images = [
-  "/asset/frame-101.jpg",
-  "/asset/frame-101.jpg",
-  "/asset/frame-101.jpg",
-];
+interface IProps {
+  images: Assets[];
+}
 
-const ProductGallery = () => {
+const ProductGallery: React.FC<IProps> = ({ images }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
 
   return (
@@ -33,12 +32,13 @@ const ProductGallery = () => {
         {images.map((src, index) => (
           <SwiperSlide key={index}>
             <Image
-              src={src}
+              src={src.asset.path}
               alt={`Ảnh ${index + 1}`}
               width={700}
               height={600}
               priority={index === 0}
-              className="object-cover rounded-lg"
+              className="object-cover rounded-lg aspect-[7/6]"
+              quality={100}
             />
           </SwiperSlide>
         ))}
@@ -57,11 +57,11 @@ const ProductGallery = () => {
         {images.map((src, index) => (
           <SwiperSlide key={index}>
             <Image
-              src={src}
+              src={src.asset.path}
               alt={`Thumbnail ${index + 1}`}
               width={150}
               height={100}
-              className="object-cover rounded-lg"
+              className="object-cover rounded-lg aspect-[7/6]"
             />
           </SwiperSlide>
         ))}

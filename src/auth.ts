@@ -48,7 +48,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) {
         // User is available during sign-in
         token.user = user as IUser;
-        token.access_token = user.access_token;
+        token.access_token = (user as IUser).access_token;
       }
       return token;
     },
