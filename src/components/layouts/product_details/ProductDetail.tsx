@@ -71,7 +71,7 @@ const ProductDetail: React.FC<IProps> = ({ slug, initialProduct }) => {
             <PricePromotionProductDetails
               price={Number(selectedVariant?.price) ?? 0}
               old_price={Number(selectedVariant?.old_price) ?? 0}
-              stock={Number(selectedVariant?.stock) ?? 0}
+              sold={Number(product.sold) ?? 0}
             />
 
             <PromotionalGifts />

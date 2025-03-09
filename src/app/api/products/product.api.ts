@@ -44,3 +44,9 @@ export const deleteProduct = async (id: number) => {
 export const getOnlyProduct = async (slug: string) => {
   return apiClient.get<OnlyProductResponse>(`/api/v1/product/${slug}`);
 };
+/**
+ *
+ */
+export const getDiscountedProducts = async () => {
+  return apiClient.get<OnlyProductResponse>(`/api/v1/product/discounted`);
+};

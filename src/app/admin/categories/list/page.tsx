@@ -20,6 +20,7 @@ const Page: React.FC = ({}) => {
     queryFn: () => getCategories(filter, current, pageSize),
     staleTime: 5000,
   });
+  console.log("category: ", data);
 
   return (
     <div>

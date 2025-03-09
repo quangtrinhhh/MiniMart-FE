@@ -1,3 +1,4 @@
+"use client";
 import { FEATURES } from "@/constants/features";
 import BannerSwiperClient from "../layouts/banner/BannerSwiperClient";
 import BenefitsRow from "./BenefitsRow";

@@ -32,7 +32,7 @@ const ProductVariants: React.FC<ProductVariantsProps> = ({
               }`}
               onClick={() => handleSelect(variant)}
             >
-              {variant.values.map((v) => v.value).join(", ")}
+              {variant.name}
             </div>
           ))
         ) : (

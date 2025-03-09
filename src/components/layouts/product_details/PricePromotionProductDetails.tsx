@@ -3,13 +3,13 @@ import CountdownTimer from "./CountdownTimer";
 interface IProps {
   price?: number;
   old_price?: number;
-  stock?: number;
+  sold?: number;
 }
 
 const PricePromotionProductDetails: React.FC<IProps> = ({
   price,
   old_price,
-  stock,
+  sold,
 }) => {
   return (
     <div className="flex flex-col border border-red-600 rounded-md overflow-hidden mt-2">
@@ -18,8 +18,8 @@ const PricePromotionProductDetails: React.FC<IProps> = ({
           <span>Vừa mở bán</span>
           <div className="w-full bg-neutral-100 rounded-sm h-1">
             <div
-              className="stock-percent bg-yellow-300 rounded-sm h-1"
-              style={{ width: `${Math.max(0, Math.min(100, stock || 0))}%` }}
+              className="sold-percent bg-yellow-300 rounded-sm h-1"
+              style={{ width: `${Math.max(0, Math.min(100, sold || 0))}%` }}
             ></div>
           </div>
         </div>

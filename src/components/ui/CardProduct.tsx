@@ -16,20 +16,20 @@ const CardProduct: React.FC<ProductProps> = ({ product }) => {
   }
 
   return (
-    <div className="bg-white overflow-hidden group flex flex-col border rounded-lg shadow-md hover:shadow-lg transition">
+    <div className="bg-white overflow-hidden group flex flex-col border  shadow-md hover:shadow-lg transition">
       {/* Hiển thị ảnh sản phẩm */}
-      <div className="relative w-full aspect-square overflow-hidden">
+      <div className="relative w-full aspect-square overflow-hidden rounded-xl">
         <Image
           src={product?.assets?.[0]?.asset?.path || "/default-image.jpg"}
           alt={product?.assets?.[0]?.asset?.filename || "No image"}
-          className="object-cover w-full h-full"
+          className="object-cover w-full h-full p-3 rounded-lg"
           width={480}
           height={480}
         />
         <Image
           src={product?.assets?.[1]?.asset?.path || "/default-image.jpg"}
           alt={product?.assets?.[1]?.asset?.filename || "No image"}
-          className="object-cover w-full h-full absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          className="object-cover w-full h-full p-3 rounded-lg absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
           width={480}
           height={480}
         />
@@ -44,7 +44,7 @@ const CardProduct: React.FC<ProductProps> = ({ product }) => {
       </div>
 
       {/* Thông tin sản phẩm */}
-      <div className="p-3 flex flex-col gap-2">
+      <div className="p-3 flex flex-col gap-1">
         <Link
           href={product.slug ? `/${product.slug}` : "/"}
           className="text-base font-semibold truncate hover:text-[#ff9d02]"
@@ -80,17 +80,21 @@ const CardProduct: React.FC<ProductProps> = ({ product }) => {
             </button>
           )}
         </div>
-        <div className="w-full">
-          <span className="text-sm mb-1 hover:text-[#ff9d02]">
-            Đã bán {product.sold || 0} sản phẩm
-          </span>
-          <div className="w-full bg-neutral-100 rounded-sm h-1">
-            <div
-              className="bg-[#ee1926] rounded-sm h-1"
-              style={{ width: `${product.sold ? product.sold : 0}%` }}
-            ></div>
+        {product.sold !== 0 ? (
+          <div className="w-full">
+            <span className="text-sm mb-1 hover:text-[#ff9d02]">
+              Đã bán {product.sold || 0} sản phẩm
+            </span>
+            <div className="w-full bg-neutral-100 rounded-sm h-1">
+              <div
+                className="bg-[#ee1926] rounded-sm h-1"
+                style={{ width: `${product.sold || 0}%` }}
+              ></div>
+            </div>
           </div>
-        </div>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

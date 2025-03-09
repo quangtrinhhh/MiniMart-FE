@@ -1,11 +1,21 @@
 "use client";
 import { Swiper, SwiperSlide } from "swiper/react";
-import Product from "./CardProduct";
+import CardProduct from "./CardProduct";
+import { useQuery } from "@tanstack/react-query";
+import { getDiscountedProducts } from "@/app/api/products/product.api";
+import { Product } from "@/types/backend";
 // import { Pagination } from "swiper/modules";
 
 const ProductSeles: React.FC = ({}) => {
-  const products = new Array(10).fill(null); // Tạo một mảng chứa 3 phần tử (hoặc số lượng tùy chỉnh)
+  const { data } = useQuery({
+    queryKey: ["product"],
+    queryFn: () => getDiscountedProducts(),
+  });
+  const products: Product[] = Array.isArray(data?.data.result)
+    ? data.data.result
+    : [];
 
+  console.log("discounted: ", products);
   return (
     <div className="rounded-lg overflow-hidden">
       <Swiper
@@ -16,25 +26,11 @@ const ProductSeles: React.FC = ({}) => {
           1024: { slidesPerView: 5 }, // Màn hình rất lớn: Hiển thị 4 slide
         }}
         spaceBetween={0.5}
-        // pagination={{ clickable: true }} // Bật phân trang
-        // modules={[Pagination]}
         loop={true} // Bật tính năng vòng lặp
       >
-        {products.map((_, index) => (
+        {products?.map((product: Product, index: number) => (
           <SwiperSlide key={index}>
-            <Product
-              name="Nước lau sàn Sunlight Tinh dầu thảo mộc Ngăn côn trùng | Chai 900g"
-              price="300.000Đ"
-              oldPrice="1802.000Đ"
-              discount="-9%"
-              stock={10}
-              sold={69}
-              stockPercent={69}
-              images={[
-                "/asset/frame-102-1.jpg", // Ảnh đầu tiên
-                "/asset/frame-101.jpg", // Ảnh thứ hai (hover)
-              ]}
-            />
+            <CardProduct product={product} />
           </SwiperSlide>
         ))}
       </Swiper>
@@ -43,3 +39,8 @@ const ProductSeles: React.FC = ({}) => {
 };
 
 export default ProductSeles;
+{
+  /* <SwiperSlide key={index}>
+  <CardProduct product={product} />
+</SwiperSlide>; */
+}
