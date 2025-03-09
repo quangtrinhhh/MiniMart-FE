@@ -88,7 +88,11 @@ const CardProduct: React.FC<ProductProps> = ({ product }) => {
             <div className="w-full bg-neutral-100 rounded-sm h-1">
               <div
                 className="bg-[#ee1926] rounded-sm h-1"
-                style={{ width: `${product.sold || 0}%` }}
+                style={{
+                  width: `${((product.sold / product.stock) * 100).toFixed(
+                    2
+                  )}%`,
+                }}
               ></div>
             </div>
           </div>

@@ -119,7 +119,7 @@ export const CategoryColumns = [
 ];
 
 export const ProductColumns = [
-  { key: "name", label: "Product Name", className: "min-w-[250px]" },
+  { key: "name", label: "Product Name", className: "min-w-[350px]" },
   { key: "id", label: "Id", className: "min-w-[100px]" },
   { key: "price", label: "Price", className: "min-w-[100px]" },
   { key: "slug", label: "slug", className: "min-w-[100px]" },

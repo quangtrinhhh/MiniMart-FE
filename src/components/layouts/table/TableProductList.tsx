@@ -25,7 +25,7 @@ const TableProductList: React.FC<IProps> = ({
   return (
     <div className="mt-5 w-full mb-2">
       <div className="w-full overflow-x-auto pb-3 scrollbar-custome">
-        <table className="min-w-[1515px] w-full border-collapse">
+        <table className="min-w-[1515px] w-full border-collapse table-fixed">
           <TableHeader columns={ProductColumns} />
           <tbody>
             {data.length > 0 ? (

@@ -20,7 +20,7 @@ const TableRowProduct: React.FC<TableRowProps> = ({
   return (
     <tr className={`${isEven ? "" : "bg-[#f6f8fbcc] "} hover:bg-[#e0e2e5cc]`}>
       <td className="px-4 py-2 flex items-center gap-3 font-bold rounded-full">
-        <div>
+        <div className="w-10 h-10 flex-shrink-0">
           <Image
             src={data.assets[0].asset.path || "/no-image.png"}
             alt={data.name}
@@ -28,17 +28,17 @@ const TableRowProduct: React.FC<TableRowProps> = ({
             height={50}
           />
         </div>
-        <span>{data.name}</span>
+        <span className="truncate ">{data.name}</span>
       </td>
       <td className="px-4 py-2">#{data.id}</td>
       <td className="px-4 py-2">{data.price}</td>
-      <td className="px-4 py-2">{data.slug}</td>
-      <td className="px-4 py-2">{data.description}</td>
+      <td className="px-4 py-2 truncate ">{data.slug}</td>
+      <td className="px-4 py-2 truncate">{data.description}</td>
       <td className="px-4 py-2">{data.sold}</td>
       <td className="px-4 py-2">
         {data.status ? "Đang kinh doanh" : "Ngừng kinh doanh"}
       </td>
-      <td className="px-4 py-2">{data.quantity}</td>
+      <td className="px-4 py-2">{data.stock}</td>
       <td className="px-4 py-2">{data.featured ? "Yes" : "No"}</td>
       <td className="px-4 py-2">{data.discount}</td>
       <td className="px-4 py-2">
