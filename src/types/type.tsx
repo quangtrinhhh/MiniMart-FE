@@ -25,47 +25,47 @@ export const adminMenuItems = {
   navMain: [
     {
       title: "Dashboard",
-      url: "/admin",
+      url: "/",
       icon: MdDashboard,
       isActive: true,
     },
     {
       title: "Products",
-      url: "/admin/products/list",
+      url: "/dashboard/products/list",
       icon: FaProductHunt,
       items: [
         {
           title: "List Products",
-          url: "/admin/products/list",
+          url: "/dashboard/products/list",
         },
         {
           title: "Add Products",
-          url: "/admin/products/create",
+          url: "/dashboard/products/create",
         },
         {
           title: "Edit Products",
-          url: "/admin/products/edit",
+          url: "/dashboard/products/edit",
         },
       ],
     },
     {
       title: "Categories",
-      url: "/admin/categories",
+      url: "/dashboard/categories",
       icon: MdCategory,
       items: [
         {
           title: "List Categories",
-          url: "/admin/categories/list",
+          url: "/dashboard/categories/list",
         },
         {
           title: "Add Categories",
-          url: "/admin/categories/create",
+          url: "/dashboard/categories/create",
         },
       ],
     },
     {
       title: "Orders",
-      url: "/admin/orders",
+      url: "/dashboard/orders",
       icon: MdCategory,
       items: [
         {
@@ -84,7 +84,7 @@ export const adminMenuItems = {
     },
     {
       title: "Users",
-      url: "/admin/users ",
+      url: "/dashboard/users ",
       icon: Users,
       items: [
         {

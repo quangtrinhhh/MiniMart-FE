@@ -46,7 +46,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({
           session?.user.role === "MANAGER") && (
           <li>
             <Link
-              href="/admin"
+              href="/dashboard"
               className="font-semibold text-error hover:text-red-600"
             >
               Đến Admin

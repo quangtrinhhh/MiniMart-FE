@@ -4,6 +4,7 @@ import InputField from "./InputField";
 import { authenticate } from "@/ulils/actions";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const FormLogin: React.FC = ({}) => {
   const router = useRouter();
@@ -16,7 +17,7 @@ const FormLogin: React.FC = ({}) => {
       toast.error(res?.error);
     } else {
       toast("Đăng nhập thành công");
-      router.push("/admin/dashboard");
+      router.push("/dashboard");
     }
   };
   return (
@@ -31,12 +32,12 @@ const FormLogin: React.FC = ({}) => {
               </h1>
               <p className="mb-0 text-sm">
                 Bạn chưa có tài khoản ?
-                <a
+                <Link
                   href="/account/register"
                   className="underline hover:text-orange-500"
                 >
                   Đăng ký tại đây
-                </a>
+                </Link>
               </p>
             </div>
             {/*  */}
