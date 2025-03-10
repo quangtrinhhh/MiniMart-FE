@@ -33,3 +33,9 @@ export const createCategory = async (categoryData: FormData) =>
 export const deleteCategory = async (id: number) => {
   return apiClient.delete<CategoryResponse>(`/api/v1/category/${id}`);
 };
+/**
+ *
+ */
+export const getAllParentCategories = async () => {
+  return apiClient.get<CategoryResponse>(`/api/v1/category/parentcategories`);
+};

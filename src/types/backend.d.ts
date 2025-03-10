@@ -125,3 +125,14 @@ interface CartItem {
   quantity: number;
   variant?: Variant;
 }
+
+// Định nghĩa kiểu dữ liệu cho danh mục sản phẩm
+interface ProductCategory {
+  categoryId: number;
+  categoryName: string;
+  products: ProductTwo[];
+}
+interface ProductTwo {
+  id: number;
+  product: Product;
+}

@@ -50,3 +50,6 @@ export const getOnlyProduct = async (slug: string) => {
 export const getDiscountedProducts = async () => {
   return apiClient.get<OnlyProductResponse>(`/api/v1/product/discounted`);
 };
+export const getProductsByCategory = async (id: number) => {
+  return apiClient.get<OnlyProductResponse>(`/api/v1/product/${id}/categorie`);
+};

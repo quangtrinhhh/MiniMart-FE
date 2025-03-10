@@ -54,12 +54,14 @@ const CardProduct: React.FC<ProductProps> = ({ product }) => {
         <div className="flex justify-between items-center text-lg">
           <div>
             <span className="font-semibold text-[#ff3c02]">
-              {formatCurrency(Number(product.price)) || "Liên hệ"}
+              {formatCurrency(
+                Number(product.variants?.[0]?.price ?? product.price)
+              ) || "Liên hệ"}
             </span>
-            {product.variants?.[0]?.price && (
+            {product.variants?.[0]?.old_price && (
               <div className="flex items-center gap-2">
                 <span className="text-[#929292] line-through text-xs">
-                  {formatCurrency(Number(product.variants[0]?.price))}
+                  {formatCurrency(Number(product.variants[0]?.old_price))}
                 </span>
                 {product.discount && (
                   <div className="text-white bg-red-600 rounded-full font-semibold text-xs px-2 py-1">
