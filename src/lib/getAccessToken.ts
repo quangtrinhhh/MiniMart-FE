@@ -1,6 +1,5 @@
 import { auth } from "@/auth";
 import { getSession } from "next-auth/react";
-import { headers } from "next/headers"; // Import headers từ Next.js
 
 export async function getAccessToken() {
   if (typeof window === "undefined") {

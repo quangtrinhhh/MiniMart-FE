@@ -1,48 +1,54 @@
 import { getOnlyProduct } from "@/app/api/products/product.api";
 import ProductDetail from "@/components/layouts/product_details/ProductDetail";
 import { Metadata } from "next";
+import { Product } from "@/types/backend";
 
-// Tạo metadata động cho SEO
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
-  const product = await getOnlyProduct(params.slug);
-
-  if (!product) {
-    return {
-      title: "Sản phẩm không tồn tại",
-    };
-  }
-
-  return {
-    title: `${product.data.result.name} | Tên Shop Của Bạn`,
-    description: product.data.result.description.substring(0, 160),
-    openGraph: {
-      images: [
-        {
-          url: product.data.result.assets[0].asset.path,
-          width: 800,
-          height: 600,
-        },
-      ],
-    },
-  };
+// Định nghĩa kiểu PageProps
+interface PageProps {
+  params: Record<string, string>; // 🔥 Sửa kiểu params
+  searchParams?: Record<string, string | string[] | undefined>;
 }
 
-// Lấy dữ liệu ban đầu ở server
-export default async function ProductPage({
+// 🛠 Tạo metadata động cho SEO
+export async function generateMetadata({
   params,
-}: {
-  params: { slug: string };
-}) {
-  const productResponse = await getOnlyProduct(params.slug);
-  const initialProduct = productResponse?.data?.result; // ✅ Lấy đúng kiểu Product
+}: PageProps): Promise<Metadata> {
+  try {
+    const productResponse = await getOnlyProduct(params.slug);
+    const product = productResponse?.data?.result as Product | undefined;
 
-  if (!initialProduct) {
-    return <div>Sản phẩm không tồn tại</div>;
+    if (!product) {
+      return { title: "Sản phẩm không tồn tại" };
+    }
+
+    return {
+      title: `${product.name} | Tên Shop`,
+      description: product.description?.substring(0, 160) || "",
+      openGraph: {
+        images: product.assets?.length
+          ? [{ url: product.assets[0].asset.path, width: 800, height: 600 }]
+          : [],
+      },
+    };
+  } catch (error) {
+    console.error("Lỗi khi lấy metadata sản phẩm:", error);
+    return { title: "Lỗi tải dữ liệu sản phẩm" };
   }
+}
 
-  return <ProductDetail slug={params.slug} initialProduct={initialProduct} />;
+// 🛠 Lấy dữ liệu sản phẩm từ API
+export default async function ProductPage({ params }: PageProps) {
+  try {
+    const productResponse = await getOnlyProduct(params.slug);
+    const initialProduct = productResponse?.data?.result as Product | undefined;
+
+    if (!initialProduct) {
+      return <div>Sản phẩm không tồn tại</div>;
+    }
+
+    return <ProductDetail slug={params.slug} initialProduct={initialProduct} />;
+  } catch (error) {
+    console.error("Lỗi khi tải trang sản phẩm:", error);
+    return <div>Đã xảy ra lỗi khi tải sản phẩm.</div>;
+  }
 }

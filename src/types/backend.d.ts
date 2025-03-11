@@ -56,6 +56,7 @@ interface Category {
   status: boolean;
   created_at: string;
   updated_at: string;
+  children: Category[];
 }
 
 interface APIResponse<T> {

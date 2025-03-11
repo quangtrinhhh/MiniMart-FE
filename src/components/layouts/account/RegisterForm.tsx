@@ -4,6 +4,7 @@ import InputField from "./InputField";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { sendRequest } from "@/ulils/api";
+import Link from "next/link";
 
 const RegisterForm: React.FC = () => {
   const router = useRouter();
@@ -51,12 +52,12 @@ const RegisterForm: React.FC = () => {
               <h1 className="text-2xl font-semibold mb-2">Đăng ký tài khoản</h1>
               <p className="mb-0 text-sm">
                 Bạn đã có tài khoản?
-                <a href="/account/login" className="link">
+                <Link href="/account/login" className="link">
                   <span className="underline hover:text-orange-500">
                     {" "}
                     Đăng nhập tại đây
                   </span>
-                </a>
+                </Link>
               </p>
               <h2 className="text-center text-sm mt-5 font-semibold">
                 Thông tin tài khoản

@@ -1,38 +1,30 @@
-import Product from "@/components/ui/CardProduct";
+import { getRelatedProducts } from "@/app/api/products/product.api";
+import CardProduct from "@/components/ui/CardProduct";
 import TitleHeading from "@/components/ui/TitleHeading";
+import { Product } from "@/types/backend";
+import { useQuery } from "@tanstack/react-query";
 
-const RelatedProducts: React.FC = ({}) => {
+interface IProps {
+  productID: number;
+}
+
+const RelatedProducts: React.FC<IProps> = ({ productID }) => {
+  const { data } = useQuery({
+    queryKey: ["product", productID],
+    queryFn: () => getRelatedProducts(productID),
+  });
+
+  const relatedProducts: Product[] = Array.isArray(data?.data.result)
+    ? data?.data.result
+    : [];
   return (
     <div className="">
       <TitleHeading titleHeading="Sản phẩm liên quan" />
 
       <div className="grid grid-cols-4 gap-2 mt-4">
-        <Product
-          name="Nước lau sàn Sunlight Tinh dầu thảo mộc Ngăn côn trùng | Chai 900g"
-          price="300.000Đ"
-          oldPrice="1802.000Đ"
-          discount="-9%"
-          stock={10}
-          sold={69}
-          stockPercent={69}
-          images={[
-            "/asset/frame-102-1.jpg", // Ảnh đầu tiên
-            "/asset/frame-101.jpg", // Ảnh thứ hai (hover)
-          ]}
-        />
-        <Product
-          name="Nước lau sàn Sunlight Tinh dầu thảo mộc Ngăn côn trùng | Chai 900g"
-          price="300.000Đ"
-          oldPrice="1802.000Đ"
-          discount="-9%"
-          stock={10}
-          sold={0}
-          stockPercent={75}
-          images={[
-            "/asset/frame-102-1.jpg", // Ảnh đầu tiên
-            "/asset/frame-101.jpg", // Ảnh thứ hai (hover)
-          ]}
-        />
+        {relatedProducts?.map((product, index) => (
+          <CardProduct key={index} product={product} />
+        ))}
       </div>
     </div>
   );

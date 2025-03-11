@@ -10,9 +10,9 @@ import { useQuery } from "@tanstack/react-query";
 import { getProducts } from "@/app/api/products/product.api";
 
 const PageCollections: React.FC = ({}) => {
-  const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [filter, setFilter] = useState("");
+  const [current] = useState(1);
+  const [pageSize] = useState(10);
+  const [filter] = useState("");
 
   const { data } = useQuery({
     queryKey: ["products", filter, current, pageSize],

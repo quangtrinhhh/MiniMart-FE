@@ -99,7 +99,7 @@ const ProductDetail: React.FC<IProps> = ({ slug, initialProduct }) => {
       />
       <div className="bg-[#f2f6f3]">
         <div className="max-w-7xl mx-auto p-3 pt-20 pb-20">
-          <RelatedProducts />
+          <RelatedProducts productID={Number(data?.data.result.id ?? 0)} />
           <ProductSuggestions />
         </div>
       </div>
