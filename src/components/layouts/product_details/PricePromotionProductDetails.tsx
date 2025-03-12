@@ -24,7 +24,7 @@ const PricePromotionProductDetails: React.FC<IProps> = ({
           </div>
         </div>
         <div className="w-full flex justify-end">
-          <CountdownTimer expiryDate="2025-01-20T23:59:59" />
+          <CountdownTimer expiryDate="2025-12-20T23:59:59" />
         </div>
       </div>
       <div className="flex flex-wrap gap-1 items-baseline p-3">

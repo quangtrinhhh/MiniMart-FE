@@ -15,7 +15,7 @@ const TableActionsProduct: React.FC<IProps> = ({ id }) => {
   const mutation = useMutation({
     mutationFn: () => deleteProduct(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      queryClient.invalidateQueries({ queryKey: ["products"] });
       toast.success("Category deleted successfully");
     },
     onError: (error) => {

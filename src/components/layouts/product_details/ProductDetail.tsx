@@ -69,8 +69,12 @@ const ProductDetail: React.FC<IProps> = ({ slug, initialProduct }) => {
             <h1 className="font-semibold text-2xl">{data?.data.result.name}</h1>
             <BrandAndCode />
             <PricePromotionProductDetails
-              price={Number(selectedVariant?.price) ?? 0}
-              old_price={Number(selectedVariant?.old_price) ?? 0}
+              price={
+                Number(selectedVariant?.price) !== 0
+                  ? Number(data?.data.result.price)
+                  : Number(selectedVariant?.price) || 0
+              }
+              old_price={Number(selectedVariant?.old_price)}
               sold={Number(product.sold) ?? 0}
             />
 
@@ -82,7 +86,11 @@ const ProductDetail: React.FC<IProps> = ({ slug, initialProduct }) => {
             />
 
             <NumberProduct
-              stock={Number(selectedVariant?.stock) ?? 0}
+              stock={
+                Number(selectedVariant?.stock) != 0
+                  ? Number(data?.data.result.stock)
+                  : 0
+              }
               quantity={quantity}
               setQuantity={setQuantity}
             />

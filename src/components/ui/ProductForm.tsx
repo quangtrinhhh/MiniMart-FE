@@ -15,6 +15,8 @@ import AttributeFields from "./AttributeFields";
 import VariantFields from "./VariantFields";
 import { ProductFormData, productSchema } from "@/types/productSchema";
 import PriceInput from "./PriceInput";
+import { useCreateProduct } from "@/hooks/useCreateProduct";
+import { Progress } from "@/components/ui/progress"; // Import thanh tiến trình
 
 export default function ProductForm() {
   const {
@@ -34,10 +36,16 @@ export default function ProductForm() {
 
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [progress, setProgress] = useState(0); // Thêm state lưu tiến trình tải
 
-  const onSubmit = async (data: ProductFormData) => {
-    console.log("Dữ liệu sản phẩm:", data);
-    console.log("Hình ảnh đã chọn:", selectedImages);
+  const { submitProduct, isLoading } = useCreateProduct(
+    selectedImages,
+    setProgress
+  );
+
+  const onSubmit = (data: ProductFormData) => {
+    setProgress(10); // Hiển thị tiến trình ban đầu
+    submitProduct(data);
   };
 
   return (
@@ -62,28 +70,13 @@ export default function ProductForm() {
               errors={errors}
             />
           </div>
-
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label>Giảm giá (%)</Label>
               <Input
                 type="number"
                 placeholder="Nhập % giảm giá"
-                {...register("discount", {
-                  required: "Vui lòng nhập phần trăm giảm giá",
-                  min: { value: 0, message: "Giảm giá không thể âm" },
-                  max: {
-                    value: 100,
-                    message: "Giảm giá không thể lớn hơn 100%",
-                  },
-                  valueAsNumber: true, // Đảm bảo dữ liệu là số
-                })}
-                onChange={(e) => {
-                  let value = Number(e.target.value);
-                  if (value < 0) value = 0;
-                  if (value > 100) value = 100;
-                  e.target.value = value.toString();
-                }}
+                {...register("discount", { valueAsNumber: true })}
               />
               {errors.discount && (
                 <p className="text-red-500 text-sm">
@@ -102,7 +95,6 @@ export default function ProductForm() {
               <p className="text-red-500 text-sm">{errors.stock?.message}</p>
             </div>
           </div>
-
           <div>
             <Label>Mô tả</Label>
             <Textarea
@@ -117,7 +109,8 @@ export default function ProductForm() {
             <Label>Ảnh sản phẩm</Label>
             <ImageUpload setSelectedImages={setSelectedImages} />
           </div>
-
+          {isLoading && <Progress value={progress} />}{" "}
+          {/* Hiển thị tiến trình khi tải */}
           <Separator />
           <AttributeFields control={control} register={register} />
           <Separator />
@@ -127,9 +120,8 @@ export default function ProductForm() {
             setValue={setValue}
             errors={errors}
           />
-
-          <Button type="submit" className="w-full">
-            Tạo sản phẩm
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? "Đang tải..." : "Tạo sản phẩm"}
           </Button>
         </form>
       </CardContent>

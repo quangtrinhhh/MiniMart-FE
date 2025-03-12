@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Popover,
   PopoverContent,
@@ -8,7 +9,9 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FieldErrors, UseFormSetValue } from "react-hook-form";
 import { ProductFormData } from "@/types/productSchema";
-import { useState } from "react";
+import { Category } from "@/types/backend";
+import { getCategories } from "@/app/api/categories/category.api";
+import { useQuery } from "@tanstack/react-query";
 
 interface CategorySelectProps {
   selectedCategories: number[];
@@ -17,13 +20,6 @@ interface CategorySelectProps {
   errors: FieldErrors<ProductFormData>;
 }
 
-const categories = [
-  { id: 1, name: "Giặt Xả" },
-  { id: 6, name: "Hóa Mỹ Phẩm" },
-  { id: 7, name: "Chăm sóc cá nhân" },
-  { id: 8, name: "Thực phẩm" },
-];
-
 export default function CategorySelect({
   selectedCategories,
   setSelectedCategories,
@@ -31,7 +27,19 @@ export default function CategorySelect({
   errors,
 }: CategorySelectProps) {
   const [open, setOpen] = useState(false);
+  const [current] = useState(1);
+  const [pageSize] = useState(10);
+  const [filter] = useState("");
 
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["category", filter, current, pageSize],
+    queryFn: () => getCategories(filter, current, pageSize),
+    staleTime: 5000,
+  });
+
+  const mockCategories: Category[] = data?.data.result || [];
+
+  // Xử lý chọn/bỏ chọn danh mục
   const handleCategoryChange = (categoryId: number) => {
     const updatedCategories = selectedCategories.includes(categoryId)
       ? selectedCategories.filter((id) => id !== categoryId)
@@ -41,30 +49,64 @@ export default function CategorySelect({
     setValue("category_ids", updatedCategories);
   };
 
+  // Tìm danh mục được chọn
+  const selectedNames = mockCategories
+    .flatMap((c) => [c, ...(c.children || [])])
+    .filter((c) => selectedCategories.includes(c.id))
+    .map((c) => c.name);
+
+  // Giới hạn hiển thị danh mục (tối đa 2 danh mục, phần còn lại sẽ thành "+X danh mục")
+  const displayText =
+    selectedNames.length > 2
+      ? `${selectedNames.slice(0, 2).join(", ")} +${
+          selectedNames.length - 2
+        } danh mục`
+      : selectedNames.join(", ") || "Chọn danh mục";
+
   return (
     <div>
       <Label>Danh mục</Label>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" className="w-full justify-start">
-            {selectedCategories.length > 0
-              ? categories
-                  .filter((c) => selectedCategories.includes(c.id))
-                  .map((c) => c.name)
-                  .join(", ")
-              : "Chọn danh mục"}
+          <Button variant="outline" className="w-full justify-start truncate">
+            {displayText}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-80 p-2">
-          {categories.map((category) => (
-            <div key={category.id} className="flex items-center space-x-2 py-1">
-              <Checkbox
-                checked={selectedCategories.includes(category.id)}
-                onCheckedChange={() => handleCategoryChange(category.id)}
-              />
-              <span>{category.name}</span>
-            </div>
-          ))}
+        <PopoverContent className="w-80 p-2 max-h-60 overflow-auto">
+          {isLoading ? (
+            <p className="text-gray-500 text-center">Đang loading...</p>
+          ) : error ? (
+            <p className="text-red-500 text-center">Lỗi, vui lòng thử lại...</p>
+          ) : mockCategories.length === 0 ? (
+            <p className="text-gray-500 text-center">Không có danh mục nào</p>
+          ) : (
+            mockCategories.map((category) => (
+              <div key={category.id} className="py-1">
+                {/* Hiển thị danh mục cha */}
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    checked={selectedCategories.includes(category.id)}
+                    onCheckedChange={() => handleCategoryChange(category.id)}
+                  />
+                  <span className="font-semibold">{category.name}</span>
+                </div>
+                {/* Hiển thị danh mục con nếu có */}
+                {category.children &&
+                  category.children.map((child) => (
+                    <div
+                      key={child.id}
+                      className="flex items-center space-x-2 pl-4"
+                    >
+                      <Checkbox
+                        checked={selectedCategories.includes(child.id)}
+                        onCheckedChange={() => handleCategoryChange(child.id)}
+                      />
+                      <span>{child.name}</span>
+                    </div>
+                  ))}
+              </div>
+            ))
+          )}
         </PopoverContent>
       </Popover>
       {errors.category_ids && (
