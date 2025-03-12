@@ -1,5 +1,5 @@
 import BreadcrumbAdmin from "@/components/layouts/admin/breadcrumb..admin";
-import ImageUploader from "@/components/ui/ImageUploader";
+// import ImageUploader from "@/components/ui/ImageUploader";
 import ProductForm from "@/components/ui/ProductForm";
 
 const CreatePage: React.FC = ({}) => {
@@ -10,31 +10,8 @@ const CreatePage: React.FC = ({}) => {
         <BreadcrumbAdmin />
       </div>
 
-      <div className="flex gap-5">
+      <div className=" mt-5">
         <ProductForm />
-        {/*  */}
-        <div className="bg-white rounded-md flex-1 flex flex-col gap-5 p-5 mt-5">
-          <fieldset name="description">
-            <div className="text-[#111] font-bold ">
-              Description
-              <span className="text-red-600 ml-1">*</span>
-            </div>
-            <textarea
-              name="description"
-              placeholder="Description"
-              id="description"
-              className="border w-full rounded-lg p-3 font-normal h-[150px] outline-none"
-            ></textarea>
-            <span className="text-[#95989D] text-xs">
-              Do not exceed 100 characters when entering the product name.
-            </span>
-          </fieldset>
-          <ImageUploader />
-          <div className="flex  gap-3">
-            <button className="btn-custome">Add product</button>
-            <button className="btn-custome">Save product</button>
-          </div>
-        </div>
       </div>
     </div>
   );

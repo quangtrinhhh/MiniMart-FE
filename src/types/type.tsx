@@ -25,7 +25,7 @@ export const adminMenuItems = {
   navMain: [
     {
       title: "Dashboard",
-      url: "/",
+      url: "/dashboard",
       icon: MdDashboard,
       isActive: true,
     },

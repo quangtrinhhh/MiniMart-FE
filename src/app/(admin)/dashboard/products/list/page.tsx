@@ -18,8 +18,6 @@ const ListProductPage: React.FC = ({}) => {
     staleTime: 5000,
   });
 
-  console.log("data", data);
-
   return (
     <div className="p-[30px] ">
       <div className="flex items-center flex-wrap justify-between gap20 mb-27">
