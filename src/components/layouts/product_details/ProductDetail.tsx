@@ -2,7 +2,7 @@
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import ProductGallery from "./ProductGallery";
 import BrandAndCode from "./BrandAndCode";
-import PricePromotionProductDetails from "./PricePromotionProductDetails";
+// import PricePromotionProductDetails from "./PricePromotionProductDetails";
 import PromotionalGifts from "./PromotionalGifts";
 import CouponBox from "./CouponBox";
 import ProductVariants from "./ProductVariants";
@@ -17,6 +17,7 @@ import { Product, Variant } from "@/types/backend";
 import { useEffect, useState } from "react";
 import { useCart } from "@/context/CartProvider";
 import { toast } from "react-toastify";
+import PriceAndSele from "./PriceAndSele";
 
 interface IProps {
   slug: string;
@@ -68,14 +69,35 @@ const ProductDetail: React.FC<IProps> = ({ slug, initialProduct }) => {
           <div>
             <h1 className="font-semibold text-2xl">{data?.data.result.name}</h1>
             <BrandAndCode />
-            <PricePromotionProductDetails
+            {/* {(product.discount ?? 0) >= 0 ? (
+              <PricePromotionProductDetails
+                price={
+                  Number(selectedVariant?.price) !== 0
+                    ? Number(data?.data.result.price)
+                    : Number(selectedVariant?.price) || 0
+                }
+                old_price={Number(selectedVariant?.old_price)}
+                sold={Number(product.sold) ?? 0}
+              />
+            ) : (
+              <PriceAndSele
+                price={
+                  Number(selectedVariant?.price) !== 0
+                    ? Number(product.price)
+                    : Number(selectedVariant?.price) || 0
+                }
+                old_price={Number(selectedVariant?.old_price)}
+                discount={product.discount ?? 0} // Đảm bảo discount không bị undefined
+              />
+            )} */}
+            <PriceAndSele
               price={
                 Number(selectedVariant?.price) !== 0
-                  ? Number(data?.data.result.price)
+                  ? Number(product.price)
                   : Number(selectedVariant?.price) || 0
               }
               old_price={Number(selectedVariant?.old_price)}
-              sold={Number(product.sold) ?? 0}
+              discount={product.discount ?? 0} // Đảm bảo discount không bị undefined
             />
 
             <PromotionalGifts />

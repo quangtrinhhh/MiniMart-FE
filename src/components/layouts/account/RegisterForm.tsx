@@ -24,8 +24,8 @@ const RegisterForm: React.FC = () => {
   };
 
   const handleRegister = async () => {
-    const res = await sendRequest<IBackendRes<undefined>>({
-      url: `${process.env.NEXT_PUBLIC_BACECKEND_URL}/api/v1/auth/register`,
+    const res = await sendRequest<IBackendRes<IRegisterResponse>>({
+      url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/register`,
       method: "POST",
       body: {
         email: formData.email,
@@ -37,7 +37,8 @@ const RegisterForm: React.FC = () => {
     });
     if (res.data) {
       toast("Đăng ký thành công");
-      router.push("/");
+      localStorage.setItem("user_email", formData.email);
+      router.push(`/account/verify/${res.data.id}`);
     } else {
       toast.error(res.message);
     }

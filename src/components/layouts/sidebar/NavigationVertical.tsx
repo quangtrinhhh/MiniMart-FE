@@ -21,8 +21,6 @@ const NavigationVertical: React.FC = () => {
     ? data?.data.result
     : [];
 
-  console.log("menu", data);
-
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error loading menu</p>;
 

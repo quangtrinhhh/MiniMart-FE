@@ -1,21 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 
-// Hàm kiểm tra trang đăng nhập/đăng ký
+// 🟢 Kiểm tra trang đăng nhập/đăng ký
 const isAuthPage = (pathname: string) =>
   ["/account/login", "/account/register"].includes(pathname);
 
-// Hàm kiểm tra trang cần xác thực
-const isProtectedPage = (pathname: string) =>
-  pathname.startsWith("/account") && !isAuthPage(pathname);
+// 🟢 Kiểm tra trang cần xác thực (TRỪ trang verify)
+const isProtectedPage = (pathname: string) => {
+  return (
+    pathname.startsWith("/account") &&
+    !isAuthPage(pathname) &&
+    !pathname.startsWith("/account/verify")
+  );
+};
 
-// Hàm kiểm tra trang admin
+// 🟢 Kiểm tra trang admin
 const isAdminPage = (pathname: string) => pathname.startsWith("/dashboard");
 
 export async function middleware(req: NextRequest) {
   try {
     const session = await auth(); // Lấy session từ auth.js
-
     const url = req.nextUrl;
     const { pathname } = url;
 
@@ -24,7 +28,7 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/account", req.url));
     }
 
-    // 🛑 Nếu chưa đăng nhập, chặn vào các trang cần xác thực
+    // 🛑 Nếu chưa đăng nhập, chặn vào các trang cần xác thực (trừ verify)
     if (!session && isProtectedPage(pathname)) {
       return NextResponse.redirect(
         new URL(`/account/login?redirect=${pathname}`, req.url)
@@ -42,7 +46,6 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   } catch (error) {
     console.error("Middleware Error:", error);
-    // Chuyển hướng đến trang lỗi nếu có lỗi xảy ra
     return NextResponse.redirect(new URL("/error", req.url));
   }
 }

@@ -73,3 +73,7 @@ export function useCreateProduct(
 
   return { submitProduct, isLoading: mutation.isPending };
 }
+
+export function useUpdateProduct() {
+  return "ok update";
+}

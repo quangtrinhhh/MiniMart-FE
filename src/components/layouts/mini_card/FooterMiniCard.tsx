@@ -1,10 +1,11 @@
 import { useCart } from "@/context/CartProvider";
+import { useSession } from "next-auth/react";
 import { FaArrowRightToBracket } from "react-icons/fa6";
 import { toast } from "react-toastify";
 
 const FooterMiniCard: React.FC = () => {
   const { cart } = useCart();
-
+  const { data: session } = useSession();
   // Tính tổng tiền
   const totalPrice = cart.reduce(
     (total, item) => total + item.price * item.quantity,
@@ -17,6 +18,7 @@ const FooterMiniCard: React.FC = () => {
     currency: "VND",
   }).format(totalPrice);
   const handleCheckOut = () => {
+    if (!session) return toast.warn("Vui lòng đăng nhập trước khi thanh toán!");
     toast.warn("Chức năng đang được phát triền");
   };
   return (

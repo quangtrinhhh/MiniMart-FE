@@ -6,6 +6,7 @@ import { ProductFormData } from "@/types/productSchema";
 interface AttributeFieldsProps {
   control: Control<ProductFormData>;
   register: UseFormRegister<ProductFormData>;
+  defaultValues?: ProductFormData["attributes"];
 }
 
 export default function AttributeFields({

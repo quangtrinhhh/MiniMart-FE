@@ -28,6 +28,9 @@ declare global {
     data?: T;
   }
 
+  interface IRegisterResponse {
+    id: string;
+  }
   interface IModelPaginate<T> {
     meta: {
       current: number;
@@ -66,7 +69,7 @@ interface APIResponse<T> {
 }
 interface Product {
   id: number;
-  category: Category;
+  categories: Category[];
   name: string;
   price: string; // Nếu cần xử lý số, có thể dùng number
   slug: string;

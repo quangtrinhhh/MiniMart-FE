@@ -1,15 +1,16 @@
 import { deleteProduct } from "@/app/api/products/product.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { FaRegEye } from "react-icons/fa6";
+import Link from "next/link";
 import { LuPenLine } from "react-icons/lu";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { toast } from "react-toastify";
 
 interface IProps {
   id: number;
+  slug: string;
 }
 
-const TableActionsProduct: React.FC<IProps> = ({ id }) => {
+const TableActionsProduct: React.FC<IProps> = ({ id, slug }) => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -24,12 +25,12 @@ const TableActionsProduct: React.FC<IProps> = ({ id }) => {
   });
   return (
     <div className="flex gap-3">
-      <button type="button" className="hover:scale-150">
-        <FaRegEye size={20} className="text-[#2377FC] cursor-pointer" />
-      </button>
-      <button type="button" className="hover:scale-150">
+      <Link
+        href={`/dashboard/products/edit/${slug}`}
+        className="hover:scale-150"
+      >
         <LuPenLine size={20} className="text-[#22C55E] cursor-pointer" />
-      </button>
+      </Link>
       <button
         type="button"
         className="hover:scale-150"

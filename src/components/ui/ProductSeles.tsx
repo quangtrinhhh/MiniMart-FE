@@ -1,6 +1,6 @@
 "use client";
 import { Swiper, SwiperSlide } from "swiper/react";
-import CardProduct from "./CardProduct";
+import CardProduct from "../layouts/product/CardProduct";
 import { useQuery } from "@tanstack/react-query";
 import { getDiscountedProducts } from "@/app/api/products/product.api";
 import { Product } from "@/types/backend";
@@ -39,8 +39,3 @@ const ProductSeles: React.FC = ({}) => {
 };
 
 export default ProductSeles;
-{
-  /* <SwiperSlide key={index}>
-  <CardProduct product={product} />
-</SwiperSlide>; */
-}

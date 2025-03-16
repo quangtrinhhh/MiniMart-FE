@@ -36,33 +36,40 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     quantity: number = 1
   ) => {
     setCart((prevCart) => {
-      const existingItemIndex = prevCart.findIndex(
-        (item) =>
-          Number(item.id) === Number(product.id) &&
-          Number(item.variant?.id) === Number(variant?.id)
-      );
+      return prevCart
+        .map((item) => {
+          // Kiểm tra nếu sản phẩm và biến thể giống nhau
+          const isSameProduct = Number(item.id) === Number(product.id);
+          const isSameVariant =
+            (item.variant?.id ?? null) === (variant?.id ?? null);
 
-      if (existingItemIndex !== -1) {
-        return prevCart.map((item, index) =>
-          index === existingItemIndex
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
+          if (isSameProduct && isSameVariant) {
+            // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng
+            return { ...item, quantity: item.quantity + quantity };
+          }
+          return item;
+        })
+        .concat(
+          // Nếu không tìm thấy sản phẩm, thêm mới vào giỏ hàng
+          prevCart.some(
+            (item) =>
+              Number(item.id) === Number(product.id) &&
+              (item.variant?.id ?? null) === (variant?.id ?? null)
+          )
+            ? []
+            : [
+                {
+                  id: Number(product.id),
+                  name: product.name,
+                  image: product.assets.length > 0 ? product.assets[0] : null,
+                  price: Number(variant?.price ?? product.price),
+                  quantity,
+                  variant: variant
+                    ? { ...variant, id: Number(variant.id) }
+                    : undefined,
+                },
+              ]
         );
-      } else {
-        return [
-          ...prevCart,
-          {
-            id: Number(product.id), // ✅ Chuyển thành number
-            name: product.name,
-            image: product.assets.length > 0 ? product.assets[0] : null,
-            price: Number(variant?.price ?? product.price), // ✅ Chuyển thành number
-            quantity,
-            variant: variant
-              ? { ...variant, id: Number(variant.id) }
-              : undefined, // ✅ Đảm bảo id của variant là number
-          },
-        ];
-      }
     });
   };
 
@@ -72,23 +79,34 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     variantId?: number,
     quantity: number = 1
   ) => {
-    if (quantity < 1) return;
+    if (quantity < 1) return; // Không cho phép số lượng nhỏ hơn 1
+
     setCart((prevCart) =>
-      prevCart.map((item) =>
-        Number(item.id) === id && Number(item.variant?.id) === variantId
-          ? { ...item, quantity }
-          : item
-      )
+      prevCart.map((item) => {
+        const isSameProduct = Number(item.id) === id;
+        const isSameVariant = item.variant?.id
+          ? Number(item.variant.id) === Number(variantId) // Nếu có biến thể, so sánh ID
+          : !variantId; // Nếu không có biến thể, đảm bảo variantId là undefined hoặc null
+
+        if (isSameProduct && isSameVariant) {
+          return { ...item, quantity };
+        }
+        return item;
+      })
     );
   };
 
   // ❌ Xóa sản phẩm khỏi giỏ hàng
   const removeFromCart = (id: number, variantId?: number) => {
     setCart((prevCart) =>
-      prevCart.filter(
-        (item) =>
-          !(Number(item.id) === id && Number(item.variant?.id) === variantId)
-      )
+      prevCart.filter((item) => {
+        const isSameProduct = Number(item.id) === id;
+        const isSameVariant =
+          item.variant && variantId !== undefined
+            ? Number(item.variant.id) === variantId
+            : item.variant === undefined; // Nếu không có biến thể, kiểm tra item.variant === undefined
+        return !(isSameProduct && isSameVariant);
+      })
     );
   };
 

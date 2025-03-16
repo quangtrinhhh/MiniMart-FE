@@ -22,7 +22,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           body: { username: credentials.email, password: credentials.password },
         });
 
-        if (res.statusCode === 201) {
+        if (res.statusCode === 200) {
           return {
             id: res.data?.user.id,
             name: res.data?.user.name,

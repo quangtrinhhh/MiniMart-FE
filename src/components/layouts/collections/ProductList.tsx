@@ -1,4 +1,4 @@
-import CardProduct from "@/components/ui/CardProduct";
+import CardProduct from "@/components/layouts/product/CardProduct";
 import { Product } from "@/types/backend";
 
 interface IProps {

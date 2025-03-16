@@ -46,7 +46,7 @@ const TableRowProduct: React.FC<TableRowProps> = ({
       </td>
 
       <td className="px-4 py-2 hidden md:table-cell">
-        <TableActionsProduct id={data.id} />
+        <TableActionsProduct id={data.id} slug={data.slug} />
       </td>
     </tr>
   );

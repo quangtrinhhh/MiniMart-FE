@@ -15,6 +15,7 @@ interface VariantFieldsProps {
   register: UseFormRegister<ProductFormData>;
   setValue: UseFormSetValue<ProductFormData>;
   errors: FieldErrors<ProductFormData>;
+  defaultValues?: ProductFormData["variants"];
 }
 
 export default function VariantFields({
@@ -22,11 +23,13 @@ export default function VariantFields({
   register,
   setValue,
   errors,
+  defaultValues,
 }: VariantFieldsProps) {
   const { fields, append, remove } = useFieldArray({
     control,
     name: "variants",
   });
+  console.log(defaultValues);
 
   // Hàm format số có dấu phân cách hàng nghìn
   const formatPrice = (value: string) => {

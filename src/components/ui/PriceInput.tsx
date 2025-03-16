@@ -8,6 +8,7 @@ interface PriceInputProps {
   setValue: UseFormSetValue<ProductFormData>;
   register: UseFormRegister<ProductFormData>;
   errors: FieldErrors<ProductFormData>;
+  defaultValues?: { price: number };
 }
 
 export default function PriceInput({ setValue, errors }: PriceInputProps) {

@@ -11,7 +11,7 @@ const MiniCartProduct: React.FC = () => {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 ">
       {cart.map((item, index) => (
         <div
           key={`${item.id}-${item.variant?.id || "default"}-${index}`}

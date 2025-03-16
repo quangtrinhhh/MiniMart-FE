@@ -15,8 +15,8 @@ import AttributeFields from "./AttributeFields";
 import VariantFields from "./VariantFields";
 import { ProductFormData, productSchema } from "@/types/productSchema";
 import PriceInput from "./PriceInput";
-import { useCreateProduct } from "@/hooks/useCreateProduct";
 import { Progress } from "@/components/ui/progress"; // Import thanh tiến trình
+import { useCreateProduct } from "@/hooks/useProduct";
 
 export default function ProductForm() {
   const {

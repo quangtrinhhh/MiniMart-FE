@@ -34,7 +34,7 @@ const MiniCard: React.FC = () => {
         </div>
 
         {/* Nội dung sản phẩm */}
-        <div className="p-4 flex-grow">
+        <div className="p-4 flex-grow overflow-y-auto max-h-[70vh]">
           <MiniCartProduct />
         </div>
 
