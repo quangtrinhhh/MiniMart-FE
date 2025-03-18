@@ -5,7 +5,7 @@ import Card_mini from "./Card_mini";
 import Link from "next/link";
 import { useSidebar } from "@/context/SidebarContext";
 import { useUI } from "@/context/UIProvider";
-import { useCart } from "@/context/CartProvider";
+import { useCart } from "@/hooks/useCart";
 
 const HeaderCenter: React.FC = () => {
   const { toggleSidebar } = useSidebar();

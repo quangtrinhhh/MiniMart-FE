@@ -1,10 +1,14 @@
 "use client";
-import { useCart } from "@/context/CartProvider";
+import { useCart, useDeleteCart, useUpdateCartItem } from "@/hooks/useCart";
+import { formatCurrency } from "@/ulils/currency";
 import Image from "next/image";
 import { IoIosClose } from "react-icons/io";
 
 const MiniCartProduct: React.FC = () => {
-  const { cart, updateQuantity, removeFromCart } = useCart();
+  const { cart, isLoading } = useCart();
+
+  const { mutate: deleteCartItem } = useDeleteCart();
+  const { mutate: updateQuantity } = useUpdateCartItem();
 
   if (cart.length === 0) {
     return <p className="text-center text-gray-500">Giỏ hàng trống</p>;
@@ -20,10 +24,10 @@ const MiniCartProduct: React.FC = () => {
           {/* Hình ảnh */}
           <div className="rounded-md overflow-hidden w-20 h-20 flex-shrink-0">
             <Image
-              src={item.image?.asset.path ?? "/fallback-image.jpg"}
+              src={item.product.assets[0].asset.path ?? "/fallback-image.jpg"}
               width={70}
               height={70}
-              alt={item.name}
+              alt={item.product.name}
               className="object-cover w-full h-full"
             />
           </div>
@@ -32,7 +36,9 @@ const MiniCartProduct: React.FC = () => {
           <div className="flex flex-col flex-grow justify-between">
             <div className="flex justify-between items-start">
               <div className="flex flex-col">
-                <span className="font-semibold text-sm">{item.name}</span>
+                <span className="font-semibold text-sm">
+                  {item.product.name}
+                </span>
                 <span className="text-gray-500 text-xs sm:text-sm mt-1">
                   {item.variant
                     ? `Biến thể: ${item.variant.name}`
@@ -42,9 +48,7 @@ const MiniCartProduct: React.FC = () => {
 
               {/* Nút xóa */}
               <button
-                onClick={() =>
-                  removeFromCart(Number(item.id), Number(item.variant?.id))
-                }
+                onClick={() => deleteCartItem(item.id)}
                 className="text-gray-400 hover:text-red-500 transition"
               >
                 <IoIosClose size={24} />
@@ -54,44 +58,47 @@ const MiniCartProduct: React.FC = () => {
             {/* Giá và số lượng */}
             <div className="flex justify-between items-center mt-2">
               <div className="text-sm font-semibold text-red-500">
-                {(item.price * item.quantity).toLocaleString()}₫
+                {formatCurrency(Number(item.price))}
               </div>
 
               {/* Chỉnh số lượng */}
               <div className="flex items-center border rounded-md overflow-hidden">
                 <button
-                  onClick={() =>
-                    updateQuantity(
-                      Number(item.id),
-                      Number(item.variant?.id),
-                      item.quantity - 1
-                    )
-                  }
                   className="px-2 py-1 text-sm hover:bg-gray-100"
+                  onClick={() =>
+                    updateQuantity({
+                      cartItemId: item.id,
+                      quantity: item.quantity - 1,
+                    })
+                  }
+                  disabled={item.quantity <= 1}
                 >
                   -
                 </button>
                 <input
-                  type="text"
+                  type="number"
                   value={item.quantity}
-                  onChange={(e) =>
-                    updateQuantity(
-                      Number(item.id),
-                      Number(item.variant?.id),
-                      Math.max(1, Number(e.target.value))
-                    )
-                  }
+                  onChange={(e) => {
+                    const newQuantity = Number(e.target.value);
+                    if (newQuantity > 0) {
+                      updateQuantity({
+                        cartItemId: item.id,
+                        quantity: newQuantity,
+                      });
+                    }
+                  }}
                   className="w-10 text-center border-l border-r text-sm outline-none"
+                  min={1}
+                  disabled={isLoading}
                 />
                 <button
-                  onClick={() =>
-                    updateQuantity(
-                      Number(item.id),
-                      Number(item.variant?.id),
-                      item.quantity + 1
-                    )
-                  }
                   className="px-2 py-1 text-sm hover:bg-gray-100"
+                  onClick={() =>
+                    updateQuantity({
+                      cartItemId: item.id,
+                      quantity: item.quantity + 1,
+                    })
+                  }
                 >
                   +
                 </button>

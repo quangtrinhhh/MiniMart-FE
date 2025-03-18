@@ -1,16 +1,11 @@
-import { useCart } from "@/context/CartProvider";
+import { useCart } from "@/hooks/useCart";
 import { useSession } from "next-auth/react";
 import { FaArrowRightToBracket } from "react-icons/fa6";
 import { toast } from "react-toastify";
 
 const FooterMiniCard: React.FC = () => {
-  const { cart } = useCart();
+  const { cart, totalPrice } = useCart();
   const { data: session } = useSession();
-  // Tính tổng tiền
-  const totalPrice = cart.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
 
   // Định dạng tiền VND
   const formattedTotal = new Intl.NumberFormat("vi-VN", {

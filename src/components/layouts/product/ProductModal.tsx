@@ -12,10 +12,10 @@ import ProductVariants from "../product_details/ProductVariants";
 import { toast } from "react-toastify";
 import NumberProduct from "../product_details/NumberProduct";
 import ButtonProductDetails from "../product_details/Button";
-import { useCart } from "@/context/CartProvider";
 import PriceAndSele from "../product_details/PriceAndSele";
 import { getOnlyProduct } from "@/app/api/products/product.api";
 import { useQuery } from "@tanstack/react-query";
+import { useAddToCart } from "@/hooks/useCart";
 
 interface ProductModalProps {
   isOpen: boolean;
@@ -30,7 +30,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
   slug,
   initialProduct,
 }) => {
-  const { addToCart } = useCart();
+  const { mutate: addToCart } = useAddToCart();
   const [product, setProduct] = useState<Product>(initialProduct);
   const [quantity, setQuantity] = useState<number>(1);
   const [selectedVariant, setSelectedVariant] = useState<Variant | null>(
@@ -56,12 +56,20 @@ const ProductModal: React.FC<ProductModalProps> = ({
     return <div>Sản phẩm không tồn tại</div>;
   }
   const handleAddToCart = () => {
-    addToCart(product, selectedVariant ?? undefined, quantity);
+    addToCart({
+      productId: product.id,
+      quantity,
+      variantId: selectedVariant?.id,
+    });
     toast.success("Thêm thành công");
   };
 
   const handleBuyNow = () => {
-    addToCart(product, selectedVariant ?? undefined, quantity);
+    addToCart({
+      productId: product.id,
+      quantity,
+      variantId: selectedVariant?.id,
+    });
     toast.warn("Chức năng đang được phát triền");
   };
 
@@ -93,12 +101,8 @@ const ProductModal: React.FC<ProductModalProps> = ({
               </Dialog.DialogTitle>
               <BrandAndCode />
               <PriceAndSele
-                price={
-                  Number(selectedVariant?.price) !== 0
-                    ? Number(product.price)
-                    : Number(selectedVariant?.price) || 0
-                }
-                old_price={Number(selectedVariant?.old_price)}
+                price={Number(selectedVariant?.price ?? product.price)}
+                old_price={Number(selectedVariant?.old_price ?? 0)}
                 discount={product.discount}
               />
               <ProductVariants

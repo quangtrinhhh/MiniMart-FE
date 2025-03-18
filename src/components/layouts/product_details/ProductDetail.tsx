@@ -15,9 +15,9 @@ import { useQuery } from "@tanstack/react-query";
 import { getOnlyProduct } from "@/app/api/products/product.api";
 import { Product, Variant } from "@/types/backend";
 import { useEffect, useState } from "react";
-import { useCart } from "@/context/CartProvider";
 import { toast } from "react-toastify";
 import PriceAndSele from "./PriceAndSele";
+import { useAddToCart } from "@/hooks/useCart";
 
 interface IProps {
   slug: string;
@@ -25,7 +25,7 @@ interface IProps {
 }
 
 const ProductDetail: React.FC<IProps> = ({ slug, initialProduct }) => {
-  const { addToCart } = useCart();
+  const { mutate: addToCart } = useAddToCart();
   const [product, setProduct] = useState<Product>(initialProduct);
   const [quantity, setQuantity] = useState<number>(1);
   const [selectedVariant, setSelectedVariant] = useState<Variant | null>(
@@ -51,12 +51,31 @@ const ProductDetail: React.FC<IProps> = ({ slug, initialProduct }) => {
     return <div>Sản phẩm không tồn tại</div>;
   }
   const handleAddToCart = () => {
-    addToCart(product, selectedVariant ?? undefined, quantity);
-    toast.success("Thêm thành công");
+    addToCart(
+      {
+        productId: product.id,
+        variantId: selectedVariant?.id ?? undefined, // Nếu sản phẩm có biến thể, truyền variantId
+        quantity,
+      },
+      {
+        onSuccess: () => toast.success("Thêm vào giỏ hàng thành công"),
+        onError: () => toast.error("Không thể thêm vào giỏ hàng"),
+      }
+    );
   };
 
   const handleBuyNow = () => {
-    addToCart(product, selectedVariant ?? undefined, quantity);
+    addToCart(
+      {
+        productId: product.id,
+        variantId: selectedVariant?.id ?? undefined, // Nếu sản phẩm có biến thể, truyền variantId
+        quantity,
+      },
+      {
+        onSuccess: () => toast.success("Thêm vào giỏ hàng thành công"),
+        onError: () => toast.error("Không thể thêm vào giỏ hàng"),
+      }
+    );
     toast.warn("Chức năng đang được phát triền");
   };
 
@@ -91,11 +110,7 @@ const ProductDetail: React.FC<IProps> = ({ slug, initialProduct }) => {
               />
             )} */}
             <PriceAndSele
-              price={
-                Number(selectedVariant?.price) !== 0
-                  ? Number(product.price)
-                  : Number(selectedVariant?.price) || 0
-              }
+              price={Number(selectedVariant?.price ?? product.price)}
               old_price={Number(selectedVariant?.old_price)}
               discount={product.discount ?? 0} // Đảm bảo discount không bị undefined
             />

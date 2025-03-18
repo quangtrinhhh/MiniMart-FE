@@ -8,15 +8,15 @@ import { IoEyeOutline } from "react-icons/io5";
 import { LuArrowRightLeft } from "react-icons/lu";
 import ProductModal from "./ProductModal";
 import ProductSoldIndicator from "../../ui/ProductSoldIndicator";
-import { useCart } from "@/context/CartProvider";
 import { toast } from "react-toastify";
+import { useAddToCart } from "@/hooks/useCart";
 
 interface ProductProps {
   product: Product;
 }
 
 const CardProduct: React.FC<ProductProps> = ({ product }) => {
-  const { addToCart } = useCart();
+  const { mutate: addToCart } = useAddToCart();
   const [isModalOpen, setIsModalOpen] = useState(false);
   if (!product)
     return <div className="text-gray-500">Sản phẩm không tồn tại</div>;
@@ -34,9 +34,20 @@ const CardProduct: React.FC<ProductProps> = ({ product }) => {
   const hasDiscount = oldPrice > 0;
 
   const hasVariants = product.variants?.length > 0;
-  const handleAddToCart = () => {
-    addToCart(product, undefined, 1);
-    toast.success("Thêm thành công");
+  const handleAddToCart = (variantId?: number) => {
+    if (!addToCart) return; // Kiểm tra nếu mutate chưa được khởi tạo
+
+    addToCart(
+      {
+        productId: product.id,
+        variantId, // Nếu sản phẩm có biến thể, truyền variantId
+        quantity: 1,
+      },
+      {
+        onSuccess: () => toast.success("Thêm vào giỏ hàng thành công"),
+        onError: () => toast.error("Không thể thêm vào giỏ hàng"),
+      }
+    );
   };
   return (
     <div className="bg-white overflow-hidden group flex flex-col border shadow-md hover:shadow-lg transition">

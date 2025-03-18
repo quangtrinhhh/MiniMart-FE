@@ -33,6 +33,18 @@ export const apiClient = {
       throw new Error(`PUT request failed: ${(error as AxiosError).message}`);
     }
   },
+  patch: async <T>(url: string, data: object): Promise<T> => {
+    try {
+      const response = await axiosInstance.patch<T>(url, data, {
+        headers: {
+          "Content-Type": "application/json", // Đảm bảo gửi JSON
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(`PATCH request failed: ${(error as AxiosError).message}`);
+    }
+  },
 
   delete: async <T>(url: string): Promise<T> => {
     try {

@@ -98,7 +98,6 @@ interface Variant {
   old_price: string;
   SKU: string;
   stock: number;
-  values: VariantValue[];
   created_at: string;
 }
 interface Attributes {
