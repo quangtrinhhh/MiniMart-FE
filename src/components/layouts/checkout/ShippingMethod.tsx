@@ -1,9 +1,16 @@
+import { useEffect } from "react";
+
 interface IProps {
   address: string;
+  setShippingFee: (value: number) => void;
 }
 
-const ShippingMethod: React.FC<IProps> = ({ address }) => {
+const ShippingMethod: React.FC<IProps> = ({ address, setShippingFee }) => {
   //   const [address, setAddress] = useState<string | null>(null);
+
+  useEffect(() => {
+    setShippingFee(40000);
+  }, [setShippingFee]);
   return (
     <div>
       <h2 className="text-[#333] font-semibold text-lg mb-2">Vận chuyển</h2>

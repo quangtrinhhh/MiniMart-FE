@@ -2,11 +2,11 @@ import { formatCurrency } from "@/ulils/currency";
 import Image from "next/image";
 
 interface Props {
-  name: string;
-  img: string;
-  quantity: number;
-  variant: string;
-  price: number;
+  name?: string;
+  img?: string;
+  quantity?: number;
+  variant?: string;
+  price?: number;
 }
 
 const CardProductCheckout: React.FC<Props> = ({
@@ -21,7 +21,7 @@ const CardProductCheckout: React.FC<Props> = ({
       {/* Hình ảnh sản phẩm */}
       <div className="relative w-14 h-14 border-2 rounded-lg flex-shrink-0">
         <Image
-          src={`${img}`}
+          src={img || "/default-image.jpg"}
           alt="product-image"
           width={56}
           height={56}

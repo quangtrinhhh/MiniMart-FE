@@ -1,9 +1,11 @@
 import { useCart } from "@/hooks/useCart";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { FaArrowRightToBracket } from "react-icons/fa6";
 import { toast } from "react-toastify";
 
 const FooterMiniCard: React.FC = () => {
+  const router = useRouter();
   const { cart, totalPrice } = useCart();
   const { data: session } = useSession();
 
@@ -14,7 +16,7 @@ const FooterMiniCard: React.FC = () => {
   }).format(totalPrice);
   const handleCheckOut = () => {
     if (!session) return toast.warn("Vui lòng đăng nhập trước khi thanh toán!");
-    toast.warn("Chức năng đang được phát triền");
+    router.push("/checkout");
   };
   return (
     <div className="border-t border-dashed">

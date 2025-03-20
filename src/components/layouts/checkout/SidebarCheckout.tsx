@@ -2,78 +2,50 @@ import { Input } from "@/components/ui/input";
 import CardProductCheckout from "./CardProductCheckout";
 import { Button } from "@/components/ui/button";
 import OrderSummary from "./OrderSummary";
+import { useCart } from "@/hooks/useCart";
 
-const cartItems = [
-  {
-    id: 1,
-    img: "/asset/frame-102-1.jpg",
-    name: "Nước Rửa Chén Bát Sunlight 100% Gốc Thực Vật",
-    price: 121000,
-    quantity: 2,
-    variant: "Matcha trà nhật",
-  },
-  {
-    id: 2,
-    img: "/asset/frame-102-1.jpg",
-    name: "Nước Giặt Omo Matic Bột Giặt Cửa Trước",
-    price: 215000,
-    quantity: 1,
-    variant: "Hương ngọc lan",
-  },
-  {
-    id: 3,
-    img: "/asset/frame-102-1.jpg",
-    name: "Nước Giặt Omo Matic Bột Giặt Cửa Trước",
-    price: 215000,
-    quantity: 1,
-    variant: "Hương ngọc lan",
-  },
-  {
-    id: 4,
-    img: "/asset/frame-102-1.jpg",
-    name: "Nước Giặt Omo Matic Bột Giặt Cửa Trước",
-    price: 215000,
-    quantity: 1,
-    variant: "Hương ngọc lan",
-  },
-  {
-    id: 5,
-    img: "/asset/frame-102-1.jpg",
-    name: "Nước Giặt Omo Matic Bột Giặt Cửa Trước",
-    price: 215000,
-    quantity: 1,
-    variant: "Hương ngọc lan",
-  },
-  {
-    id: 6,
-    img: "/asset/frame-102-1.jpg",
-    name: "Nước Giặt Omo Matic Bột Giặt Cửa Trước",
-    price: 215000,
-    quantity: 1,
-    variant: "Hương ngọc lan",
-  },
-];
-const SidebarCheckout: React.FC = ({}) => {
-  const subtotal = 1234567;
+interface IProps {
+  handleCheckout: () => void;
+  isPending: boolean;
+  isError: boolean;
+  error?: string;
+  isSuccess: boolean;
+}
+
+const SidebarCheckout: React.FC<IProps> = ({
+  handleCheckout,
+  isPending,
+  isError,
+  error,
+  isSuccess,
+}) => {
+  const { cart, isLoading, totalPrice } = useCart();
+  const subtotal = totalPrice;
   const shippingFee = 40000;
   const total = subtotal + shippingFee;
   return (
     <div>
       <h2 className=" text-xl font-semibold p-5 border-b">
-        Đơn hàng (6 sản phẩm)
+        Đơn hàng ({cart.length} sản phẩm)
       </h2>
       <div className="p-5">
-        <div className="border-b pb-3 max-h-72 overflow-x-auto">
-          {cartItems.map((item) => (
-            <CardProductCheckout
-              key={item.id}
-              img={item.img}
-              name={item.name}
-              price={item.price}
-              quantity={item.quantity}
-              variant={item.variant}
-            />
-          ))}
+        <div className="border-b pb-3 min-h-52 overflow-x-auto">
+          {isLoading ? (
+            <div className="">Loading...</div>
+          ) : (
+            cart.map((item) => (
+              <CardProductCheckout
+                key={item.id}
+                img={
+                  item.product.assets[0]?.asset?.path ?? "/default-image.jpg"
+                }
+                name={item.product.name}
+                price={Number(item.price)}
+                quantity={item.quantity}
+                variant={item.variant?.name ?? ""}
+              />
+            ))
+          )}
         </div>
         <div className="mt-5 flex gap-5">
           <Input placeholder="Nhập mã giảm giá" />
@@ -84,7 +56,17 @@ const SidebarCheckout: React.FC = ({}) => {
           shippingFee={shippingFee}
           total={total}
         />
-        <Button className="w-full mt-5">Đặt hàng </Button>
+        <Button
+          className="w-full mt-5"
+          onClick={handleCheckout}
+          disabled={isPending}
+        >
+          {isPending ? "Đang xử lý..." : "Đặt hàng"}
+        </Button>
+        {isError && <p className="text-red-500 mt-2">Lỗi: {error}</p>}
+        {isSuccess && (
+          <p className="text-green-500 mt-2">Đặt hàng thành công!</p>
+        )}
       </div>
     </div>
   );

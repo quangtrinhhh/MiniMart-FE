@@ -46,6 +46,7 @@ declare global {
       name: string;
       email: string;
       role: string;
+      phone: string;
     };
     access_token: string;
   }

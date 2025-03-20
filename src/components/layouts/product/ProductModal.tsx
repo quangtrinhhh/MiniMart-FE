@@ -61,7 +61,6 @@ const ProductModal: React.FC<ProductModalProps> = ({
       quantity,
       variantId: selectedVariant?.id,
     });
-    toast.success("Thêm thành công");
   };
 
   const handleBuyNow = () => {

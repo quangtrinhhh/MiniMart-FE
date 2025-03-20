@@ -8,7 +8,6 @@ import { IoEyeOutline } from "react-icons/io5";
 import { LuArrowRightLeft } from "react-icons/lu";
 import ProductModal from "./ProductModal";
 import ProductSoldIndicator from "../../ui/ProductSoldIndicator";
-import { toast } from "react-toastify";
 import { useAddToCart } from "@/hooks/useCart";
 
 interface ProductProps {
@@ -31,23 +30,16 @@ const CardProduct: React.FC<ProductProps> = ({ product }) => {
   const oldPrice = Number(product.variants?.[0]?.old_price);
   const discount = product.discount;
   const isOutOfStock = product.stock === 0;
-  const hasDiscount = oldPrice > 0;
 
   const hasVariants = product.variants?.length > 0;
   const handleAddToCart = (variantId?: number) => {
     if (!addToCart) return; // Kiểm tra nếu mutate chưa được khởi tạo
 
-    addToCart(
-      {
-        productId: product.id,
-        variantId, // Nếu sản phẩm có biến thể, truyền variantId
-        quantity: 1,
-      },
-      {
-        onSuccess: () => toast.success("Thêm vào giỏ hàng thành công"),
-        onError: () => toast.error("Không thể thêm vào giỏ hàng"),
-      }
-    );
+    addToCart({
+      productId: product.id,
+      variantId,
+      quantity: 1,
+    });
   };
   return (
     <div className="bg-white overflow-hidden group flex flex-col border shadow-md hover:shadow-lg transition">
@@ -97,11 +89,14 @@ const CardProduct: React.FC<ProductProps> = ({ product }) => {
               {formatCurrency(productPrice) || "Liên hệ"}
             </span>
 
-            {hasDiscount && (
+            {discount && (
               <div className="flex items-center gap-2">
-                <span className="text-[#929292] line-through text-xs">
-                  {formatCurrency(oldPrice)}
-                </span>
+                {oldPrice > 0 && (
+                  <span className="text-[#929292] line-through text-xs">
+                    {formatCurrency(oldPrice)}
+                  </span>
+                )}
+
                 {discount && (
                   <div className="text-white bg-red-600 rounded-full font-semibold text-xs px-2 py-1">
                     {discount}%

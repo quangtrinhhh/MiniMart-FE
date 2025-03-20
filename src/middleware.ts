@@ -5,12 +5,13 @@ import { auth } from "@/auth";
 const isAuthPage = (pathname: string) =>
   ["/account/login", "/account/register"].includes(pathname);
 
-// 🟢 Kiểm tra trang cần xác thực (TRỪ trang verify)
+// 🟢 Kiểm tra trang cần xác thực (bao gồm checkout)
 const isProtectedPage = (pathname: string) => {
   return (
-    pathname.startsWith("/account") &&
-    !isAuthPage(pathname) &&
-    !pathname.startsWith("/account/verify")
+    (pathname.startsWith("/account") &&
+      !isAuthPage(pathname) &&
+      !pathname.startsWith("/account/verify")) ||
+    pathname.startsWith("/checkout")
   );
 };
 
@@ -23,12 +24,15 @@ export async function middleware(req: NextRequest) {
     const url = req.nextUrl;
     const { pathname } = url;
 
-    // 🛑 Nếu đã đăng nhập, chặn vào trang đăng nhập/đăng ký
-    if (session && isAuthPage(pathname)) {
+    // 🛑 Nếu đã đăng nhập, chặn vào trang đăng nhập, đăng ký, xác minh
+    if (
+      session &&
+      (isAuthPage(pathname) || pathname.startsWith("/account/verify"))
+    ) {
       return NextResponse.redirect(new URL("/account", req.url));
     }
 
-    // 🛑 Nếu chưa đăng nhập, chặn vào các trang cần xác thực (trừ verify)
+    // 🛑 Nếu chưa đăng nhập, chặn vào các trang cần xác thực (bao gồm checkout)
     if (!session && isProtectedPage(pathname)) {
       return NextResponse.redirect(
         new URL(`/account/login?redirect=${pathname}`, req.url)
@@ -52,5 +56,5 @@ export async function middleware(req: NextRequest) {
 
 // ✅ Chỉ áp dụng middleware cho các trang cần thiết
 export const config = {
-  matcher: ["/account/:path*", "/dashboard/:path*"],
+  matcher: ["/account/:path*", "/dashboard/:path*", "/checkout/:path*"],
 };

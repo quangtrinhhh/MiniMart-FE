@@ -16,7 +16,7 @@ const AccountInfo: React.FC = () => {
         </div>
         <div className="flex gap-1 text-sm">
           <strong>Điện thoại:</strong>
-          <span>0123654789</span>
+          <span>{session?.user.phone}</span>
         </div>
         <div className="flex gap-1 text-sm">
           <strong>Địa chỉ:</strong>

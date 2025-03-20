@@ -5,6 +5,8 @@ import {
   updateCartItemQuantity,
 } from "@/app/api/cart/cart.api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 // Định nghĩa types
 
 export const useCart = () => {
@@ -53,7 +55,7 @@ export const useAddToCart = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({
+    mutationFn: async ({
       productId,
       quantity,
       variantId,
@@ -61,12 +63,21 @@ export const useAddToCart = () => {
       productId: number;
       quantity: number;
       variantId?: number;
-    }) => addToCart(productId, quantity, variantId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart"] }); // Cập nhật giỏ hàng sau khi thêm
+    }) => {
+      return addToCart(productId, quantity, variantId);
     },
-    onError: (error) => {
-      console.error("Thêm sản phẩm vào giỏ hàng thất bại:", error);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      toast.success("Thêm sản phẩm thành công");
+    },
+    onError: (error: AxiosError<{ message: string }>) => {
+      if (error.response?.status === 400) {
+        toast.warning(
+          error.response?.data?.message || "An unexpected error occurred."
+        );
+      } else {
+        toast.warning(error.message);
+      }
     },
   });
 };
