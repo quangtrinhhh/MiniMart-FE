@@ -140,3 +140,24 @@ interface ProductTwo {
   id: number;
   product: Product;
 }
+interface OrderItem {
+  id: number;
+  product: { name: string };
+  quantity: number;
+  price: number;
+}
+
+interface Order {
+  id: number;
+  created_at: string;
+  user: { email: string };
+  status: string;
+  total: number;
+  payment_status: string;
+  payment_method: sring;
+  shipping_address: string;
+  shipping_fee: string;
+  consignee_name: string;
+  created_at: Data;
+  orderItems: OrderItem[];
+}

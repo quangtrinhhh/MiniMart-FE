@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/lib/apiClient";
 
 export interface Order {
@@ -31,7 +31,6 @@ export const checkout = async (
     note,
     shipping_fee,
   });
-  console.log(response.data?.status);
 
   return response.data;
 };
@@ -52,5 +51,26 @@ export const useCheckout = () => {
         orderData.note,
         orderData.shipping_fee
       ),
+  });
+};
+
+export const getOrder = async () => {
+  const response = await apiClient.get<IBackendRes<Order>>(`/api/v1/orders`);
+  return response.data;
+};
+
+export const cancelOrder = async (orderId: number) => {
+  const response = await apiClient.delete<IBackendRes<Order>>(
+    `/api/v1/orders/${orderId}/cancel`
+  );
+  return response.data;
+};
+export const useCancelOrder = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (orderId: number) => cancelOrder(orderId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders"] }); // Gọi lại API lấy danh sách đơn hàng
+    },
   });
 };

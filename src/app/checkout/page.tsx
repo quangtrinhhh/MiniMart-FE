@@ -4,9 +4,10 @@ import PaymentMethods from "@/components/layouts/checkout/PaymentMethods";
 import ShippingMethod from "@/components/layouts/checkout/ShippingMethod";
 import SidebarCheckout from "@/components/layouts/checkout/SidebarCheckout";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCheckout } from "../api/order/order.api";
 import { Bounce, toast, ToastContainer } from "react-toastify";
+import ThankYouDialog from "@/components/layouts/checkout/ThankYouDialog";
 
 const CheckoutPage = ({}) => {
   const [fullAddress, setFullAddress] = useState("");
@@ -15,6 +16,7 @@ const CheckoutPage = ({}) => {
   const [fullName, setFullName] = useState<string>("");
   const [homeAddress, setHomeAddress] = useState<string>("");
   const [note, setNote] = useState<string>("");
+  const [isOrderSuccess, setIsOrderSuccess] = useState(false);
 
   const { mutate, isPending, isError, error, isSuccess } = useCheckout();
   const handleCheckout = () => {
@@ -42,9 +44,12 @@ const CheckoutPage = ({}) => {
 
     mutate(orderData);
   };
-  if (isSuccess) {
-    toast.success("Đặt hàng thành công!");
-  }
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Đặt hàng thành công!");
+      setIsOrderSuccess(true);
+    }
+  }, [isSuccess]);
 
   return (
     <div className="h-screen flex max-w-7xl mx-auto max-md:flex-col">
@@ -93,6 +98,10 @@ const CheckoutPage = ({}) => {
         pauseOnHover
         theme="colored"
         transition={Bounce}
+      />
+      <ThankYouDialog
+        isOpen={isOrderSuccess}
+        onClose={() => setIsOrderSuccess(false)}
       />
     </div>
   );
