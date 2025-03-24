@@ -1,5 +1,5 @@
 import { axiosInstance } from "./axiosInstance";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 
 export const apiClient = {
   get: async <T>(url: string, params?: object): Promise<T> => {
@@ -30,14 +30,29 @@ export const apiClient = {
       const response = await axiosInstance.put<T>(url, data);
       return response.data;
     } catch (error) {
-      throw new Error(`PUT request failed: ${(error as AxiosError).message}`);
+      if (axios.isAxiosError(error)) {
+        console.error("PUT request failed:", {
+          url,
+          data,
+          status: error.response?.status,
+          responseData: error.response?.data,
+        });
+        throw new Error(
+          `PUT request failed: ${error.response?.status} - ${
+            error.response?.data?.message || error.message
+          }`
+        );
+      } else {
+        throw new Error(`Unexpected error: ${(error as Error).message}`);
+      }
     }
-  },
+  }, // 🛠 **Đã sửa lỗi dấu chấm phẩy thành dấu phẩy**
+
   patch: async <T>(url: string, data: object): Promise<T> => {
     try {
       const response = await axiosInstance.patch<T>(url, data, {
         headers: {
-          "Content-Type": "application/json", // Đảm bảo gửi JSON
+          "Content-Type": "application/json",
         },
       });
       return response.data;

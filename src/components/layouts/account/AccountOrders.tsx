@@ -12,6 +12,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Fragment, useState } from "react";
 import { Order } from "@/types/backend";
+import { OrderStatus } from "@/app/(admin)/dashboard/orders/list/page";
 
 const AccountOrders: React.FC = () => {
   const { data } = useQuery({
@@ -67,9 +68,9 @@ const AccountOrders: React.FC = () => {
                 <TableCell>
                   <Badge
                     variant={
-                      order.status === "pending"
+                      order.status === OrderStatus.PENDING
                         ? "outline"
-                        : order.status === "completed"
+                        : order.status === OrderStatus.PROCESSING
                         ? "default"
                         : "destructive"
                     }
@@ -77,26 +78,30 @@ const AccountOrders: React.FC = () => {
                     {order.status.toUpperCase()}
                   </Badge>
                 </TableCell>
+
                 <TableCell>
-                  {order.status !== "completed" &&
-                    order.status !== "canceled" && (
-                      <Button
-                        variant="destructive"
-                        onClick={() => handleCancelOrder(order.id)}
-                      >
-                        Hủy đơn
-                      </Button>
-                    )}
+                  {order.status === OrderStatus.PENDING && (
+                    <Button
+                      variant="destructive"
+                      onClick={(e) => {
+                        e.stopPropagation(); // Ngăn sự kiện click lan ra TableRow
+                        handleCancelOrder(order.id);
+                      }}
+                    >
+                      Hủy đơn
+                    </Button>
+                  )}
                 </TableCell>
               </TableRow>
               {expandedRowKeys.includes(order.id) && (
                 <TableRow>
-                  <TableCell colSpan={7}>
+                  <TableCell colSpan={8}>
                     <h3 className="font-semibold">Chi tiết đơn hàng</h3>
                     <Table>
                       <TableHeader>
                         <TableRow>
                           <TableHead>Sản phẩm</TableHead>
+                          <TableHead>Biến thể</TableHead>
                           <TableHead>Số lượng</TableHead>
                           <TableHead>Giá</TableHead>
                         </TableRow>
@@ -104,7 +109,8 @@ const AccountOrders: React.FC = () => {
                       <TableBody>
                         {order.orderItems?.map((item) => (
                           <TableRow key={item.id}>
-                            <TableCell>{item.product?.name}</TableCell>
+                            <TableCell>{item.name}</TableCell>
+                            <TableCell>{item.variant?.name}</TableCell>
                             <TableCell>{item.quantity}</TableCell>
                             <TableCell>
                               ₫{Number(item.price).toLocaleString()}

@@ -60,7 +60,7 @@ export const getOrder = async () => {
 };
 
 export const cancelOrder = async (orderId: number) => {
-  const response = await apiClient.delete<IBackendRes<Order>>(
+  const response = await apiClient.put<IBackendRes<Order>>(
     `/api/v1/orders/${orderId}/cancel`
   );
   return response.data;
@@ -71,6 +71,24 @@ export const useCancelOrder = () => {
     mutationFn: (orderId: number) => cancelOrder(orderId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders"] }); // Gọi lại API lấy danh sách đơn hàng
+    },
+  });
+};
+
+export const UpdateOrderStatus = async (id: number, status: string) =>
+  apiClient.put<IBackendRes<null>>(`/api/v1/orders/${id}/status`, { status });
+
+export const useUpdateOrderStatus = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, status }: { id: number; status: string }) =>
+      UpdateOrderStatus(id, status),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders"] }); // Tự động cập nhật danh sách đơn hàng
+    },
+    onError: (error: unknown) => {
+      console.error("Lỗi cập nhật trạng thái đơn hàng:", error);
     },
   });
 };

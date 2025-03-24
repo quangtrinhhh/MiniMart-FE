@@ -6,7 +6,7 @@ import { useState } from "react";
 import { FaMoneyBill1 } from "react-icons/fa6";
 
 const paymentMethods = [
-  { id: "bank", label: "Chuyển khoản" },
+  { id: "bank_transfer", label: "Chuyển khoản" },
   { id: "cod", label: "Thu hộ (COD)" },
 ];
 

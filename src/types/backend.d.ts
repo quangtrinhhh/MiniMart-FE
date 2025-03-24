@@ -142,16 +142,20 @@ interface ProductTwo {
 }
 interface OrderItem {
   id: number;
-  product: { name: string };
+  name: string;
   quantity: number;
-  price: number;
+  price: string;
+  variant: Variant;
+  created_at: Date;
+  updated_at: Date;
+  deleted_at: Date;
 }
 
 interface Order {
   id: number;
   created_at: string;
   user: { email: string };
-  status: string;
+  status: OrderStatus;
   total: number;
   payment_status: string;
   payment_method: sring;
@@ -160,4 +164,11 @@ interface Order {
   consignee_name: string;
   created_at: Data;
   orderItems: OrderItem[];
+}
+export enum OrderStatus {
+  PENDING = "pending",
+  PROCESSING = "processing",
+  SHIPPED = "shipped",
+  DELIVERED = "delivered",
+  CANCELED = "canceled",
 }

@@ -1,7 +1,11 @@
 import { Users } from "lucide-react";
 import { FaHome, FaUser, FaCog, FaEnvelope } from "react-icons/fa";
 import { FaProductHunt } from "react-icons/fa6";
-import { MdCategory, MdDashboard } from "react-icons/md";
+import {
+  MdCategory,
+  MdDashboard,
+  MdOutlineBorderVertical,
+} from "react-icons/md";
 
 export const menuItems = [
   { icon: FaHome, text: "Home", hasSubMenu: false },
@@ -19,7 +23,8 @@ export const adminMenuItems = {
   user: {
     name: "shadcn",
     email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    avatar:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-tJ9WruDBMHyYM1cY3h-_PCNRgf5OnXZrqw&s",
   },
 
   navMain: [
@@ -27,7 +32,7 @@ export const adminMenuItems = {
       title: "Dashboard",
       url: "/dashboard",
       icon: MdDashboard,
-      isActive: true,
+      isActive: false,
     },
     {
       title: "Products",
@@ -35,16 +40,12 @@ export const adminMenuItems = {
       icon: FaProductHunt,
       items: [
         {
-          title: "List Products",
+          title: "Danh sách sản phẩm",
           url: "/dashboard/products/list",
         },
         {
-          title: "Add Products",
+          title: "Thêm sản phẩm",
           url: "/dashboard/products/create",
-        },
-        {
-          title: "Edit Products",
-          url: "/dashboard/products/edit",
         },
       ],
     },
@@ -54,11 +55,11 @@ export const adminMenuItems = {
       icon: MdCategory,
       items: [
         {
-          title: "List Categories",
+          title: "Dánh sách loại sản phầm",
           url: "/dashboard/categories/list",
         },
         {
-          title: "Add Categories",
+          title: "Thêm loại sản phẩm",
           url: "/dashboard/categories/create",
         },
       ],
@@ -66,19 +67,11 @@ export const adminMenuItems = {
     {
       title: "Orders",
       url: "/dashboard/orders",
-      icon: MdCategory,
+      icon: MdOutlineBorderVertical,
       items: [
         {
-          title: "Danh sách Categories",
-          url: "#",
-        },
-        {
-          title: "Thêm Categories",
-          url: "#",
-        },
-        {
-          title: "Sửa Categories",
-          url: "#",
+          title: "Đơn hàng",
+          url: "/dashboard/orders/list",
         },
       ],
     },
@@ -88,15 +81,7 @@ export const adminMenuItems = {
       icon: Users,
       items: [
         {
-          title: "Danh sách Categories",
-          url: "#",
-        },
-        {
-          title: "Thêm Categories",
-          url: "#",
-        },
-        {
-          title: "Sửa Categories",
+          title: "Danh sách users",
           url: "#",
         },
       ],
