@@ -27,6 +27,15 @@ declare global {
     statusCode: number | string;
     data?: T;
   }
+  interface IBackendResPage<T> {
+    statusCode: number;
+    message: string;
+    data: {
+      result: T;
+      totalItems: number;
+      totalPages: number;
+    };
+  }
 
   interface IRegisterResponse {
     id: string;
@@ -67,6 +76,24 @@ interface APIResponse<T> {
   success: boolean;
   data: T;
   message?: string;
+}
+
+interface User {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  role: string;
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+  phone_number: string;
+  code: string;
+  isActive: boolean;
+  codeExpired: Date;
+  created_at: Date;
+  updated_at: Date;
 }
 interface Product {
   id: number;
@@ -164,11 +191,4 @@ interface Order {
   consignee_name: string;
   created_at: Data;
   orderItems: OrderItem[];
-}
-export enum OrderStatus {
-  PENDING = "pending",
-  PROCESSING = "processing",
-  SHIPPED = "shipped",
-  DELIVERED = "delivered",
-  CANCELED = "canceled",
 }

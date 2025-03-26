@@ -14,7 +14,7 @@ export default async function AdminProductPage({ params }: ProductPageProps) {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Chỉnh sửa sản phẩm</h1>
-      <ProductEditFrom slug={slug} initialProduct={initialProduct} />
+      <ProductEditFrom initialProduct={initialProduct} />
     </div>
   );
 }

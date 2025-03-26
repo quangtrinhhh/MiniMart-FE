@@ -6,6 +6,7 @@ import {
   MdDashboard,
   MdOutlineBorderVertical,
 } from "react-icons/md";
+import { RiCoupon2Fill } from "react-icons/ri";
 
 export const menuItems = [
   { icon: FaHome, text: "Home", hasSubMenu: false },
@@ -32,6 +33,12 @@ export const adminMenuItems = {
       title: "Dashboard",
       url: "/dashboard",
       icon: MdDashboard,
+      isActive: false,
+    },
+    {
+      title: "Users",
+      url: "/dashboard/users ",
+      icon: Users,
       isActive: false,
     },
     {
@@ -76,13 +83,17 @@ export const adminMenuItems = {
       ],
     },
     {
-      title: "Users",
-      url: "/dashboard/users ",
-      icon: Users,
+      title: "Mã giảm giá",
+      url: "/dashboard/orders",
+      icon: RiCoupon2Fill,
       items: [
         {
-          title: "Danh sách users",
-          url: "#",
+          title: "Danh sách mã giảm giá",
+          url: "/dashboard/coupon/list",
+        },
+        {
+          title: "Thêm mã giảm giá",
+          url: "/dashboard/coupon/create",
         },
       ],
     },
