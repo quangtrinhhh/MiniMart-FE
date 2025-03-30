@@ -3,17 +3,20 @@ import CardProductCheckout from "./CardProductCheckout";
 import { Button } from "@/components/ui/button";
 import OrderSummary from "./OrderSummary";
 import { useCart } from "@/hooks/useCart";
+import { useEffect } from "react";
 
 interface IProps {
   handleCheckout: () => void;
+  setTotal: (total: number) => void;
   isPending: boolean;
   isError: boolean;
-  error?: string;
+  error?: string | unknown;
   isSuccess: boolean;
 }
 
 const SidebarCheckout: React.FC<IProps> = ({
   handleCheckout,
+  setTotal,
   isPending,
   isError,
   error,
@@ -23,6 +26,10 @@ const SidebarCheckout: React.FC<IProps> = ({
   const subtotal = totalPrice;
   const shippingFee = 40000;
   const total = subtotal + shippingFee;
+
+  useEffect(() => {
+    setTotal(totalPrice);
+  }, [totalPrice, setTotal]);
   return (
     <div>
       <h2 className=" text-xl font-semibold p-5 border-b">
@@ -63,7 +70,7 @@ const SidebarCheckout: React.FC<IProps> = ({
         >
           {isPending ? "Đang xử lý..." : "Đặt hàng"}
         </Button>
-        {isError && <p className="text-red-500 mt-2">Lỗi: {error}</p>}
+        {isError && <p className="text-red-500 mt-2">Lỗi: {String(error)}</p>}
         {isSuccess && (
           <p className="text-green-500 mt-2">Đặt hàng thành công!</p>
         )}

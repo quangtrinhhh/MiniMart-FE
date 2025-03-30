@@ -180,14 +180,14 @@ interface OrderItem {
 
 interface Order {
   id: number;
-  created_at: string;
-  user: { email: string };
+  user: User;
   status: OrderStatus;
   total: number;
   payment_status: string;
   payment_method: sring;
   shipping_address: string;
   shipping_fee: string;
+  note: string;
   consignee_name: string;
   created_at: Data;
   orderItems: OrderItem[];

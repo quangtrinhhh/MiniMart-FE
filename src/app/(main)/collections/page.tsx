@@ -8,10 +8,11 @@ import Image from "next/image";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getProducts } from "@/app/api/products/product.api";
+import Pagination from "@/components/layouts/admin/Pagination";
 
 const PageCollections: React.FC = ({}) => {
-  const [current] = useState(1);
-  const [pageSize] = useState(10);
+  const [current, setCurrent] = useState(1);
+  const [pageSize] = useState(8);
   const [filter] = useState("");
 
   const { data } = useQuery({
@@ -43,6 +44,11 @@ const PageCollections: React.FC = ({}) => {
               dataList={data?.data.result || []}
               totalItemsProps={Number(data?.data.totalItems)}
               totalPagesProps={Number(data?.data.totalPages)}
+            />
+            <Pagination
+              setCurrent={setCurrent}
+              totalItemsProps={data?.data.totalItems}
+              totalPagesProps={data?.data.totalPages}
             />
           </div>
           <Siderbar />

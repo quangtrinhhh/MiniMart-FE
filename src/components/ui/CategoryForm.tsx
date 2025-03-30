@@ -5,14 +5,30 @@ import FormField from "./FormField";
 import { useMutation } from "@tanstack/react-query";
 import { createCategory } from "@/app/api/categories/category.api";
 import { toast } from "react-toastify";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { ProductFormData, productSchema } from "@/types/productSchema";
+import SingleCategorySelect from "../layouts/admin/SingleCategorySelect";
 
 const CategoryForm = () => {
+  const {
+    setValue,
+    formState: { errors },
+  } = useForm<ProductFormData>({
+    resolver: zodResolver(productSchema),
+    defaultValues: {
+      category_ids: [],
+    },
+  });
+
   const [formState, setFormState] = useState({
     name: "",
     description: "",
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
-
+  const [selectedCategories, setSelectedCategories] = useState<number | null>(
+    null
+  );
   // Hàm cập nhật giá trị của input
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -26,7 +42,7 @@ const CategoryForm = () => {
       formData.append("name", formState.name);
       formData.append("description", formState.description);
       if (imageFile) formData.append("images", imageFile);
-
+      formData.append("parentId", JSON.stringify(selectedCategories));
       return await createCategory(formData);
     },
     onSuccess: () => {
@@ -44,6 +60,7 @@ const CategoryForm = () => {
     e.preventDefault();
     console.log("Form data:", formState);
     console.log("Image file:", imageFile);
+    console.log(selectedCategories);
 
     mutate();
   };
@@ -72,7 +89,15 @@ const CategoryForm = () => {
         placeholder="Enter description"
         required
       />
-
+      <div className="flex">
+        <span className="font-bold w-full md:w-[300px]">Category cha</span>
+        <SingleCategorySelect
+          selectedCategory={selectedCategories ?? null} // Đảm bảo đúng kiểu dữ liệu
+          setSelectedCategory={setSelectedCategories} // Cập nhật lại cho đúng kiểu callback
+          setValue={setValue}
+          errors={errors}
+        />
+      </div>
       {/* Upload Image */}
       <fieldset className="flex flex-col md:flex-row items-center gap-2">
         <label className="text-[#111] font-bold w-full md:w-[300px]">

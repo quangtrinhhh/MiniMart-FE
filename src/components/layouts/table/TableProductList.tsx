@@ -1,6 +1,6 @@
 import { Product } from "@/types/backend";
 import TableHeader from "./TableHeader";
-import Pagination from "@/components/ui/Pagination";
+import Pagination from "@/components/layouts/admin/Pagination";
 import { ProductColumns } from "@/types/type";
 import TableRowProduct from "./TableRowProduct";
 

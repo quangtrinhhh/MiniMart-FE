@@ -4,7 +4,7 @@ import PaymentMethods from "@/components/layouts/checkout/PaymentMethods";
 import ShippingMethod from "@/components/layouts/checkout/ShippingMethod";
 import SidebarCheckout from "@/components/layouts/checkout/SidebarCheckout";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useCheckout } from "../api/order/order.api";
 import { Bounce, toast, ToastContainer } from "react-toastify";
 import ThankYouDialog from "@/components/layouts/checkout/ThankYouDialog";
@@ -13,12 +13,14 @@ const CheckoutPage = ({}) => {
   const [fullAddress, setFullAddress] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [shippingFee, setShippingFee] = useState(0);
+  const [total, setTotal] = useState(0);
   const [fullName, setFullName] = useState<string>("");
   const [homeAddress, setHomeAddress] = useState<string>("");
   const [note, setNote] = useState<string>("");
   const [isOrderSuccess, setIsOrderSuccess] = useState(false);
 
   const { mutate, isPending, isError, error, isSuccess } = useCheckout();
+
   const handleCheckout = () => {
     const missingFields: string[] = [];
 
@@ -26,6 +28,7 @@ const CheckoutPage = ({}) => {
     if (!homeAddress) missingFields.push("Địa chỉ nhà");
     if (!fullAddress) missingFields.push("Địa chỉ đầy đủ");
     if (!paymentMethod) missingFields.push("Phương thức thanh toán");
+    if (!total) missingFields.push("Lỗi giá tiền");
 
     if (missingFields.length > 0) {
       toast.error(
@@ -40,16 +43,25 @@ const CheckoutPage = ({}) => {
       consignee_name: fullName,
       shipping_fee: shippingFee,
       note: note || "",
+      total,
     };
 
-    mutate(orderData);
+    mutate(orderData, {
+      onSuccess: (response) => {
+        if (typeof response === "string" && response.startsWith("http")) {
+          // ✅ Redirect tới trang thanh toán VNPAY
+          window.location.href = response;
+        } else {
+          // ✅ Nếu là COD, hiển thị thông báo đặt hàng thành công
+          setIsOrderSuccess(true);
+          toast.success("Đặt hàng thành công!");
+        }
+      },
+      onError: () => {
+        toast.error("Thanh toán thất bại, vui lòng thử lại!");
+      },
+    });
   };
-  useEffect(() => {
-    if (isSuccess) {
-      toast.success("Đặt hàng thành công!");
-      setIsOrderSuccess(true);
-    }
-  }, [isSuccess]);
 
   return (
     <div className="h-screen flex max-w-7xl mx-auto max-md:flex-col">
@@ -81,8 +93,9 @@ const CheckoutPage = ({}) => {
           handleCheckout={handleCheckout}
           isPending={isPending}
           isError={isError}
-          error={error?.message}
+          error={error}
           isSuccess={isSuccess}
+          setTotal={setTotal}
         />
       </div>
       <ToastContainer

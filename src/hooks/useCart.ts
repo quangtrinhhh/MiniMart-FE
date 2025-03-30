@@ -6,18 +6,22 @@ import {
 } from "@/app/api/cart/cart.api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 // Định nghĩa types
 
 export const useCart = () => {
+  const { status } = useSession(); // 🟢 Lấy session từ Auth.js
+
   const { data, error, isLoading } = useQuery({
     queryKey: ["cart"],
-    queryFn: () => getAllItemCart(),
+    queryFn: getAllItemCart,
+    enabled: status === "authenticated", // 🔥 Chỉ gọi API nếu đã login
   });
 
   return {
-    cart: data?.data.cart.cartItems ?? [],
-    totalPrice: data?.data.totalPrice ?? 0,
+    cart: data?.data?.cart?.cartItems ?? [],
+    totalPrice: data?.data?.totalPrice ?? 0,
     isLoading,
     error,
   };

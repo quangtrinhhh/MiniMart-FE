@@ -27,7 +27,7 @@ const fakeCoupons: Coupon[] = Array.from({ length: 30 }, (_, i) => ({
   id: i + 1,
   code: `COUPON${i + 1}`,
   type: i % 2 === 0 ? "Fixed Discount" : "Percentage Discount",
-  value: Math.floor(Math.random() * 50) + 5,
+  value: ((i % 5) + 1) * 10,
   status: i % 3 === 0 ? "Active" : "Expired",
   startDate: "2025-04-01",
   endDate: "2025-04-30",

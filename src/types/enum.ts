@@ -15,3 +15,7 @@ export enum CouponStatus {
   EXPIRED = "expired",
   DISABLED = "disabled",
 }
+export enum PaymentMethod {
+  COD = "cod", // Thanh toán khi nhận hàng
+  BANK_TRANSFER = "bank_transfer", // Chuyển khoản ngân hàng
+}

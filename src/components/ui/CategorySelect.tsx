@@ -64,7 +64,7 @@ export default function CategorySelect({
       : selectedNames.join(", ") || "Chọn danh mục";
 
   return (
-    <div>
+    <div className=" flex-1">
       <Label>Danh mục</Label>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>

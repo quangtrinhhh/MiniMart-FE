@@ -20,7 +20,9 @@ const isAdminPage = (pathname: string) => pathname.startsWith("/dashboard");
 
 export async function middleware(req: NextRequest) {
   try {
-    const session = await auth(); // Lấy session từ auth.js
+    // 🟢 Lấy session mà KHÔNG cần truyền tham số
+    const session = await auth();
+
     const url = req.nextUrl;
     const { pathname } = url;
 
