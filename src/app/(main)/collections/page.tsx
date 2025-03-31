@@ -17,7 +17,7 @@ const PageCollections: React.FC = ({}) => {
 
   const { data } = useQuery({
     queryKey: ["products", filter, current, pageSize],
-    queryFn: () => getProducts(filter, current, pageSize),
+    queryFn: () => getProducts(current, pageSize),
     staleTime: 5000,
   });
 

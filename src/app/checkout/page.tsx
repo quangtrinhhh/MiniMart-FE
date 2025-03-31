@@ -45,6 +45,7 @@ const CheckoutPage = ({}) => {
       note: note || "",
       total,
     };
+    console.log(orderData);
 
     mutate(orderData, {
       onSuccess: (response) => {

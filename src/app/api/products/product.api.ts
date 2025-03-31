@@ -17,12 +17,12 @@ interface OnlyProductResponse {
  * 🟢 Lấy danh sách danh mục
  */
 export const getProducts = async (
-  search: string,
+  // search: string,
   current: number,
   pageSize: number
 ) =>
   apiClient.get<ProductResponse>(`/api/v1/product`, {
-    search: search.trim() || undefined,
+    // filter: search.trim() || undefined,
     current,
     pageSize,
   });

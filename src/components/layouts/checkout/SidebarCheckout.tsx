@@ -28,8 +28,8 @@ const SidebarCheckout: React.FC<IProps> = ({
   const total = subtotal + shippingFee;
 
   useEffect(() => {
-    setTotal(totalPrice);
-  }, [totalPrice, setTotal]);
+    setTotal(subtotal);
+  }, [subtotal, setTotal]);
   return (
     <div>
       <h2 className=" text-xl font-semibold p-5 border-b">
