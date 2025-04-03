@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   getOrder,
   useCancelOrder,
   useUpdateOrderStatus,
 } from "@/app/api/order/order.api";
-import BreadcrumbAdmin from "@/components/layouts/admin/breadcrumb..admin";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import {
@@ -18,16 +17,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Order } from "@/types/backend";
 import RenderActionButtons from "@/components/layouts/admin/RenderActionButtons";
-
-export enum OrderStatus {
-  PENDING = "pending",
-  PROCESSING = "processing",
-  SHIPPED = "shipped",
-  DELIVERED = "delivered",
-  CANCELED = "canceled",
-}
+import { OrderStatus } from "@/types/enum";
+import BreadcrumbAdmin from "@/components/layouts/admin/breadcrumb..admin";
 
 const ListOrderPage: React.FC = () => {
   const { data } = useQuery({
@@ -39,7 +31,7 @@ const ListOrderPage: React.FC = () => {
   const { mutate: updateOrderStatus, isPending: isUpdating } =
     useUpdateOrderStatus();
 
-  const orders: Order[] = Array.isArray(data) ? data : [];
+  const orders = useMemo(() => (Array.isArray(data) ? data : []), [data]);
   const [expandedRowKey, setExpandedRowKey] = useState<number | null>(null);
 
   const toggleExpand = (id: number) => {
@@ -92,7 +84,7 @@ const ListOrderPage: React.FC = () => {
                   <TableCell>{order.payment_method.toUpperCase()}</TableCell>
                   <TableCell>
                     <Badge variant={getStatusVariant(order.status)}>
-                      {order.status.toUpperCase()}
+                      {formatOrderStatus(order.status)}
                     </Badge>
                   </TableCell>
                 </TableRow>
@@ -123,18 +115,26 @@ const ListOrderPage: React.FC = () => {
                             </TableRow>
                           </TableHeader>
                           <TableBody>
-                            {order.orderItems?.map((item) => (
-                              <TableRow key={item.id}>
-                                <TableCell>{item.name}</TableCell>
-                                <TableCell>
-                                  {item.variant?.name || "-"}
-                                </TableCell>
-                                <TableCell>{item.quantity}</TableCell>
-                                <TableCell>
-                                  ₫{Number(item.price).toLocaleString()}
-                                </TableCell>
-                              </TableRow>
-                            ))}
+                            {order.orderItems?.map(
+                              (item: {
+                                id: number;
+                                name: string;
+                                variant?: { name: string };
+                                quantity: number;
+                                price: number;
+                              }) => (
+                                <TableRow key={item.id}>
+                                  <TableCell>{item.name}</TableCell>
+                                  <TableCell>
+                                    {item.variant?.name || "-"}
+                                  </TableCell>
+                                  <TableCell>{item.quantity}</TableCell>
+                                  <TableCell>
+                                    ₫{Number(item.price).toLocaleString()}
+                                  </TableCell>
+                                </TableRow>
+                              )
+                            )}
                           </TableBody>
                         </Table>
                       </div>
@@ -164,15 +164,22 @@ export default ListOrderPage;
 const getStatusVariant = (
   status: OrderStatus
 ): "outline" | "default" | "secondary" | "destructive" => {
-  const variants: Record<
-    OrderStatus,
-    "outline" | "default" | "secondary" | "destructive"
-  > = {
-    [OrderStatus.PENDING]: "outline",
-    [OrderStatus.PROCESSING]: "default",
-    [OrderStatus.SHIPPED]: "secondary",
-    [OrderStatus.DELIVERED]: "default",
-    [OrderStatus.CANCELED]: "destructive",
-  };
-  return variants[status] || "outline";
+  switch (status) {
+    case OrderStatus.PENDING:
+      return "outline";
+    case OrderStatus.PROCESSING:
+    case OrderStatus.DELIVERED:
+    case OrderStatus.CONFIRMED:
+      return "default";
+    case OrderStatus.SHIPPED:
+      return "secondary";
+    case OrderStatus.CANCELED:
+      return "destructive";
+    default:
+      return "outline";
+  }
+};
+
+const formatOrderStatus = (status: OrderStatus) => {
+  return status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
 };

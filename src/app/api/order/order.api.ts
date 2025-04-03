@@ -84,6 +84,7 @@ export const useCancelOrder = () => {
   return useMutation({
     mutationFn: (orderId: number) => cancelOrder(orderId),
     onSuccess: () => {
+      toast.success("Đơn hàng đã được hủy thành công!");
       queryClient.invalidateQueries({ queryKey: ["orders"] }); // Gọi lại API lấy danh sách đơn hàng
     },
   });

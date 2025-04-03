@@ -17,7 +17,6 @@ export const getCategories = async (
   pageSize: number
 ) =>
   apiClient.get<CategoryResponse>(`/api/v1/category`, {
-    search: search.trim() || undefined,
     current,
     pageSize,
   });

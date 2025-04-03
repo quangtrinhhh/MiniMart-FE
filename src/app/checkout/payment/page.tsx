@@ -1,7 +1,7 @@
 "use client";
 
 import { usePaymentResult } from "@/app/api/order/order.api";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -14,12 +14,21 @@ import { CheckCircle, Printer } from "lucide-react";
 import Link from "next/link";
 import { formatCurrency } from "@/ulils/currency";
 import CardProductCheckout from "@/components/layouts/checkout/CardProductCheckout";
+import { useEffect } from "react";
 
 const PaymentResultPage = () => {
   const searchParams = useSearchParams();
   const queryParams = Object.fromEntries(searchParams.entries());
   const { data, isLoading, error } = usePaymentResult(queryParams);
   console.log("data: ", data);
+
+  const router = useRouter();
+  useEffect(() => {
+    // Nếu có lỗi hoặc thanh toán thất bại, điều hướng về trang checkout
+    if (error || data?.status === "failed") {
+      router.push("/checkout");
+    }
+  }, [data, error, router]);
 
   if (isLoading)
     return (

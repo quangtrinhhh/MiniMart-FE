@@ -12,7 +12,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Fragment, useState } from "react";
 import { Order } from "@/types/backend";
-import { OrderStatus } from "@/app/(admin)/dashboard/orders/list/page";
+import { OrderStatus } from "@/types/enum";
 
 const AccountOrders: React.FC = () => {
   const { data } = useQuery({
@@ -69,10 +69,16 @@ const AccountOrders: React.FC = () => {
                   <Badge
                     variant={
                       order.status === OrderStatus.PENDING
-                        ? "outline"
+                        ? "outline" // Màu vàng (mapped to outline)
+                        : order.status === OrderStatus.CONFIRMED
+                        ? "default" // Xanh dương
                         : order.status === OrderStatus.PROCESSING
-                        ? "default"
-                        : "destructive"
+                        ? "secondary" // Cam nhạt
+                        : order.status === OrderStatus.SHIPPED
+                        ? "default" // Xanh lá
+                        : order.status === OrderStatus.DELIVERED
+                        ? "default" // Màu tím hoặc xanh dương nhạt
+                        : "destructive" // Màu đỏ cho CANCELED
                     }
                   >
                     {order.status.toUpperCase()}

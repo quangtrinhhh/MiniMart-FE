@@ -60,3 +60,24 @@ export const getProductsByCategory = async (id: number) => {
 export const getRelatedProducts = async (id: number) => {
   return apiClient.get<OnlyProductResponse>(`/api/v1/product/${id}/related`);
 };
+
+interface IProductCategoryResponse {
+  category: string;
+  products: Product[];
+  totalItems: number;
+  totalPages: number;
+}
+
+export const getProductBySlugCategory = async (
+  slug: string,
+  current: number,
+  pageSize: number
+) => {
+  return apiClient.get<IBackendRes<IProductCategoryResponse>>(
+    `/api/v1/product/category/${slug}`,
+    {
+      current,
+      pageSize,
+    }
+  );
+};

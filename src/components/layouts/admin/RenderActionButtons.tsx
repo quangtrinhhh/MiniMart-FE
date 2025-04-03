@@ -1,8 +1,8 @@
 "use client";
 
-import { OrderStatus } from "@/app/(admin)/dashboard/orders/list/page";
 import { Button } from "@/components/ui/button";
 import { Order } from "@/types/backend";
+import { OrderStatus } from "@/types/enum";
 
 type RenderActionButtonsProps = {
   order: Order;
@@ -33,20 +33,26 @@ const RenderActionButtons: React.FC<RenderActionButtonsProps> = ({
   }[] = [
     {
       currentStatus: OrderStatus.PENDING,
-      nextStatus: OrderStatus.PROCESSING,
+      nextStatus: OrderStatus.CONFIRMED,
       label: "Xác nhận đơn hàng",
       variant: "outline",
     },
     {
+      currentStatus: OrderStatus.CONFIRMED,
+      nextStatus: OrderStatus.PROCESSING,
+      label: "Bắt đầu xử lý",
+      variant: "default",
+    },
+    {
       currentStatus: OrderStatus.PROCESSING,
       nextStatus: OrderStatus.SHIPPED,
-      label: "Gửi hàng",
+      label: "Xuất kho & vận chuyển",
       variant: "secondary",
     },
     {
       currentStatus: OrderStatus.SHIPPED,
       nextStatus: OrderStatus.DELIVERED,
-      label: "Đã giao hàng",
+      label: "Xác nhận đã giao hàng",
       variant: "default",
     },
   ];
@@ -70,7 +76,11 @@ const RenderActionButtons: React.FC<RenderActionButtonsProps> = ({
       ) && (
         <Button
           variant="destructive"
-          onClick={() => cancelOrder(order.id)}
+          onClick={() => {
+            if (confirm("Bạn có chắc chắn muốn hủy đơn hàng này?")) {
+              cancelOrder(order.id);
+            }
+          }}
           disabled={isCanceling}
         >
           {isCanceling ? "Đang hủy..." : "Hủy đơn"}
