@@ -42,7 +42,10 @@ const CategoryForm = () => {
       formData.append("name", formState.name);
       formData.append("description", formState.description);
       if (imageFile) formData.append("images", imageFile);
-      formData.append("parentId", JSON.stringify(selectedCategories));
+      if (selectedCategories !== null) {
+        formData.append("parentId", JSON.stringify(selectedCategories));
+      }
+
       return await createCategory(formData);
     },
     onSuccess: () => {

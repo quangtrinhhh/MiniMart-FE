@@ -6,19 +6,28 @@ import ProductList from "@/components/layouts/collections/ProductList";
 import Siderbar from "@/components/layouts/collections/Siderbar";
 import Image from "next/image";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getProducts } from "@/app/api/products/product.api";
+
+import { useFindAllWithFilter } from "@/app/api/products/useProducts";
 
 const PageCollections: React.FC = ({}) => {
   const [current, setCurrent] = useState(1);
   const [pageSize] = useState(8);
-  const [filter] = useState("");
-
-  const { data } = useQuery({
-    queryKey: ["products", filter, current, pageSize],
-    queryFn: () => getProducts(current, pageSize),
-    staleTime: 5000,
+  const [sortBy, setSortBy] = useState("manual");
+  const [filters, setFilters] = useState({
+    colors: [] as string[],
+    productTypes: [] as string[],
+    tags: [] as string[],
+    priceRanges: [] as string[],
   });
+  console.log("sortBy", sortBy);
+
+  const { products, totalItems, totalPages } = useFindAllWithFilter(
+    current,
+    pageSize,
+    sortBy,
+    filters
+  );
+  console.log("filters", filters);
 
   return (
     <div className="bg-[#f2f6f3]">
@@ -38,15 +47,15 @@ const PageCollections: React.FC = ({}) => {
             <h1 className="text-5xl text-[#016735] font-semibold">
               Tất cả sản phẩm
             </h1>
-            <Arrange />
+            <Arrange onSortChange={setSortBy} />
             <ProductList
-              dataList={data?.data.result || []}
-              totalItemsProps={Number(data?.data.totalItems)}
-              totalPagesProps={Number(data?.data.totalPages)}
+              dataList={products}
+              totalItemsProps={Number(totalItems)}
+              totalPagesProps={Number(totalPages)}
               setCurrent={setCurrent}
             />
           </div>
-          <Siderbar />
+          <Siderbar onFilterChange={setFilters} />
         </div>
       </div>
     </div>

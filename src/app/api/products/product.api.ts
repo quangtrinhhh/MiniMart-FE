@@ -63,7 +63,7 @@ export const getRelatedProducts = async (id: number) => {
 
 interface IProductCategoryResponse {
   category: string;
-  products: Product[];
+  result: Product[];
   totalItems: number;
   totalPages: number;
 }
@@ -71,13 +71,41 @@ interface IProductCategoryResponse {
 export const getProductBySlugCategory = async (
   slug: string,
   current: number,
-  pageSize: number
+  pageSize: number,
+  sortBy: string,
+  filters: {
+    colors: string[];
+    productTypes: string[];
+    tags: string[];
+    priceRanges: string[];
+  }
 ) => {
   return apiClient.get<IBackendRes<IProductCategoryResponse>>(
     `/api/v1/product/category/${slug}`,
     {
       current,
       pageSize,
+      sortBy,
+      ...filters,
     }
   );
+};
+
+export const findAllWithFilter = async (
+  current: number,
+  pageSize: number,
+  sortBy: string,
+  filters: {
+    colors: string[];
+    productTypes: string[];
+    tags: string[];
+    priceRanges: string[];
+  }
+) => {
+  return apiClient.get<ProductResponse>(`/api/v1/product/filter`, {
+    current,
+    pageSize,
+    sortBy,
+    ...filters,
+  });
 };

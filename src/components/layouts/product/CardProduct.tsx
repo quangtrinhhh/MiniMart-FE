@@ -48,14 +48,14 @@ const CardProduct: React.FC<ProductProps> = ({ product }) => {
         <Image
           src={imageUrl1}
           alt={product.assets?.[0]?.asset?.filename || productName}
-          className="object-cover w-full h-full p-3 rounded-lg"
+          className="object-cover w-full h-full p-3  overflow-hidden rounded-3xl"
           width={480}
           height={480}
         />
         <Image
           src={imageUrl2}
           alt={product.assets?.[1]?.asset?.filename || productName}
-          className="object-cover w-full h-full p-3 rounded-lg absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          className="overflow-hidden object-cover w-full h-full p-3 rounded-3xl absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
           width={480}
           height={480}
         />

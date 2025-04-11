@@ -14,7 +14,16 @@ interface Props {
 
 const CollectionsSlug: React.FC<Props> = ({ slug }) => {
   const [current, setCurrent] = useState(1);
-  const { data, isLoading } = useProductBySlugCategory(slug, current, 10);
+  const [sortBy, setSortBy] = useState("manual");
+  const [filters, setFilters] = useState({
+    colors: [] as string[],
+    productTypes: [] as string[],
+    tags: [] as string[],
+    priceRanges: [] as string[],
+  });
+  const { categoryName, totalItems, totalPages, products, isLoading } =
+    useProductBySlugCategory(slug, current, 8, sortBy, filters);
+  console.log("products", products);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -35,17 +44,17 @@ const CollectionsSlug: React.FC<Props> = ({ slug }) => {
         <div className="grid grid-cols-1 xl:grid-cols-[9fr_3fr] gap-3 mt-5">
           <div className="block">
             <h1 className="text-5xl text-[#016735] font-semibold">
-              {data?.data?.category || "Tất cả sản phẩm"}
+              {categoryName || "Tất cả sản phẩm"}
             </h1>
-            <Arrange />
+            <Arrange onSortChange={setSortBy} />
             <ProductList
-              dataList={data?.data?.products || []}
-              totalItemsProps={Number(data?.data?.totalItems)}
-              totalPagesProps={Number(data?.data?.totalPages)}
+              dataList={products || []}
+              totalItemsProps={Number(totalItems)}
+              totalPagesProps={Number(totalPages)}
               setCurrent={setCurrent}
             />
           </div>
-          <Siderbar />
+          <Siderbar onFilterChange={setFilters} />
         </div>
       </div>
     </div>

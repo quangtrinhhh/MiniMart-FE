@@ -3,7 +3,7 @@ import { Product } from "@/types/backend";
 import Pagination from "../admin/Pagination";
 
 interface IProps {
-  dataList: Product[];
+  dataList?: Product[];
   totalPagesProps: number;
   totalItemsProps: number;
   setCurrent: (page: number) => void;
@@ -18,7 +18,7 @@ const ProductList: React.FC<IProps> = ({
   return (
     <div className="">
       <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-2 mt-2">
-        {dataList.map((product, index) => (
+        {dataList?.map((product, index) => (
           <CardProduct key={index} product={product} />
         ))}
       </div>

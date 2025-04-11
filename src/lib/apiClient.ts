@@ -1,5 +1,6 @@
 import { axiosInstance } from "./axiosInstance";
 import axios, { AxiosError } from "axios";
+import qs from "qs";
 
 export const apiClient = {
   get: async <T>(url: string, params?: object): Promise<T> => {
@@ -7,7 +8,8 @@ export const apiClient = {
       console.log("🔍 Fetching URL:", url, params);
       const response = await axiosInstance.get<T>(url, {
         params,
-        paramsSerializer: (params) => new URLSearchParams(params).toString(), // 🔥 Fix lỗi Axios wrap params
+        paramsSerializer: (params) =>
+          qs.stringify(params, { arrayFormat: "repeat" }), // ✅ giống Postman
       });
       return response.data;
     } catch (error) {

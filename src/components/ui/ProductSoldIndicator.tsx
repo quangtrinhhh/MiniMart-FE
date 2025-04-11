@@ -4,7 +4,8 @@ interface Props {
 }
 
 const ProductSoldIndicator: React.FC<Props> = ({ sold, stock }) => {
-  const percentage = stock > 0 ? ((sold / stock) * 100).toFixed(2) : 0;
+  const total = sold + stock;
+  const percentage = total > 0 ? ((sold / total) * 100).toFixed(2) : 0;
   return (
     <div>
       <div className="w-full">

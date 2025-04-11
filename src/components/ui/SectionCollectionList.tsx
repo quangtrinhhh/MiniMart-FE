@@ -2,6 +2,7 @@ import Image from "next/image";
 import Collenction from "./Collenction";
 import { useQuery } from "@tanstack/react-query";
 import { getAllParentCategories } from "@/app/api/categories/category.api";
+import Link from "next/link";
 
 const SectionCollectionList: React.FC = ({}) => {
   const { data } = useQuery({
@@ -26,11 +27,13 @@ const SectionCollectionList: React.FC = ({}) => {
       <div className="relative z-10 top-1/2 -translate-y-1/2 ">
         <div className="max-w-7xl mx-auto p-3 w-full h-full grid grid-cols-6 max-md:grid-cols-3 gap-5 max-md:my-5">
           {categoryList?.map((category, index) => (
-            <Collenction
-              key={index}
-              image={category.image}
-              name={category.name}
-            />
+            <Link href={`/collections/${category.slug}`} key={index}>
+              <Collenction
+                key={index}
+                image={category.image}
+                name={category.name}
+              />
+            </Link>
           ))}
         </div>
       </div>

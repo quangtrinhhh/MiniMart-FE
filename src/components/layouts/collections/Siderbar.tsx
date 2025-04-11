@@ -1,9 +1,23 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+  onFilterChange: (filters: {
+    colors: string[];
+    productTypes: string[];
+    tags: string[];
+    priceRanges: string[];
+  }) => void;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
   const [showAllColors, setShowAllColors] = useState(false);
   const [showAllProducts, setShowAllProducts] = useState(false);
+
+  const [selectedColors, setSelectedColors] = useState<string[]>([]);
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedPrices, setSelectedPrices] = useState<string[]>([]);
 
   const colors = ["Trắng", "Đen", "Nâu", "Xanh", "Hồng", "Tím", "Vàng"];
   const productTypes = [
@@ -13,18 +27,46 @@ const Sidebar: React.FC = () => {
     "Làm thơm",
     "Nhập khẩu",
   ];
+  const tags = ["EGA", "EGA GREEN", "Khác"];
   const prices = [
-    "Giá dưới 1.000.000₫",
-    "1.000.000₫ - 2.000.000₫",
-    "2.000.000₫ - 3.000.000₫",
-    "3.000.000₫ - 5.000.000₫",
-    "5.000.000₫ - 7.000.000₫",
-    "7.000.000₫ - 10.000.000₫",
-    "Giá trên 10.000.000₫",
+    "0-1000000",
+    "1000000-2000000",
+    "2000000-3000000",
+    "3000000-5000000",
+    "5000000-7000000",
+    "7000000-10000000",
+    "10000000-999999999",
   ];
 
+  const toggleItem = (
+    item: string,
+    list: string[],
+    setter: (newList: string[]) => void
+  ) => {
+    if (list.includes(item)) {
+      setter(list.filter((i) => i !== item));
+    } else {
+      setter([...list, item]);
+    }
+  };
+
+  useEffect(() => {
+    onFilterChange({
+      colors: selectedColors,
+      productTypes: selectedTypes,
+      tags: selectedTags,
+      priceRanges: selectedPrices,
+    });
+  }, [
+    selectedColors,
+    selectedTypes,
+    selectedTags,
+    selectedPrices,
+    onFilterChange,
+  ]);
+
   return (
-    <aside className="bg-white rounded-sm p-5  overflow-auto h-full">
+    <aside className="bg-white rounded-sm p-5 overflow-auto h-full">
       {/* Màu sắc */}
       <div className="mb-5">
         <h2 className="text-lg font-semibold border-b pb-2">Màu sắc</h2>
@@ -37,7 +79,10 @@ const Sidebar: React.FC = () => {
               <input
                 type="checkbox"
                 className="w-4 h-4"
-                aria-label={`Lọc màu ${color}`}
+                checked={selectedColors.includes(color)}
+                onChange={() =>
+                  toggleItem(color, selectedColors, setSelectedColors)
+                }
               />
               <span>{color}</span>
             </li>
@@ -55,7 +100,7 @@ const Sidebar: React.FC = () => {
       <div className="mb-5">
         <h2 className="text-lg font-semibold border-b pb-2">Tags</h2>
         <ul className="mt-2">
-          {["EGA", "EGA GREEN", "Khác"].map((tag, index) => (
+          {tags.map((tag, index) => (
             <li
               key={index}
               className="flex items-center gap-2 cursor-pointer hover:text-orange-500"
@@ -63,7 +108,8 @@ const Sidebar: React.FC = () => {
               <input
                 type="checkbox"
                 className="w-4 h-4"
-                aria-label={`Lọc tag ${tag}`}
+                checked={selectedTags.includes(tag)}
+                onChange={() => toggleItem(tag, selectedTags, setSelectedTags)}
               />
               <span>{tag}</span>
             </li>
@@ -84,7 +130,10 @@ const Sidebar: React.FC = () => {
                 <input
                   type="checkbox"
                   className="w-4 h-4"
-                  aria-label={`Lọc theo loại ${type}`}
+                  checked={selectedTypes.includes(type)}
+                  onChange={() =>
+                    toggleItem(type, selectedTypes, setSelectedTypes)
+                  }
                 />
                 <span>{type}</span>
               </li>
@@ -111,9 +160,22 @@ const Sidebar: React.FC = () => {
               <input
                 type="checkbox"
                 className="w-4 h-4"
-                aria-label={`Lọc theo giá ${price}`}
+                checked={selectedPrices.includes(price)}
+                onChange={() =>
+                  toggleItem(price, selectedPrices, setSelectedPrices)
+                }
               />
-              <span>{price}</span>
+              <span>
+                {index === 0
+                  ? "Giá dưới 1.000.000₫"
+                  : index === prices.length - 1
+                  ? "Giá trên 10.000.000₫"
+                  : `Từ ${Number(price.split("-")[0]).toLocaleString(
+                      "vi-VN"
+                    )}₫ - ${Number(price.split("-")[1]).toLocaleString(
+                      "vi-VN"
+                    )}₫`}
+              </span>
             </li>
           ))}
         </ul>

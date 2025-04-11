@@ -14,7 +14,7 @@ const ListProductPage: React.FC = ({}) => {
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["products", filter, current, pageSize],
-    queryFn: () => getProducts(filter, current, pageSize),
+    queryFn: () => getProducts(current, pageSize),
     staleTime: 5000,
   });
 
