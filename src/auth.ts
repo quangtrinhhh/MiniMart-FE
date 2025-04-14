@@ -6,6 +6,7 @@ import {
 } from "./ulils/errors";
 import { sendRequest } from "./ulils/api";
 import { IUser } from "./types/next-auth";
+import { isAccessTokenExpired } from "./lib/jwtDecode";
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
@@ -50,6 +51,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // User is available during sign-in
         token.user = user as IUser;
         token.access_token = (user as IUser).access_token;
+      }
+      // Kiểm tra nếu access token hết hạn
+      if (token.access_token && isAccessTokenExpired(token.access_token)) {
+        return null; // Token hết hạn, trả về null để yêu cầu đăng nhập lại
       }
       return token;
     },

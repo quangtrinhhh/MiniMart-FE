@@ -38,3 +38,10 @@ export const deleteCategory = async (id: number) => {
 export const getAllParentCategories = async () => {
   return apiClient.get<CategoryResponse>(`/api/v1/category/parentcategories`);
 };
+/**
+ *
+ */
+
+export const getCategoryMenu = async () => {
+  return apiClient.get<IBackendResPage<Category>>(`/api/v1/category/menu`);
+};

@@ -20,13 +20,11 @@ const isAdminPage = (pathname: string) => pathname.startsWith("/dashboard");
 
 export async function middleware(req: NextRequest) {
   try {
-    // 🟢 Lấy session mà KHÔNG cần truyền tham số
     const session = await auth();
-
     const url = req.nextUrl;
     const { pathname } = url;
 
-    // 🛑 Nếu đã đăng nhập, chặn vào trang đăng nhập, đăng ký, xác minh
+    // ✅ Nếu đã đăng nhập → chặn vào trang login/register/verify
     if (
       session &&
       (isAuthPage(pathname) || pathname.startsWith("/account/verify"))
@@ -34,21 +32,18 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/account", req.url));
     }
 
-    // 🛑 Nếu chưa đăng nhập, chặn vào các trang cần xác thực (bao gồm checkout)
+    // ✅ Nếu chưa đăng nhập → chặn vào các route bảo vệ
     if (!session && isProtectedPage(pathname)) {
-      return NextResponse.redirect(
-        new URL(`/account/login?redirect=${pathname}`, req.url)
-      );
+      const loginUrl = new URL("/account/login", req.url);
+      loginUrl.searchParams.set("redirect", pathname);
+      return NextResponse.redirect(loginUrl);
     }
 
-    // 🛑 Nếu vào trang admin nhưng KHÔNG phải ADMIN
-    if (isAdminPage(pathname)) {
-      if (!session || session.user?.role !== "ADMIN") {
-        return NextResponse.redirect(new URL("/?error=unauthorized", req.url));
-      }
+    // ✅ Truy cập admin nhưng không phải admin
+    if (isAdminPage(pathname) && session?.user?.role !== "ADMIN") {
+      return NextResponse.redirect(new URL("/?error=unauthorized", req.url));
     }
 
-    // ✅ Cho phép truy cập nếu không có vấn đề
     return NextResponse.next();
   } catch (error) {
     console.error("Middleware Error:", error);
@@ -56,7 +51,7 @@ export async function middleware(req: NextRequest) {
   }
 }
 
-// ✅ Chỉ áp dụng middleware cho các trang cần thiết
+// ✅ Áp dụng middleware cho các route cần bảo vệ
 export const config = {
   matcher: ["/account/:path*", "/dashboard/:path*", "/checkout/:path*"],
 };
