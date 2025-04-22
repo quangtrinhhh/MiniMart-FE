@@ -36,8 +36,9 @@ const PaymentResultPage = () => {
         Đang kiểm tra thanh toán...
       </p>
     );
-  if (error || data?.status === "invalid")
-    return <p className="text-red-500">❌ Giao dịch không hợp lệ!</p>;
+  if (error || data?.status === "invalid") {
+    router.push("/checkout");
+  }
 
   return (
     <div className="h-screen  bg-[#E6E8EA] rounded-lg shadow-md">

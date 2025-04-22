@@ -1,5 +1,5 @@
 import { getOnlyProduct } from "@/app/api/products/product.api";
-import ProductEditFrom from "@/components/ui/ProductEditFrom";
+import ProductEditForm from "@/components/layouts/product/ProductEditFrom";
 
 interface ProductPageProps {
   params: {
@@ -11,10 +11,12 @@ export default async function AdminProductPage({ params }: ProductPageProps) {
   const { slug } = params;
   const productResponse = await getOnlyProduct(slug);
   const initialProduct = productResponse.data.result;
+  console.log("initialProduct", initialProduct);
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Chỉnh sửa sản phẩm</h1>
-      <ProductEditFrom initialProduct={initialProduct} />
+      <ProductEditForm product={initialProduct} />
     </div>
   );
 }

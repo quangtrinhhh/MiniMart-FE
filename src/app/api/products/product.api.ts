@@ -21,7 +21,7 @@ export const getProducts = async (
   current: number,
   pageSize: number
 ) =>
-  apiClient.get<ProductResponse>(`/api/v1/product`, {
+  apiClient.get<ProductResponse>(`/api/v1/products`, {
     // filter: search.trim() || undefined,
     current,
     pageSize,
@@ -31,34 +31,34 @@ export const getProducts = async (
  * 🟢 Tạo mới danh mục
  */
 export const createproduct = async (productData: FormData) =>
-  apiClient.post<ProductResponse>(`/api/v1/product`, productData);
+  apiClient.post<ProductResponse>(`/api/v1/products`, productData);
 
 /**
  * 🟢 Xóa  */
 export const deleteProduct = async (id: number) => {
-  return apiClient.delete<ProductResponse>(`/api/v1/product/${id}`);
+  return apiClient.delete<ProductResponse>(`/api/v1/products/${id}`);
 };
 /**
  *🟢 lấy chi tiết 1 product
  */
 export const getOnlyProduct = async (slug: string) => {
-  return apiClient.get<OnlyProductResponse>(`/api/v1/product/${slug}`);
+  return apiClient.get<OnlyProductResponse>(`/api/v1/products/${slug}`);
 };
 /**
  *
  */
 export const getDiscountedProducts = async () => {
-  return apiClient.get<OnlyProductResponse>(`/api/v1/product/discounted`);
+  return apiClient.get<OnlyProductResponse>(`/api/v1/products/discounted`);
 };
 export const getProductsByCategory = async (id: number) => {
-  return apiClient.get<OnlyProductResponse>(`/api/v1/product/${id}/categorie`);
+  return apiClient.get<OnlyProductResponse>(`/api/v1/products/${id}/categorie`);
 };
 /**
  *
  */
 
 export const getRelatedProducts = async (id: number) => {
-  return apiClient.get<OnlyProductResponse>(`/api/v1/product/${id}/related`);
+  return apiClient.get<OnlyProductResponse>(`/api/v1/products/${id}/related`);
 };
 
 interface IProductCategoryResponse {
@@ -81,7 +81,7 @@ export const getProductBySlugCategory = async (
   }
 ) => {
   return apiClient.get<IBackendRes<IProductCategoryResponse>>(
-    `/api/v1/product/category/${slug}`,
+    `/api/v1/products/category/${slug}`,
     {
       current,
       pageSize,
@@ -102,7 +102,7 @@ export const findAllWithFilter = async (
     priceRanges: string[];
   }
 ) => {
-  return apiClient.get<ProductResponse>(`/api/v1/product/filter`, {
+  return apiClient.get<ProductResponse>(`/api/v1/products/filter`, {
     current,
     pageSize,
     sortBy,
