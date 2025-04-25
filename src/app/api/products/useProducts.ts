@@ -46,12 +46,13 @@ export const useProductBySlugCategory = (
 export const useFindAllWithFilter = (
   current: number,
   pageSize: number,
-  sortBy: string,
-  filters: {
-    colors: string[];
-    productTypes: string[];
-    tags: string[];
-    priceRanges: string[];
+  sortBy?: string,
+  filters?: {
+    colors?: string[];
+    productTypes?: string[];
+    tags?: string[];
+    priceRanges?: string[];
+    keyword?: string;
   }
 ) => {
   const serializedFilters = useMemo(() => JSON.stringify(filters), [filters]);

@@ -94,12 +94,13 @@ export const getProductBySlugCategory = async (
 export const findAllWithFilter = async (
   current: number,
   pageSize: number,
-  sortBy: string,
-  filters: {
-    colors: string[];
-    productTypes: string[];
-    tags: string[];
-    priceRanges: string[];
+  sortBy?: string,
+  filters?: {
+    colors?: string[];
+    productTypes?: string[];
+    tags?: string[];
+    priceRanges?: string[];
+    keyword?: string;
   }
 ) => {
   return apiClient.get<ProductResponse>(`/api/v1/products/filter`, {

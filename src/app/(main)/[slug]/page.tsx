@@ -1,36 +1,35 @@
+// app/(main)/[slug]/page.tsx
 import { getOnlyProduct } from "@/app/api/products/product.api";
 import ProductDetail from "@/components/layouts/product_details/ProductDetail";
-import { Metadata } from "next";
 import { Product } from "@/types/backend";
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
 
-// Định nghĩa kiểu PageProps
+// Kiểu props từ dynamic segment
 interface PageProps {
-  params: Record<string, string>; // 🔥 Sửa kiểu params
-  searchParams?: Record<string, string | string[] | undefined>;
+  params: { slug: string };
 }
 
-// 🛠 Tạo metadata động cho SEO
+// ✅ SEO metadata động
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  console.log("Kiểm tra slug: ", params.slug);
   try {
     const productResponse = await getOnlyProduct(params.slug);
     const product = productResponse?.data?.result as Product | undefined;
 
     if (!product) {
       return {
-        title: "Sản phẩm không tồn tại | Tên Shop",
-        description: "Sản phẩm bạn tìm kiếm không tồn tại hoặc đã bị xóa.",
+        title: "Sản phẩm không tồn tại | EGA Mini Mart",
+        description: "Sản phẩm bạn tìm không tồn tại hoặc đã bị xóa.",
       };
     }
 
-    const title = `${product.name} | Mua giá tốt tại Tên Shop`;
+    const title = `${product.name} | EGA Mini Mart`;
     const description =
       product.description?.length > 160
-        ? product.description.substring(0, 157) + "..."
-        : product.description ||
-          `Mua ${product.name} với giá tốt tại Tên Shop.`;
+        ? product.description.slice(0, 157) + "..."
+        : product.description || `Mua ${product.name} tại EGA Mini Mart.`;
 
     const imageUrl =
       product.assets?.[0]?.asset.path || "/images/default-image.jpg";
@@ -52,29 +51,27 @@ export async function generateMetadata({
       },
     };
   } catch (error) {
-    console.error("Lỗi khi lấy metadata sản phẩm:", error);
+    console.error("Lỗi metadata:", error);
     return {
-      title: "Lỗi tải dữ liệu sản phẩm | Tên Shop",
-      description: `Không thể tải thông tin sản phẩm do lỗi: ${
-        error instanceof Error ? error.message : "Không xác định"
-      }. Vui lòng thử lại sau.`,
+      title: "Lỗi tải sản phẩm | EGA Mini Mart",
+      description: "Không thể hiển thị thông tin sản phẩm lúc này.",
     };
   }
 }
 
-// 🛠 Lấy dữ liệu sản phẩm từ API
+// ✅ Hiển thị trang chi tiết sản phẩm
 export default async function ProductPage({ params }: PageProps) {
   try {
     const productResponse = await getOnlyProduct(params.slug);
-    const initialProduct = productResponse?.data?.result as Product | undefined;
+    const product = productResponse?.data?.result as Product | undefined;
 
-    if (!initialProduct) {
-      return <div>Sản phẩm không tồn tại</div>;
+    if (!product) {
+      notFound(); // 🔥 Chuẩn SEO - chuyển về 404
     }
 
-    return <ProductDetail slug={params.slug} initialProduct={initialProduct} />;
+    return <ProductDetail slug={params.slug} initialProduct={product} />;
   } catch (error) {
-    console.error("Lỗi khi tải trang sản phẩm:", error);
-    return <div>Đã xảy ra lỗi khi tải sản phẩm.</div>;
+    console.error("Lỗi khi tải sản phẩm:", error);
+    notFound(); // Hoặc tạo error.tsx nếu muốn trang lỗi riêng
   }
 }

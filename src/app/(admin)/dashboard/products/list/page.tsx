@@ -1,23 +1,22 @@
 "use client";
-import { getProducts } from "@/app/api/products/product.api";
+import { useFindAllWithFilter } from "@/app/api/products/useProducts";
 import BreadcrumbAdmin from "@/components/layouts/admin/breadcrumb..admin";
 import TableProductList from "@/components/layouts/table/TableProductList";
 import AddButton from "@/components/ui/AddButton";
 import EntriesSelector from "@/components/ui/EntriesSelector";
 import SearchInput from "@/components/ui/SearchInput";
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 const ListProductPage: React.FC = ({}) => {
   const [current, setCurrent] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [filter, setFilter] = useState("");
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["products", filter, current, pageSize],
-    queryFn: () => getProducts(current, pageSize),
-    staleTime: 5000,
+  const [sortBy] = useState("manual");
+  const [filters, setFilters] = useState({
+    keyword: "",
   });
 
+  const { products, totalItems, totalPages, isLoading, error } =
+    useFindAllWithFilter(current, pageSize, sortBy, filters);
   return (
     <div className="p-[30px] ">
       <div className="flex items-center flex-wrap justify-between gap20 mb-27">
@@ -29,15 +28,15 @@ const ListProductPage: React.FC = ({}) => {
         <div className="flex gap-5 ">
           <EntriesSelector setPageSize={setPageSize} />
           {/*  */}
-          <SearchInput setFilter={setFilter} />
+          <SearchInput setFilter={(value) => setFilters({ keyword: value })} />
           {/*  */}
           <AddButton href="/admin/products/create" />
         </div>
 
         <TableProductList
-          data={data?.data.result ?? []}
-          totalItemsProps={Number(data?.data.totalItems)}
-          totalPagesProps={Number(data?.data.totalPages)}
+          data={products ?? []}
+          totalItemsProps={Number(totalItems)}
+          totalPagesProps={Number(totalPages)}
           isLoading={isLoading}
           setCurrent={setCurrent}
           error={error}

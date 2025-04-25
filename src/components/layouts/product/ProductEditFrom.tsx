@@ -153,7 +153,7 @@ export default function ProductEditForm({ product }: { product: Product }) {
 
       <Card>
         <CardContent className="space-y-4 p-4">
-          <Label>Biến thể</Label>
+          <Label className="flex w-full">Biến thể</Label>
           {form.variants.map((variant, idx) => (
             <div key={idx} className="grid grid-cols-5 gap-2 items-center">
               <Input
