@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Collenction from "./Collenction";
 import { useQuery } from "@tanstack/react-query";
-import { getAllParentCategories } from "@/app/api/categories/category.api";
+import { getAllParentCategories } from "@/api/categories/category.api";
 import Link from "next/link";
 
 const SectionCollectionList: React.FC = ({}) => {

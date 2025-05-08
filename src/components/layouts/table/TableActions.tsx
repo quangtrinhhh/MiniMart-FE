@@ -1,4 +1,4 @@
-import { deleteCategory } from "@/app/api/categories/category.api";
+import { deleteCategory } from "@/api/categories/category.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FaRegEye } from "react-icons/fa6";
 import { LuPenLine } from "react-icons/lu";

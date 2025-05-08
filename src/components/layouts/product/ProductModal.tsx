@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 import NumberProduct from "../product_details/NumberProduct";
 import ButtonProductDetails from "../product_details/Button";
 import PriceAndSele from "../product_details/PriceAndSele";
-import { getOnlyProduct } from "@/app/api/products/product.api";
+import { getOnlyProduct } from "@/api/products/product.api";
 import { useQuery } from "@tanstack/react-query";
 import { useAddToCart } from "@/hooks/useCart";
 

@@ -63,6 +63,17 @@ export default function ProductForm() {
               register={register}
               errors={errors}
             />
+            <div>
+              <Label>Giá cũ</Label>
+              <Input
+                type="number"
+                placeholder="Nhập giá cũ (nếu có)"
+                {...register("price_old", { valueAsNumber: true })}
+              />
+              <p className="text-red-500 text-sm">
+                {errors.price_old?.message}
+              </p>
+            </div>
             <CategorySelect
               selectedCategories={selectedCategories}
               setSelectedCategories={setSelectedCategories}

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { IoIosArrowForward } from "react-icons/io";
 import CardProduct from "../layouts/product/CardProduct";
 import { useQuery } from "@tanstack/react-query";
-import { getProductsByCategory } from "@/app/api/products/product.api";
+import { getProductsByCategory } from "@/api/products/product.api";
 import { ProductCategory } from "@/types/backend";
 
 const ProductsOfInterest: React.FC = () => {

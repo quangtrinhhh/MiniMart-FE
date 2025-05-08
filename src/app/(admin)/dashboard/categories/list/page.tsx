@@ -1,6 +1,6 @@
 "use client";
 import TableProductList from "@/components/layouts/table/TableCategoryList";
-import { getCategories } from "@/app/api/categories/category.api";
+import { getCategories } from "@/api/categories/category.api";
 import AddButton from "@/components/ui/AddButton";
 import EntriesSelector from "@/components/ui/EntriesSelector";
 import SearchInput from "@/components/ui/SearchInput";

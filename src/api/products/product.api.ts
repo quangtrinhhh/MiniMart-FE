@@ -8,11 +8,7 @@ interface ProductResponse {
     totalPages: number;
   };
 }
-interface OnlyProductResponse {
-  data: {
-    result: Product;
-  };
-}
+
 /**
  * 🟢 Lấy danh sách danh mục
  */
@@ -42,23 +38,27 @@ export const deleteProduct = async (id: number) => {
  *🟢 lấy chi tiết 1 product
  */
 export const getOnlyProduct = async (slug: string) => {
-  return apiClient.get<OnlyProductResponse>(`/api/v1/products/${slug}`);
+  return apiClient.get<IBackendResPage<Product>>(`/api/v1/products/${slug}`);
 };
 /**
  *
  */
 export const getDiscountedProducts = async () => {
-  return apiClient.get<OnlyProductResponse>(`/api/v1/products/discounted`);
+  return apiClient.get<IBackendResPage<Product>>(`/api/v1/products/discounted`);
 };
 export const getProductsByCategory = async (id: number) => {
-  return apiClient.get<OnlyProductResponse>(`/api/v1/products/${id}/categorie`);
+  return apiClient.get<IBackendResPage<Product>>(
+    `/api/v1/products/${id}/categorie`
+  );
 };
 /**
  *
  */
 
 export const getRelatedProducts = async (id: number) => {
-  return apiClient.get<OnlyProductResponse>(`/api/v1/products/${id}/related`);
+  return apiClient.get<IBackendResPage<Product>>(
+    `/api/v1/products/${id}/related`
+  );
 };
 
 interface IProductCategoryResponse {
@@ -109,4 +109,10 @@ export const findAllWithFilter = async (
     sortBy,
     ...filters,
   });
+};
+
+export const getSuggestProducts = async (limit: number) => {
+  return apiClient.get<IBackendResPage<Product>>(
+    `/api/v1/products/suggestions?limit=${limit}`
+  );
 };

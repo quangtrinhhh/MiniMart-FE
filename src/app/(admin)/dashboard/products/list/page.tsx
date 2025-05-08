@@ -1,5 +1,5 @@
 "use client";
-import { useFindAllWithFilter } from "@/app/api/products/useProducts";
+import { useFindAllWithFilter } from "@/api/products/useProducts";
 import BreadcrumbAdmin from "@/components/layouts/admin/breadcrumb..admin";
 import TableProductList from "@/components/layouts/table/TableProductList";
 import AddButton from "@/components/ui/AddButton";

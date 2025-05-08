@@ -6,7 +6,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
-import { resendOTP, verifyOTP } from "@/app/api/auth/auth";
+import { resendOTP, verifyOTP } from "@/api/auth/auth";
 
 interface IProps {
   setIsModalOpen: (isOpen: boolean) => void;

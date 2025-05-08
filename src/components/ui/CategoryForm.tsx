@@ -3,7 +3,7 @@ import { useState } from "react";
 import UploadImage from "./UploadImage";
 import FormField from "./FormField";
 import { useMutation } from "@tanstack/react-query";
-import { createCategory } from "@/app/api/categories/category.api";
+import { createCategory } from "@/api/categories/category.api";
 import { toast } from "react-toastify";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";

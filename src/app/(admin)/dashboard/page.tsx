@@ -1,5 +1,5 @@
 "use client";
-import { useDashboardStats } from "@/app/api/dashboard/dashboard.api";
+import { useDashboardStats } from "@/api/dashboard/dashboard.api";
 import { DashboardStats } from "@/components/layouts/admin/DashboardStats";
 import { RevenueChart } from "@/components/layouts/admin/RevenueChart";
 import { useCheckSession } from "@/hooks/useCheckSession";

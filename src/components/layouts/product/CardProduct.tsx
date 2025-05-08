@@ -17,30 +17,51 @@ interface ProductProps {
 const CardProduct: React.FC<ProductProps> = ({ product }) => {
   const { mutate: addToCart } = useAddToCart();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   if (!product)
     return <div className="text-gray-500">Sản phẩm không tồn tại</div>;
 
   // ✅ Tách logic ra khỏi JSX
-  const imageUrl1 = product?.assets?.[0]?.asset?.path || "/default-image.jpg";
-  const imageUrl2 = product?.assets?.[1]?.asset?.path || "/default-image.jpg";
   const productName = product.name || "Sản phẩm chưa có tên";
   const productSlug = product.slug ? `/${product.slug}` : "/";
+  const hasVariants = product.variants?.length > 0;
 
-  const productPrice = Number(product.variants?.[0]?.price ?? product.price);
-  const oldPrice = Number(product.variants?.[0]?.old_price);
-  const discount = product.discount;
+  const variant = hasVariants ? product.variants[0] : undefined;
+  const productPrice = Number(variant?.price ?? product.price);
+  const productOldPrice = Number(variant?.old_price ?? product.price_old);
+
+  const calculatedDiscount =
+    productOldPrice && productOldPrice > productPrice
+      ? Math.round(((productOldPrice - productPrice) / productOldPrice) * 100)
+      : 0;
+
+  const discount = product.discount ?? calculatedDiscount;
+
+  const imageUrl1 = product.assets?.[0]?.asset?.path || "/default-image.jpg";
+  const imageUrl2 = product.assets?.[1]?.asset?.path;
+
   const isOutOfStock = product.stock === 0;
 
-  const hasVariants = product.variants?.length > 0;
   const handleAddToCart = (variantId?: number) => {
-    if (!addToCart) return; // Kiểm tra nếu mutate chưa được khởi tạo
-
     addToCart({
       productId: product.id,
       variantId,
       quantity: 1,
     });
   };
+
+  const handleCartClick = () => {
+    if (hasVariants) {
+      if (product.variants.length === 1) {
+        handleAddToCart(product.variants[0].id);
+      } else {
+        setIsModalOpen(true);
+      }
+    } else {
+      handleAddToCart();
+    }
+  };
+
   return (
     <div className="bg-white overflow-hidden group flex flex-col border shadow-md hover:shadow-lg transition">
       {/* Ảnh sản phẩm */}
@@ -48,19 +69,23 @@ const CardProduct: React.FC<ProductProps> = ({ product }) => {
         <Image
           src={imageUrl1}
           alt={product.assets?.[0]?.asset?.filename || productName}
-          className="object-cover w-full h-full p-3  overflow-hidden rounded-3xl"
-          width={480}
-          height={480}
-        />
-        <Image
-          src={imageUrl2}
-          alt={product.assets?.[1]?.asset?.filename || productName}
-          className="overflow-hidden object-cover w-full h-full p-3 rounded-3xl absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          className="object-cover w-full h-full p-3 rounded-3xl"
           width={480}
           height={480}
         />
 
-        {/* Nút xem nhanh & yêu thích */}
+        {/* Hover ảnh thứ 2 nếu có */}
+        {imageUrl2 && (
+          <Image
+            src={imageUrl2}
+            alt={product.assets?.[1]?.asset?.filename || productName}
+            className="absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 object-cover w-full h-full p-3 rounded-3xl"
+            width={480}
+            height={480}
+          />
+        )}
+
+        {/* Nút hành động */}
         <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <button
             className="w-9 h-9 flex items-center justify-center bg-white rounded-full border shadow hover:bg-gray-100"
@@ -89,24 +114,19 @@ const CardProduct: React.FC<ProductProps> = ({ product }) => {
               {formatCurrency(productPrice) || "Liên hệ"}
             </span>
 
-            {discount && (
+            {productOldPrice > productPrice && (
               <div className="flex items-center gap-2">
-                {oldPrice > 0 && (
-                  <span className="text-[#929292] line-through text-xs">
-                    {formatCurrency(oldPrice)}
-                  </span>
-                )}
-
-                {discount && (
-                  <div className="text-white bg-red-600 rounded-full font-semibold text-xs px-2 py-1">
-                    {discount}%
-                  </div>
-                )}
+                <span className="text-[#929292] line-through text-xs">
+                  {formatCurrency(productOldPrice)}
+                </span>
+                <div className="text-white bg-red-600 rounded-full font-semibold text-xs px-2 py-1">
+                  {discount}%
+                </div>
               </div>
             )}
           </div>
 
-          {/* Hiển thị trạng thái hết hàng hoặc nút thêm vào giỏ */}
+          {/* Nút thêm vào giỏ hoặc hết hàng */}
           {isOutOfStock ? (
             <div className="bg-[#EBEBEB] rounded-full text-[#EE1926] px-2.5 py-1 text-xs font-semibold">
               Hết hàng
@@ -114,9 +134,7 @@ const CardProduct: React.FC<ProductProps> = ({ product }) => {
           ) : (
             <button
               className="relative p-2 rounded-full text-[#FF3C02] hover:scale-110"
-              onClick={() =>
-                hasVariants == true ? setIsModalOpen(true) : handleAddToCart()
-              }
+              onClick={handleCartClick}
             >
               <span className="absolute inset-0 bg-[#FF3C02] opacity-10 rounded-full"></span>
               <CiShoppingBasket size={20} className="relative" />
@@ -124,13 +142,13 @@ const CardProduct: React.FC<ProductProps> = ({ product }) => {
           )}
         </div>
 
-        {/* Thanh tiến trình sản phẩm đã bán */}
+        {/* Thanh tiến trình số lượng bán */}
         {product.sold !== 0 && (
           <ProductSoldIndicator sold={product.sold} stock={product.stock} />
         )}
       </div>
 
-      {/* Modal xem nhanh sản phẩm */}
+      {/* Modal xem nhanh */}
       <ProductModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

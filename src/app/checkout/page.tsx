@@ -5,7 +5,7 @@ import ShippingMethod from "@/components/layouts/checkout/ShippingMethod";
 import SidebarCheckout from "@/components/layouts/checkout/SidebarCheckout";
 import Link from "next/link";
 import { useState } from "react";
-import { useCheckout } from "../api/order/order.api";
+import { useCheckout } from "../../api/order/order.api";
 import { Bounce, toast, ToastContainer } from "react-toastify";
 import ThankYouDialog from "@/components/layouts/checkout/ThankYouDialog";
 
@@ -45,7 +45,6 @@ const CheckoutPage = ({}) => {
       note: note || "",
       total,
     };
-    console.log(orderData);
 
     mutate(orderData, {
       onSuccess: (response) => {

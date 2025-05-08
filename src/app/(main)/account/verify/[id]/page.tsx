@@ -32,7 +32,7 @@ const VerifyPage: React.FC = () => {
       return;
     }
     setError("");
-    verifyOTPMutation.mutate({ id, code: otpValue });
+    verifyOTPMutation.mutate({ id: Number(id), code: otpValue });
   };
 
   // Xử lý gửi lại mã OTP

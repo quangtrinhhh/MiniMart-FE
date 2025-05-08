@@ -3,7 +3,7 @@ import {
   getAllItemCart,
   removeFromCart,
   updateCartItemQuantity,
-} from "@/app/api/cart/cart.api";
+} from "@/api/cart/cart.api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useSession } from "next-auth/react";

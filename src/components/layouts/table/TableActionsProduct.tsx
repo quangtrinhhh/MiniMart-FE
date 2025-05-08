@@ -1,4 +1,4 @@
-import { deleteProduct } from "@/app/api/products/product.api";
+import { deleteProduct } from "@/api/products/product.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { LuPenLine } from "react-icons/lu";

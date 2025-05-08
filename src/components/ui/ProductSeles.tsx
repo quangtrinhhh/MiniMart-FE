@@ -2,7 +2,7 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import CardProduct from "../layouts/product/CardProduct";
 import { useQuery } from "@tanstack/react-query";
-import { getDiscountedProducts } from "@/app/api/products/product.api";
+import { getDiscountedProducts } from "@/api/products/product.api";
 import { Product } from "@/types/backend";
 // import { Pagination } from "swiper/modules";
 

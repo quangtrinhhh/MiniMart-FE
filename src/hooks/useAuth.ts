@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { resendOTP, verifyOTP } from "@/app/api/auth/auth";
+import { resendOTP, verifyOTP } from "@/api/auth/auth";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 

@@ -2,18 +2,27 @@
 import { AuthError } from "next-auth";
 
 export class CustomAuthError extends AuthError {
-  static type: string;
+  type: string;
 
   constructor(message?: any) {
-    super();
+    super(message); // Pass message to the super class constructor if required by AuthError
 
-    this.type = message;
+    this.type = message ?? "Unknown Error"; // Set a default type or handle appropriately
   }
 }
 
-export class InvalidEmailPasswordError extends AuthError {
+export class InvalidEmailPasswordError extends CustomAuthError {
   static type = "Email hoặc Password không hợp lệ";
+
+  constructor() {
+    super(InvalidEmailPasswordError.type);
+  }
 }
-export class InActiveAccountError extends AuthError {
+
+export class InActiveAccountError extends CustomAuthError {
   static type = "Tài khoản chưa được kích hoạt";
+
+  constructor() {
+    super(InActiveAccountError.type);
+  }
 }

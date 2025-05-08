@@ -6,7 +6,7 @@ import Arrange from "./Arrange";
 import ProductList from "./ProductList";
 import Siderbar from "@/components/layouts/collections/Siderbar";
 import { useState } from "react";
-import { useProductBySlugCategory } from "@/app/api/products/useProducts";
+import { useProductBySlugCategory } from "@/api/products/useProducts";
 
 interface Props {
   slug: string;

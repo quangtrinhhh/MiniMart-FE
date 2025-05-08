@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback } from "react";
 import { useSidebar } from "@/context/SidebarContext";
 import Link from "next/link";
 import { MdArrowForwardIos } from "react-icons/md";
-import { useMenu } from "@/app/api/categories/useCategries";
+import { useMenu } from "@/api/categories/useCategries";
 import { Category } from "@/types/backend";
 
 const NavigationVertical: React.FC = () => {
@@ -10,6 +10,8 @@ const NavigationVertical: React.FC = () => {
   const [openSubmenu, setOpenSubmenu] = useState<number | null>(null);
 
   const { data, isLoading, error } = useMenu();
+
+  console.log("data", data);
 
   const menuItems = useMemo(() => {
     return Array.isArray(data?.data.result) ? data.data.result : [];

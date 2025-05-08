@@ -24,6 +24,7 @@ const nextConfig: NextConfig = {
         hostname: "i.imgur.com",
       },
     ],
+    domains: ["fonts.googleapis.com"],
   },
 };
 

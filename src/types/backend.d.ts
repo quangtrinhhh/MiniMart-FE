@@ -100,6 +100,7 @@ interface Product {
   categories: Category[];
   name: string;
   price: string; // Nếu cần xử lý số, có thể dùng number
+  price_old: string;
   slug: string;
   description: string;
   discount: number; // Nếu cần tính toán, có thể dùng number

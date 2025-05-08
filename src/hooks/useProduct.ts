@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createproduct } from "@/app/api/products/product.api";
+import { createproduct } from "@/api/products/product.api";
 import { ProductFormData } from "@/types/productSchema";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -39,6 +39,7 @@ export function useCreateProduct(
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("price", String(data.price));
+    formData.append("price_old", String(data.price_old));
     formData.append("discount", String(data.discount));
     formData.append("stock", String(data.stock));
     formData.append("description", data.description);
@@ -67,6 +68,7 @@ export function useCreateProduct(
     }
 
     selectedImages.forEach((file) => formData.append("images", file));
+    console.log("formData", data);
 
     mutation.mutate(formData);
   };

@@ -6,7 +6,7 @@ import {
   getOrder,
   useCancelOrder,
   useUpdateOrderStatus,
-} from "@/app/api/order/order.api";
+} from "@/api/order/order.api";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import {

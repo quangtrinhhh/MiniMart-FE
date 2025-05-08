@@ -1,4 +1,4 @@
-import { getOrder, useCancelOrder } from "@/app/api/order/order.api";
+import { getOrder, useCancelOrder } from "@/api/order/order.api";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import {

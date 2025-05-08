@@ -10,7 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { FieldErrors, UseFormSetValue } from "react-hook-form";
 import { ProductFormData } from "@/types/productSchema";
 import { Category } from "@/types/backend";
-import { getCategories } from "@/app/api/categories/category.api";
+import { getCategories } from "@/api/categories/category.api";
 import { useQuery } from "@tanstack/react-query";
 
 interface CategorySelectProps {

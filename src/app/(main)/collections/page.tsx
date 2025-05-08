@@ -7,7 +7,7 @@ import Siderbar from "@/components/layouts/collections/Siderbar";
 import Image from "next/image";
 import { useState } from "react";
 
-import { useFindAllWithFilter } from "@/app/api/products/useProducts";
+import { useFindAllWithFilter } from "@/api/products/useProducts";
 
 const PageCollections: React.FC = ({}) => {
   const [current, setCurrent] = useState(1);
