@@ -1,6 +1,6 @@
 "use client";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
-import DiscountCodeRow from "@/components/ui/DiscountCodeRow";
+import DiscountCodeRow from "@/components/layouts/main/DiscountCodeRow";
 import Image from "next/image";
 import Arrange from "./Arrange";
 import ProductList from "./ProductList";

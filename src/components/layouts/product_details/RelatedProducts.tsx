@@ -1,6 +1,6 @@
 import { getRelatedProducts } from "@/api/products/product.api";
 import CardProduct from "@/components/layouts/product/CardProduct";
-import TitleHeading from "@/components/ui/TitleHeading";
+import TitleHeading from "@/components/layouts/main/TitleHeading";
 import { Product } from "@/types/backend";
 import { useQuery } from "@tanstack/react-query";
 

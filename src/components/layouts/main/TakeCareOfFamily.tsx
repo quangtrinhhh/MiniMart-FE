@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import TitleHeading from "./TitleHeading";
 import Link from "next/link";
 import { IoIosArrowForward } from "react-icons/io";
-import CardProduct from "../layouts/product/CardProduct";
+import CardProduct from "../product/CardProduct";
 import { useQuery } from "@tanstack/react-query";
 import { getProductsByCategory } from "@/api/products/product.api";
 import { ProductCategory } from "@/types/backend";
@@ -42,7 +42,7 @@ const TakeCareOfFamily: React.FC = () => {
       <div>
         {/* Render các tab danh mục */}
         <ul className="flex flex-wrap gap-5 text-center justify-center mt-5 cursor-pointer text-sm">
-          {categoryTabs.map((tab) => (
+          {categoryTabs?.map((tab) => (
             <li
               key={tab}
               className={`py-2 px-5 font-semibold ${

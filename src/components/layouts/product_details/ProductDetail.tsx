@@ -17,12 +17,15 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import PriceAndSele from "./PriceAndSele";
 import { useAddToCart } from "@/hooks/useCart";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface IProps {
   slug: string;
 }
 
 const ProductDetail: React.FC<IProps> = ({ slug }) => {
+  const router = useRouter();
   const { data, isLoading } = useQuery({
     queryKey: ["product", slug],
     queryFn: () => getOnlyProduct(slug),
@@ -33,6 +36,7 @@ const ProductDetail: React.FC<IProps> = ({ slug }) => {
   const [quantity, setQuantity] = useState<number>(1);
   const [selectedVariant, setSelectedVariant] = useState<Variant | null>(null);
 
+  const { data: session } = useSession();
   // Cập nhật state khi query thành công
   useEffect(() => {
     if (data?.data?.result) {
@@ -63,7 +67,10 @@ const ProductDetail: React.FC<IProps> = ({ slug }) => {
       }
     );
   };
-
+  const handleCheckOut = () => {
+    if (!session) return toast.warn("Vui lòng đăng nhập trước khi thanh toán!");
+    router.push("/checkout");
+  };
   const handleBuyNow = () => {
     addToCart(
       {
@@ -72,11 +79,10 @@ const ProductDetail: React.FC<IProps> = ({ slug }) => {
         quantity,
       },
       {
-        onSuccess: () => toast.success("Thêm vào giỏ hàng thành công"),
+        onSuccess: () => handleCheckOut(),
         onError: () => toast.error("Không thể thêm vào giỏ hàng"),
       }
     );
-    toast.warn("Chức năng đang được phát triển");
   };
 
   return (

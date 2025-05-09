@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import TitleHeading from "./TitleHeading";
 import Link from "next/link";
 import { IoIosArrowForward } from "react-icons/io";
-import CardProduct from "../layouts/product/CardProduct";
+import CardProduct from "../product/CardProduct";
 import { useQuery } from "@tanstack/react-query";
 import { getProductsByCategory } from "@/api/products/product.api";
 import { ProductCategory } from "@/types/backend";

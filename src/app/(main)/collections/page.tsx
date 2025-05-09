@@ -1,6 +1,6 @@
 "use client";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
-import DiscountCodeRow from "@/components/ui/DiscountCodeRow";
+import DiscountCodeRow from "@/components/layouts/main/DiscountCodeRow";
 import Arrange from "@/components/layouts/collections/Arrange";
 import ProductList from "@/components/layouts/collections/ProductList";
 import Siderbar from "@/components/layouts/collections/Siderbar";

@@ -1,31 +1,50 @@
-import { axiosInstance } from "./axiosInstance";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import qs from "qs";
+import { axiosInstance } from "./axiosInstance";
+import { toast } from "react-toastify";
+
+/**
+ * Hàm xử lý lỗi tập trung, log chi tiết lỗi trả về từ API
+ */
+function handleAxiosError(
+  error: unknown,
+  url: string,
+  method: string,
+  requestData?: unknown
+): never {
+  if (axios.isAxiosError(error)) {
+    // const status = error.response?.status;
+    const responseData = error.response?.data;
+    // const responseHeaders = error.response?.headers;
+
+    if (requestData) console.error("🔸 Request Data:", requestData);
+
+    const userMessage =
+      typeof responseData === "string"
+        ? responseData
+        : responseData?.message || "Yêu cầu thất bại, vui lòng thử lại.";
+
+    toast.error(userMessage); // 👈 Thông báo người dùng
+
+    throw new Error(userMessage);
+  } else {
+    console.error("❌ Unexpected Error:", error);
+    toast.error("Đã xảy ra lỗi không xác định."); // 👈 fallback cho lỗi không xác định
+    throw new Error("Đã xảy ra lỗi không xác định.");
+  }
+}
 
 export const apiClient = {
   get: async <T>(url: string, params?: object): Promise<T> => {
     try {
-      console.log("🔍 Fetching URL:", url, params);
       const response = await axiosInstance.get<T>(url, {
         params,
         paramsSerializer: (params) =>
-          qs.stringify(params, { arrayFormat: "repeat" }), // ✅ giống Postman
+          qs.stringify(params, { arrayFormat: "repeat" }),
       });
       return response.data;
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error("API Error:", {
-          url,
-          status: error.response?.status,
-          responseData: error.response?.data,
-        });
-        throw new Error(
-          `Lỗi API: ${error.response?.data?.message || error.message}`
-        );
-      } else {
-        console.error("Unexpected Error:", error);
-        throw new Error("Có lỗi xảy ra, vui lòng thử lại.");
-      }
+      handleAxiosError(error, url, "get", params);
     }
   },
 
@@ -39,23 +58,7 @@ export const apiClient = {
       });
       return response.data;
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error("PUT request failed:", {
-          url,
-          data,
-          status: error.response?.status,
-          responseData: error.response?.data,
-        });
-        throw new Error(
-          `POST request failed: ${error.response?.status} - ${
-            error.response?.data?.message || error.message
-          }`
-        );
-      } else {
-        throw new Error(
-          `POST request failed: ${(error as AxiosError).message}`
-        );
-      }
+      handleAxiosError(error, url, "post", data);
     }
   },
 
@@ -64,34 +67,16 @@ export const apiClient = {
       const response = await axiosInstance.put<T>(url, data);
       return response.data;
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error("PUT request failed:", {
-          url,
-          data,
-          status: error.response?.status,
-          responseData: error.response?.data,
-        });
-        throw new Error(
-          `PUT request failed: ${error.response?.status} - ${
-            error.response?.data?.message || error.message
-          }`
-        );
-      } else {
-        throw new Error(`Unexpected error: ${(error as Error).message}`);
-      }
+      handleAxiosError(error, url, "put", data);
     }
   },
 
   patch: async <T>(url: string, data: object): Promise<T> => {
     try {
-      const response = await axiosInstance.patch<T>(url, data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axiosInstance.patch<T>(url, data);
       return response.data;
     } catch (error) {
-      throw new Error(`PATCH request failed: ${(error as AxiosError).message}`);
+      handleAxiosError(error, url, "patch", data);
     }
   },
 
@@ -100,9 +85,7 @@ export const apiClient = {
       const response = await axiosInstance.delete<T>(url);
       return response.data;
     } catch (error) {
-      throw new Error(
-        `DELETE request failed: ${(error as AxiosError).message}`
-      );
+      handleAxiosError(error, url, "delete");
     }
   },
 };

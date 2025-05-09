@@ -1,5 +1,5 @@
 "use client";
-import HomeMain from "@/components/ui/HomeMain";
+import HomeMain from "@/components/layouts/main/HomeMain";
 import { useCheckSession } from "@/hooks/useCheckSession";
 import { NextPage } from "next";
 

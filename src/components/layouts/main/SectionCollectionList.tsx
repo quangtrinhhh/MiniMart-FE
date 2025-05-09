@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Collenction from "./Collenction";
+import Collenction from "../../ui/Collenction";
 import { useQuery } from "@tanstack/react-query";
 import { getAllParentCategories } from "@/api/categories/category.api";
 import Link from "next/link";

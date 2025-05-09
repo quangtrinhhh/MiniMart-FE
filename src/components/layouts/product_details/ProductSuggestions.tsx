@@ -1,5 +1,5 @@
 import { useSuggestProducts } from "@/api/products/useProducts";
-import TitleHeading from "@/components/ui/TitleHeading";
+import TitleHeading from "@/components/layouts/main/TitleHeading";
 import CardProduct from "../product/CardProduct";
 
 const ProductSuggestions: React.FC = () => {
