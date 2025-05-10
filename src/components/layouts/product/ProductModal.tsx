@@ -9,13 +9,15 @@ import "swiper/css/pagination";
 import ProductGallery from "../product_details/ProductGallery";
 import BrandAndCode from "../product_details/BrandAndCode";
 import ProductVariants from "../product_details/ProductVariants";
-import { toast } from "react-toastify";
 import NumberProduct from "../product_details/NumberProduct";
 import ButtonProductDetails from "../product_details/Button";
 import PriceAndSele from "../product_details/PriceAndSele";
 import { getOnlyProduct } from "@/api/products/product.api";
 import { useQuery } from "@tanstack/react-query";
 import { useAddToCart } from "@/hooks/useCart";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 interface ProductModalProps {
   isOpen: boolean;
@@ -30,6 +32,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
   slug,
   initialProduct,
 }) => {
+  const router = useRouter();
   const { mutate: addToCart } = useAddToCart();
   const [product, setProduct] = useState<Product>(initialProduct);
   const [quantity, setQuantity] = useState<number>(1);
@@ -41,6 +44,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
     queryKey: ["product", slug],
     queryFn: () => getOnlyProduct(slug),
   });
+  const { data: session } = useSession();
 
   // Cập nhật state khi query thành công
   useEffect(() => {
@@ -62,14 +66,22 @@ const ProductModal: React.FC<ProductModalProps> = ({
       variantId: selectedVariant?.id,
     });
   };
-
+  const handleCheckOut = () => {
+    if (!session) return toast.warn("Vui lòng đăng nhập trước khi thanh toán!");
+    router.push("/checkout");
+  };
   const handleBuyNow = () => {
-    addToCart({
-      productId: product.id,
-      quantity,
-      variantId: selectedVariant?.id,
-    });
-    toast.warn("Chức năng đang được phát triền");
+    addToCart(
+      {
+        productId: product.id,
+        variantId: selectedVariant?.id ?? undefined, // Nếu sản phẩm có biến thể, truyền variantId
+        quantity,
+      },
+      {
+        onSuccess: () => handleCheckOut(),
+        onError: () => toast.error("Không thể thêm vào giỏ hàng"),
+      }
+    );
   };
 
   return (
@@ -110,11 +122,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
               />
 
               <NumberProduct
-                stock={
-                  Number(selectedVariant?.stock) != 0
-                    ? Number(product.stock)
-                    : 0
-                }
+                stock={selectedVariant?.stock ?? product.stock}
                 quantity={quantity}
                 setQuantity={setQuantity}
               />

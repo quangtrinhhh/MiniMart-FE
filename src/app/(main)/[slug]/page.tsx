@@ -1,9 +1,6 @@
 import { getOnlyProduct } from "@/api/products/product.api";
 import ProductDetail from "@/components/layouts/product_details/ProductDetail";
-// import { productQueryOptions } from "@/app/api/products/useProducts";
-// import ProductDetail from "@/components/layouts/product_details/ProductDetail";
-// import { getQueryClient } from "@/lib/react-query";
-// import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import NotFound from "@/components/ui/not-found";
 import { Metadata } from "next";
 
 type PageProps = {
@@ -15,18 +12,52 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
 
-  const productResponse = await getOnlyProduct(slug);
-  return {
-    title: `${productResponse.data.result.name} | EGA Mini Mart`,
-    description: productResponse.data.result.description,
-  };
+  try {
+    const productResponse = await getOnlyProduct(slug);
+    const product = productResponse.data.result;
+    console.log("API Response:", productResponse);
+    if (!productResponse) {
+      return {
+        title: "Product not found | EGA Mini Mart",
+        description: "The product you're looking for does not exist.",
+      };
+    }
+
+    return {
+      title: `${product.name} | EGA Mini Mart`,
+      description: product.description || "No description available",
+    };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (error) {
+    return {
+      title: "Product not found | EGA Mini Mart",
+      description: "The product you're looking for does not exist.",
+    };
+  }
 }
 
 export default async function Page({ params }: PageProps) {
   const { slug } = await params;
-  return (
-    <div>
-      <ProductDetail slug={slug} />
-    </div>
-  );
+
+  if (!slug) {
+    return <NotFound />; // Ensure this is a component call
+  }
+
+  try {
+    const productResponse = await getOnlyProduct(slug);
+    const product = productResponse.data.result;
+
+    if (!product) {
+      return <NotFound />; // Return NotFound component if product does not exist
+    }
+
+    return (
+      <div>
+        <ProductDetail slug={slug} />
+      </div>
+    );
+  } catch (error) {
+    console.log(error);
+    return <NotFound />; // Catch error if there are issues fetching the product
+  }
 }

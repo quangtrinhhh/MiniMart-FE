@@ -20,7 +20,7 @@ const AccountInfo: React.FC = () => {
         </div>
         <div className="flex gap-1 text-sm">
           <strong>Địa chỉ:</strong>
-          <span>Quảng An, Quảng Điền,TP.Huế</span>
+          <span>Chưa update</span>
         </div>
       </div>
     </div>

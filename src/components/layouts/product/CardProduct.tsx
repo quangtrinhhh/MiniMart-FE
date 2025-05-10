@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { CiShoppingBasket } from "react-icons/ci";
 import { IoEyeOutline } from "react-icons/io5";
-import { LuArrowRightLeft } from "react-icons/lu";
+// import { LuArrowRightLeft } from "react-icons/lu";
 import ProductModal from "./ProductModal";
 import ProductSoldIndicator from "../../ui/ProductSoldIndicator";
 import { useAddToCart } from "@/hooks/useCart";
@@ -93,9 +93,9 @@ const CardProduct: React.FC<ProductProps> = ({ product }) => {
           >
             <IoEyeOutline size={17} />
           </button>
-          <button className="w-9 h-9 flex items-center justify-center bg-white rounded-full border shadow hover:bg-gray-100">
+          {/* <button className="w-9 h-9 flex items-center justify-center bg-white rounded-full border shadow hover:bg-gray-100">
             <LuArrowRightLeft size={17} />
-          </button>
+          </button> */}
         </div>
       </div>
 

@@ -87,6 +87,10 @@ export const useCancelOrder = () => {
       toast.success("Đơn hàng đã được hủy thành công!");
       queryClient.invalidateQueries({ queryKey: ["orders"] }); // Gọi lại API lấy danh sách đơn hàng
     },
+    onError: (error: unknown) => {
+      console.error("❌ Lỗi khi hủy đơn hàng:", error);
+      toast.error("Hủy đơn hàng thất bại, vui lòng thử lại!");
+    },
   });
 };
 
