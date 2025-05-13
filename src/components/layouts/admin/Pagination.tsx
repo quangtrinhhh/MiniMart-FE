@@ -7,7 +7,7 @@ interface IProps {
   totalItemsProps?: number;
   setCurrent?: (value: number) => void;
 }
-
+// fix
 const Pagination: React.FC<IProps> = ({
   totalPagesProps = 1,
   totalItemsProps = 0,
