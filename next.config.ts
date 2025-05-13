@@ -30,7 +30,7 @@ const nextConfig: NextConfig = {
   webpack(config) {
     config.resolve.alias = {
       ...config.resolve.alias,
-      "@": path.resolve(__dirname, "./src/*"), // Đảm bảo alias trỏ đến thư mục src
+      "@": path.resolve(__dirname, "src"), // Đảm bảo alias trỏ đến thư mục src
     };
     return config;
   },
