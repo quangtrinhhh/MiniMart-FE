@@ -1,7 +1,7 @@
 import { Category } from "@/types/backend";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
-import Pagination from "@/components/layouts/admin/pagination";
+import Pagination from "@/components/layouts/admin/paginations";
 import { CategoryColumns } from "@/types/type";
 
 interface IProps {

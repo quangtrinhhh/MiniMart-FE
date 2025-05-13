@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/dialog";
 import { Pencil, Trash } from "lucide-react";
 import { useUsers } from "@/api/users/users.api";
-import Pagination from "@/components/layouts/admin/pagination";
+import Pagination from "@/components/layouts/admin/paginations";
 
 interface User {
   id: number;
