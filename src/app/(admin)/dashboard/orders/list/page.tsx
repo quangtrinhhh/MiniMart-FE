@@ -25,15 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+
 import {
   ChevronDown,
   ChevronUp,
@@ -54,6 +46,15 @@ import OrderActionButtons from "@/components/layouts/admin/OrderActionButtons";
 import { Order } from "@/types/backend";
 import { formatCurrency } from "@/ulils/currency";
 import Image from "next/image";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 // Status utilities
 const getStatusVariant = (
