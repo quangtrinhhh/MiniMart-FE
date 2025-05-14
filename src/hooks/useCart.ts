@@ -7,6 +7,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 // Định nghĩa types
 
@@ -57,7 +58,8 @@ export const useUpdateCartItem = () => {
 
 export const useAddToCart = () => {
   const queryClient = useQueryClient();
-
+  const router = useRouter();
+  const { status } = useSession();
   return useMutation({
     mutationFn: async ({
       productId,
@@ -68,6 +70,12 @@ export const useAddToCart = () => {
       quantity: number;
       variantId?: number;
     }) => {
+      if (status !== "authenticated") {
+        router.push("/account/login");
+        throw new AxiosError(
+          "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng."
+        );
+      }
       return addToCart(productId, quantity, variantId);
     },
     onSuccess: () => {

@@ -1,5 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { getCategories, getCategoryMenu } from "./category.api";
+import {
+  getAllParentCategories,
+  getCategories,
+  getCategoryMenu,
+} from "./category.api";
 
 export const useCategories = (
   filter: string,
@@ -21,4 +25,16 @@ export const useMenu = () => {
     staleTime: 5000,
     placeholderData: (previousData) => previousData, // Giữ dữ liệu cũ tránh flickering
   });
+};
+
+export const useAllParentCategories = () => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["category"],
+    queryFn: () => getAllParentCategories(),
+  });
+  return {
+    data: data?.data.result,
+    isLoading,
+    error,
+  };
 };

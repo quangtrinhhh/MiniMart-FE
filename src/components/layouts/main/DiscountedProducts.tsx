@@ -1,5 +1,5 @@
 import Link from "next/link";
-import CountdownTimer from "./CountdownTimer";
+import CountdownTimer from "../../ui/CountdownTimer";
 import ProductSeles from "./ProductSeles";
 
 const DiscountedProducts: React.FC = () => {

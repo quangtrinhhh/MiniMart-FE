@@ -1,16 +1,10 @@
 import Image from "next/image";
 import Collenction from "../../ui/Collenction";
-import { useQuery } from "@tanstack/react-query";
-import { getAllParentCategories } from "@/api/categories/category.api";
 import Link from "next/link";
+import { useAllParentCategories } from "@/api/categories/useCategries";
 
 const SectionCollectionList: React.FC = ({}) => {
-  const { data } = useQuery({
-    queryKey: ["category"],
-    queryFn: () => getAllParentCategories(),
-  });
-  const categoryList = data?.data.result;
-  console.log("categoryList: ", categoryList);
+  const { data: categoryList } = useAllParentCategories();
 
   return (
     <div className="w-full h-[200px] max-h-[350px] max-md:h-[300px]  relative mt-5">

@@ -1,21 +1,14 @@
 "use client";
 import { Swiper, SwiperSlide } from "swiper/react";
-import CardProduct from "../layouts/product/CardProduct";
-import { useQuery } from "@tanstack/react-query";
-import { getDiscountedProducts } from "@/api/products/product.api";
+import CardProduct from "../product/CardProduct";
 import { Product } from "@/types/backend";
+import { useDiscountedProducts } from "@/api/products/useProducts";
 // import { Pagination } from "swiper/modules";
 
 const ProductSeles: React.FC = ({}) => {
-  const { data } = useQuery({
-    queryKey: ["product"],
-    queryFn: () => getDiscountedProducts(),
-  });
-  const products: Product[] = Array.isArray(data?.data.result)
-    ? data.data.result
-    : [];
+  const { data } = useDiscountedProducts() || { data: [] };
+  const products = Array.isArray(data) ? data : [];
 
-  console.log("discounted: ", products);
   return (
     <div className="rounded-lg overflow-hidden">
       <Swiper

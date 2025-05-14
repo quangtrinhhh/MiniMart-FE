@@ -2,7 +2,7 @@ import { Category } from "@/types/backend";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
 import { CategoryColumns } from "@/types/type";
-import Pagination from "../admin/Pagination";
+import Pagination from "../admin/pagination";
 
 interface IProps {
   data: Category[];

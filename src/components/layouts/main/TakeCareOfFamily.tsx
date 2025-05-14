@@ -4,21 +4,15 @@ import TitleHeading from "./TitleHeading";
 import Link from "next/link";
 import { IoIosArrowForward } from "react-icons/io";
 import CardProduct from "../product/CardProduct";
-import { useQuery } from "@tanstack/react-query";
-import { getProductsByCategory } from "@/api/products/product.api";
+
 import { ProductCategory } from "@/types/backend";
+import { useProductsByCategory } from "@/api/products/useProducts";
 
 const TakeCareOfFamily: React.FC = () => {
-  const categoryId = 1; // ID danh mục cha
-  const { data } = useQuery({
-    queryKey: ["product", categoryId],
-    queryFn: () => getProductsByCategory(categoryId),
-  });
-
-  const productsByCategoryList: ProductCategory[] = Array.isArray(
-    data?.data.result
-  )
-    ? data?.data.result
+  const categoryId = 1;
+  const { data } = useProductsByCategory(categoryId);
+  const productsByCategoryList: ProductCategory[] = Array.isArray(data)
+    ? data
     : [];
 
   // Lấy danh sách category từ API

@@ -1,8 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import {
   findAllWithFilter,
+  getDiscountedProducts,
   getOnlyProduct,
   getProductBySlugCategory,
+  getProductsByCategory,
   getSuggestProducts,
 } from "./product.api";
 import { useMemo } from "react";
@@ -92,6 +94,18 @@ export const productQueryOptions = (slug: string) => ({
   staleTime: 1000 * 60 * 5, // 5 phút cache
 });
 
+export const useProductDetail = (slug: string) => {
+  const { data, isPending, error } = useQuery({
+    queryKey: ["product"],
+    queryFn: () => getOnlyProduct(slug),
+  });
+
+  return {
+    data, // Trả về danh sách sản phẩm gợi ý
+    isLoading: isPending,
+    error: error, // Trả về lỗi nếu có
+  };
+};
 export const useSuggestProducts = (limit: number) => {
   const { isPending, error, data } = useQuery({
     queryKey: ["suggestProducts", limit],
@@ -103,5 +117,29 @@ export const useSuggestProducts = (limit: number) => {
     data: data?.data.result || [], // Trả về danh sách sản phẩm gợi ý
     isLoading: isPending,
     error: error, // Trả về lỗi nếu có
+  };
+};
+export const useDiscountedProducts = () => {
+  const { data, isPending, error } = useQuery({
+    queryKey: ["products"],
+    queryFn: () => getDiscountedProducts(),
+  });
+
+  return {
+    data: data?.data.result || [], // Trả về danh sách sản phẩm gợi ý
+    isLoading: isPending,
+    error: error, // Trả về lỗi nếu có
+  };
+};
+
+export const useProductsByCategory = (idCategory: number) => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["products", idCategory],
+    queryFn: () => getProductsByCategory(idCategory),
+  });
+  return {
+    data: data?.data.result || [],
+    isLoading,
+    error,
   };
 };

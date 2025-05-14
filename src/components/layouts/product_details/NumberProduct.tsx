@@ -46,7 +46,7 @@ const NumberProduct: React.FC<IProps> = ({ stock, quantity, setQuantity }) => {
           onChange={handleChange}
           className="focus:outline-none w-full focus:ring-transparent text-base font-semibold text-md md:text-base cursor-default flex items-center outline-none bg-transparent border-none text-center no-arrows"
           min="1"
-          max={stock}
+          max={Number.isFinite(stock) ? stock : 999}
         />
 
         {/* Button tăng số lượng */}

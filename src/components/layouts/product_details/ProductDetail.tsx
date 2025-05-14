@@ -10,8 +10,6 @@ import ButtonProductDetails from "./Button";
 import ContentProduct from "./ContentProduct";
 import RelatedProducts from "./RelatedProducts";
 import ProductSuggestions from "./ProductSuggestions";
-import { useQuery } from "@tanstack/react-query";
-import { getOnlyProduct } from "@/api/products/product.api";
 import { Product, Variant } from "@/types/backend";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -19,6 +17,8 @@ import PriceAndSele from "./PriceAndSele";
 import { useAddToCart } from "@/hooks/useCart";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useProductDetail } from "@/api/products/useProducts";
+import { Loading } from "@/components/ui/loading";
 
 interface IProps {
   slug: string;
@@ -26,10 +26,7 @@ interface IProps {
 
 const ProductDetail: React.FC<IProps> = ({ slug }) => {
   const router = useRouter();
-  const { data, isLoading } = useQuery({
-    queryKey: ["product", slug],
-    queryFn: () => getOnlyProduct(slug),
-  });
+  const { data, isLoading } = useProductDetail(slug);
 
   const { mutate: addToCart } = useAddToCart();
   const [product, setProduct] = useState<Product | null>(null); // Khởi tạo là null
@@ -47,17 +44,17 @@ const ProductDetail: React.FC<IProps> = ({ slug }) => {
   }, [data]);
 
   if (isLoading) {
-    return <div>Đang tải...</div>;
+    return <Loading size="lg" text="Đang tải sản phẩm..." />;
   }
 
   if (!product) {
-    return <div>Sản phẩm không tồn tại</div>;
+    return <div>Không tìm thấy sản phẩm</div>;
   }
 
   const handleAddToCart = () => {
     addToCart(
       {
-        productId: product.id,
+        productId: Number(product?.id),
         variantId: selectedVariant?.id ?? undefined, // Nếu sản phẩm có biến thể, truyền variantId
         quantity,
       },
@@ -74,7 +71,7 @@ const ProductDetail: React.FC<IProps> = ({ slug }) => {
   const handleBuyNow = () => {
     addToCart(
       {
-        productId: product.id,
+        productId: Number(product?.id),
         variantId: selectedVariant?.id ?? undefined, // Nếu sản phẩm có biến thể, truyền variantId
         quantity,
       },
@@ -90,25 +87,25 @@ const ProductDetail: React.FC<IProps> = ({ slug }) => {
       <Breadcrumbs />
       <div className="max-w-7xl mx-auto p-3">
         <div className="product-detail lg:gap-x-[6.4rem] gap-x-6 grid grid-cols-1 auto-rows-min lg:grid-cols-2 relative">
-          <ProductGallery images={product.assets ?? []} />
+          <ProductGallery images={product?.assets ?? []} />
           <div>
-            <h1 className="font-semibold text-2xl">{product.name}</h1>
+            <h1 className="font-semibold text-2xl">{product?.name}</h1>
             <BrandAndCode />
             <PriceAndSele
-              price={Number(selectedVariant?.price ?? product.price)}
+              price={Number(selectedVariant?.price ?? product?.price)}
               old_price={Number(selectedVariant?.old_price)}
-              discount={product.discount ?? 0} // Đảm bảo discount không bị undefined
+              discount={product?.discount ?? 0} // Đảm bảo discount không bị undefined
             />
 
             <PromotionalGifts />
             <CouponBox />
             <ProductVariants
-              variants={product.variants ?? []} // Đảm bảo variants không undefined
+              variants={product?.variants ?? []} // Đảm bảo variants không undefined
               onSelectVariant={setSelectedVariant}
             />
 
             <NumberProduct
-              stock={selectedVariant?.stock ?? product.stock}
+              stock={Number(selectedVariant?.stock) ?? product?.stock}
               quantity={quantity}
               setQuantity={setQuantity}
             />
@@ -119,10 +116,10 @@ const ProductDetail: React.FC<IProps> = ({ slug }) => {
           </div>
         </div>
       </div>
-      <ContentProduct description={product.description ?? "Đang cập nhật"} />
+      <ContentProduct description={product?.description ?? "Đang cập nhật"} />
       <div className="bg-[#f2f6f3]">
         <div className="max-w-7xl mx-auto p-3 pt-20 pb-20">
-          <RelatedProducts productID={product.id} />
+          <RelatedProducts productID={Number(product?.id)} />
           <ProductSuggestions />
         </div>
       </div>

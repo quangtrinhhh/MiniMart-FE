@@ -1,9 +1,9 @@
 "use client";
 import { FEATURES } from "@/constants/features";
 import BannerSwiperClient from "../banner/BannerSwiperClient";
-import BenefitsRow from "../../ui/BenefitsRow";
+import BenefitsRow from "./BenefitsRow";
 import BannerGroup from "../banner/BannerGroup";
-import DiscountedProducts from "../../ui/DiscountedProducts";
+import DiscountedProducts from "./DiscountedProducts";
 import DiscountCodeRow from "./DiscountCodeRow";
 import SectionVideoRview from "./SectionVideoRview";
 import SectionCollectionList from "./SectionCollectionList";
@@ -11,7 +11,7 @@ import TakeCareOfFamily from "./TakeCareOfFamily";
 import ProductsOfInterest from "./ProductsOfInterest";
 import BannerGroupTwo from "../banner/BannerGroupTwo";
 import SectionNews from "./SectionNews";
-import BrandLogoList from "../../ui/BrandLogoList";
+import BrandLogoList from "./BrandLogoList";
 
 const HomeMain: React.FC = ({}) => {
   return (

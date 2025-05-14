@@ -15,7 +15,6 @@ export async function generateMetadata({
   try {
     const productResponse = await getOnlyProduct(slug);
     const product = productResponse.data.result;
-    console.log("API Response:", productResponse);
     if (!productResponse) {
       return {
         title: "Product not found | EGA Mini Mart",
@@ -56,8 +55,8 @@ export default async function Page({ params }: PageProps) {
         <ProductDetail slug={slug} />
       </div>
     );
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    console.log(error);
     return <NotFound />; // Catch error if there are issues fetching the product
   }
 }
