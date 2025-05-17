@@ -6,7 +6,7 @@ export const productSchema = z.object({
   category_ids: z
     .array(z.number())
     .min(1, { message: "Chọn ít nhất một danh mục" }),
-  discount: z
+  discount: z.coerce
     .number()
     .min(0, { message: "Giảm giá không thể âm" })
     .max(100, { message: "Giảm giá không thể lớn hơn 100%" }),

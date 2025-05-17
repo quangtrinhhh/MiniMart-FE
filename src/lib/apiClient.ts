@@ -71,9 +71,14 @@ export const apiClient = {
     }
   },
 
-  patch: async <T>(url: string, data: object): Promise<T> => {
+  patch: async <T>(url: string, data: object | FormData): Promise<T> => {
     try {
-      const response = await axiosInstance.patch<T>(url, data);
+      const isFormData = data instanceof FormData;
+      const response = await axiosInstance.patch<T>(url, data, {
+        headers: isFormData
+          ? { "Content-Type": "multipart/form-data" }
+          : undefined,
+      });
       return response.data;
     } catch (error) {
       handleAxiosError(error, url, "patch", data);

@@ -119,7 +119,6 @@ export const ProductColumns = [
   { key: "id", label: "Id", className: "min-w-[100px]" },
   { key: "price", label: "Price", className: "min-w-[100px]" },
   { key: "slug", label: "slug", className: "min-w-[100px]" },
-  { key: "description", label: "Description", className: "min-w-[100px]" },
   { key: "sold", label: "Sold", className: "min-w-[100px]" },
   { key: "status", label: "Status", className: "min-w-[100px]" },
   { key: "quantity", label: "quantity", className: "min-w-[100px]" },

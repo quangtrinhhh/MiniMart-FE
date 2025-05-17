@@ -30,7 +30,7 @@ const ListProductPage: React.FC = ({}) => {
           {/*  */}
           <SearchInput setFilter={(value) => setFilters({ keyword: value })} />
           {/*  */}
-          <AddButton href="/admin/products/create" />
+          <AddButton href="/dashboard/products/create" />
         </div>
 
         <TableProductList

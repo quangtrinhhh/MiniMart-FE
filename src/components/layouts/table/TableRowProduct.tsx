@@ -11,8 +11,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Edit, Eye, MoreHorizontal, Trash2 } from "lucide-react";
+import { Edit, MoreHorizontal, Trash2 } from "lucide-react";
 import Image from "next/image";
+import { formatCurrency } from "@/ulils/currency";
+import Link from "next/link";
+import { useDeleteProduct } from "@/api/products/useProducts";
 
 interface IProps {
   data: Product;
@@ -38,25 +41,6 @@ const TableRowProduct: React.FC<IProps> = ({ data, isEven }) => {
       }
     }
     return "/placeholder.svg";
-  };
-
-  // Function to format price
-  const formatPrice = (price: string) => {
-    if (!price) return "-";
-    // Try to format as currency if it's a valid number
-    try {
-      const numPrice = Number.parseFloat(price.replace(/[^\d.-]/g, ""));
-      if (!isNaN(numPrice)) {
-        return new Intl.NumberFormat("vi-VN", {
-          style: "currency",
-          currency: "VND",
-        }).format(numPrice);
-      }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (e) {
-      // If parsing fails, return the original string
-    }
-    return price;
   };
 
   // Function to truncate text
@@ -91,17 +75,12 @@ const TableRowProduct: React.FC<IProps> = ({ data, isEven }) => {
     }
   };
 
-  // Format categories
-  // const formatCategories = (categories: any[]) => {
-  //   if (!categories || categories.length === 0) return "-";
-  //   return categories.map((cat) => cat.name).join(", ");
-  // };
-
   // Format discount
   const formatDiscount = (discount: number) => {
     if (!discount && discount !== 0) return "-";
     return `${discount}%`;
   };
+  const deleteMutation = useDeleteProduct();
 
   return (
     <TableRow className={isEven ? "bg-muted/30" : ""}>
@@ -129,10 +108,10 @@ const TableRowProduct: React.FC<IProps> = ({ data, isEven }) => {
       <TableCell className="min-w-[100px]">{data.id}</TableCell>
       <TableCell className="min-w-[100px]">
         <div>
-          {formatPrice(data.price)}
-          {data.price_old && (
+          {formatCurrency(Number(data.price))}
+          {Number(data.price_old) > 0 && (
             <div className="text-xs text-muted-foreground line-through">
-              {formatPrice(data.price_old)}
+              {formatCurrency(Number(data.price_old))}
             </div>
           )}
         </div>
@@ -140,9 +119,7 @@ const TableRowProduct: React.FC<IProps> = ({ data, isEven }) => {
       <TableCell className="min-w-[100px]">
         {truncateText(data.slug || "", 15)}
       </TableCell>
-      <TableCell className="min-w-[100px]">
-        {truncateText(data.description || "", 20)}
-      </TableCell>
+
       <TableCell className="min-w-[100px]">{data.sold || 0}</TableCell>
       <TableCell className="min-w-[100px]">
         {getStatusBadge(data.status)}
@@ -174,15 +151,19 @@ const TableRowProduct: React.FC<IProps> = ({ data, isEven }) => {
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <Eye className="mr-2 h-4 w-4" />
-                View details
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Edit className="mr-2 h-4 w-4" />
-                Edit product
+                <Link
+                  href={`/dashboard/products/edit/${data.slug}`}
+                  className="flex items-center"
+                >
+                  <Edit className="mr-2 h-4 w-4" />
+                  Edit product
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-destructive">
+              <DropdownMenuItem
+                className="text-destructive"
+                onClick={() => deleteMutation.mutate(data.id)}
+              >
                 <Trash2 className="mr-2 h-4 w-4" />
                 Delete product
               </DropdownMenuItem>

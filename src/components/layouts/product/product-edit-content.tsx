@@ -1,191 +1,135 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
-import { Trash2, Plus, Loader2 } from "lucide-react";
+import type React from "react";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
+import { type ProductFormData, productSchema } from "@/types/productSchema";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useProductDetail, useUpdateProduct } from "@/api/products/useProducts";
+import { Assets, Attributes, Category, Variant } from "@/types/backend";
+import ProductAttributeCard from "./ProductAttributeCard";
+import { ProductVariantsCard } from "./ProductVariantsCard";
+import { ProductImagesCard } from "./ProductImagesCard";
+import { BasicProductInfoCard } from "./BasicProductInfoCard";
 
-// Define types for our mock data
 interface ProductEditContentProps {
   slug: string;
 }
 
-// Mock data for the product
-const mockProduct = {
-  id: 23,
-  name: "Túi Nước Giặt Xả MaxKleen Thiên Nhiên Vườn hoa thanh khiết 3.6kg",
-  price: "15000.00",
-  slug: "tui-nuoc-giat-xa-maxkleen-thien-nhien-vuon-hoa-thanh-khiet-3.6kg",
-  description:
-    "Vườn hoa thanh khiết\n\nMaxKleen là sản phẩm tiên phong trong công nghệ kết hợp Giặt & Xả 2 trong 1, giúp tiết kiệm chi phí, thời gian và công sức cho người tiêu dùng.\nVới công nghệ đột phá Enzyme Kép đột phá với 100% thành phần làm sạch nguồn gốc thiên nhiên & chiết xuất tơ tằm, giúp giặt mạnh mẻ & xả dịu êm mà vô cùng an toàn cho da, dịu nhẹ với vải và thân thiện với môi trường.",
-  discount: "13",
-  stock: 905,
-  sold: 157,
-  status: true,
-  featured: false,
-  categories: [
-    {
-      id: 1,
-      name: "Chăm sóc gia đình",
-      slug: "cham-soc-gia-dinh",
-      image: "https://i.imgur.com/VcB8bKM.jpeg",
-    },
-    {
-      id: 6,
-      name: "Nước lâu sàn",
-      slug: "nuoc-lau-san",
-      image: "https://i.imgur.com/XANaMxH.jpeg",
-    },
-  ],
-  assets: [
-    {
-      id: 49,
-      asset: {
-        id: 59,
-        path: "https://i.imgur.com/XANaMxH.jpeg",
-      },
-    },
-    {
-      id: 50,
-      asset: {
-        id: 60,
-        path: "https://i.imgur.com/XANaMxH.jpeg",
-      },
-    },
-    {
-      id: 51,
-      asset: {
-        id: 61,
-        path: "https://i.imgur.com/XANaMxH.jpeg",
-      },
-    },
-  ],
-  variants: [
-    {
-      id: 21,
-      name: "2L",
-      price: "167000.00",
-      old_price: "182000.00",
-      SKU: "2L-01-0023-00",
-    },
-    {
-      id: 22,
-      name: "3L",
-      price: "202000.00",
-      old_price: "230000.00",
-      SKU: "3L-01-0023-00",
-    },
-  ],
-  attributes: [
-    {
-      name: "Xuất xứ",
-      value: "Việt Nam",
-    },
-    {
-      name: "Thương hiệu",
-      value: "Peace Mass",
-    },
-    {
-      name: "Hạn bảo hành",
-      value: "Không bảo hành",
-    },
-  ],
-};
-
-// Define the form schema with Zod
-const productFormSchema = z.object({
-  name: z.string().min(3, { message: "Tên sản phẩm phải có ít nhất 3 ký tự" }),
-  price: z.string().min(1, { message: "Giá không được để trống" }),
-  description: z
-    .string()
-    .min(10, { message: "Mô tả phải có ít nhất 10 ký tự" }),
-  discount: z.string().optional(),
-  stock: z.coerce.number().min(0, { message: "Số lượng không được âm" }),
-  status: z.boolean().default(true),
-  featured: z.boolean().default(false),
-  categoryIds: z
-    .array(z.number())
-    .min(1, { message: "Phải chọn ít nhất 1 danh mục" }),
-  variants: z.array(
-    z.object({
-      id: z.number().optional(),
-      name: z.string().min(1, { message: "Tên biến thể không được để trống" }),
-      price: z.string().min(1, { message: "Giá không được để trống" }),
-      old_price: z.string().optional(),
-      SKU: z.string().optional(),
-    })
-  ),
-  attributes: z.array(
-    z.object({
-      name: z
-        .string()
-        .min(1, { message: "Tên thuộc tính không được để trống" }),
-      value: z.string().min(1, { message: "Giá trị không được để trống" }),
-    })
-  ),
-});
-
-type ProductFormValues = z.infer<typeof productFormSchema>;
-
 export function ProductEditContent({ slug }: ProductEditContentProps) {
-  const [isSaving, setIsSaving] = useState(false);
-  console.log(slug, "slug");
+  const router = useRouter();
+  const { data, isLoading } = useProductDetail(slug);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedImages, setSelectedImages] = useState<
+    { id: number; path: string }[]
+  >([]);
+  const [deletedImageIds, setDeletedImageIds] = useState<number[]>([]);
+  const [newImages, setNewImages] = useState<File[]>([]);
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
 
-  // Initialize form with mock product data
-  const form = useForm<ProductFormValues>({
-    resolver: zodResolver(productFormSchema),
+  // Khởi tạo form với React Hook Form và Zod
+  const form = useForm<ProductFormData>({
+    resolver: zodResolver(productSchema),
     defaultValues: {
-      name: mockProduct.name,
-      price: mockProduct.price,
-      description: mockProduct.description,
-      discount: mockProduct.discount,
-      stock: mockProduct.stock,
-      status: mockProduct.status,
-      featured: mockProduct.featured,
-      categoryIds: mockProduct.categories.map((cat) => cat.id),
-      variants: mockProduct.variants,
-      attributes: mockProduct.attributes,
+      name: "",
+      category_ids: [],
+      discount: 0,
+      stock: 0,
+      description: "",
+      price: 0,
+      price_old: 0,
+      attributes: [],
+      variants: [],
     },
   });
 
-  // Handle form submission (just for UI demonstration)
-  function onSubmit(values: ProductFormValues) {
-    setIsSaving(true);
+  // Cập nhật form khi dữ liệu từ API được tải
+  useEffect(() => {
+    if (data && !isLoading) {
+      try {
+        const product = data.data.result;
 
-    // Simulate API call
-    setTimeout(() => {
-      console.log("Form values:", values);
-      setIsSaving(false);
-    }, 1500);
-  }
+        // Cập nhật danh mục
+        setCategories(product.categories);
 
-  // Add new variant
+        // Cập nhật giá trị mặc định cho form
+        form.reset({
+          name: product.name,
+          category_ids: product.categories.map((cat: Category) => cat.id),
+          discount: product.discount,
+          stock: product.stock,
+          description: product.description,
+          price: Number.parseFloat(product.price),
+          price_old: Number.parseFloat(product.price_old),
+          attributes: product.attributes.map((attributes: Attributes) => ({
+            name: attributes.name,
+            value: attributes.value,
+          })), // Nếu có thuộc tính, bạn sẽ cần chuyển đổi định dạng
+          variants: product.variants.map((variant: Variant) => ({
+            name: variant.name,
+            price: Number.parseFloat(variant.price),
+            old_price: Number.parseFloat(variant.old_price),
+            stock: variant.stock,
+          })),
+        });
+
+        // Cập nhật hình ảnh đã chọn
+        setSelectedImages(
+          product.assets.map((item: Assets) => ({
+            id: item.asset.id,
+            path: item.asset.path,
+          }))
+        );
+      } catch (error) {
+        console.error("Lỗi khi xử lý dữ liệu sản phẩm:", error);
+      }
+    }
+  }, [data, isLoading, form]);
+
+  // Xử lý khi người dùng chọn hình ảnh mới
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const filesArray = Array.from(e.target.files);
+      setNewImages((prev) => [...prev, ...filesArray]);
+
+      // Tạo URL xem trước cho hình ảnh mới
+      const newPreviewUrls = filesArray.map((file) =>
+        URL.createObjectURL(file)
+      );
+      setPreviewUrls((prev) => [...prev, ...newPreviewUrls]);
+    }
+  };
+
+  // Xóa hình ảnh đã chọn
+  const removeSelectedImage = (id: number) => {
+    setDeletedImageIds((prev) => [...prev, id]);
+    setSelectedImages((prev) => prev.filter((img) => img.id !== id));
+  };
+
+  // Xóa hình ảnh mới
+  const removeNewImage = (index: number) => {
+    setNewImages((prev) => prev.filter((_, i) => i !== index));
+
+    // Giải phóng URL xem trước
+    URL.revokeObjectURL(previewUrls[index]);
+    setPreviewUrls((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // Thêm biến thể mới
   const addVariant = () => {
     const currentVariants = form.getValues("variants") || [];
     form.setValue("variants", [
       ...currentVariants,
-      { name: "", price: "", old_price: "", SKU: "" },
+      { name: "", price: 0, old_price: 0, stock: 0 },
     ]);
   };
 
-  // Remove variant
+  // Xóa biến thể
   const removeVariant = (index: number) => {
     const currentVariants = form.getValues("variants") || [];
     form.setValue(
@@ -194,7 +138,7 @@ export function ProductEditContent({ slug }: ProductEditContentProps) {
     );
   };
 
-  // Add new attribute
+  // Thêm thuộc tính mới
   const addAttribute = () => {
     const currentAttributes = form.getValues("attributes") || [];
     form.setValue("attributes", [
@@ -203,7 +147,7 @@ export function ProductEditContent({ slug }: ProductEditContentProps) {
     ]);
   };
 
-  // Remove attribute
+  // Xóa thuộc tính
   const removeAttribute = (index: number) => {
     const currentAttributes = form.getValues("attributes") || [];
     form.setValue(
@@ -211,391 +155,146 @@ export function ProductEditContent({ slug }: ProductEditContentProps) {
       currentAttributes.filter((_, i) => i !== index)
     );
   };
+  const updateMutation = useUpdateProduct();
+  // Xử lý khi người dùng gửi form
+  const onSubmit = async (formData: ProductFormData) => {
+    try {
+      const formDataObj = new FormData();
+
+      // Trường đơn giản
+      formDataObj.append("name", formData.name);
+      formDataObj.append("price", formData.price.toString());
+      formDataObj.append("price_old", (formData.price_old || 0).toString());
+      formDataObj.append("discount", formData.discount.toString());
+      formDataObj.append("stock", formData.stock.toString());
+      formDataObj.append("description", formData.description || "");
+
+      // Mảng category_ids
+      formData.category_ids.forEach((id: number) => {
+        formDataObj.append("productCategories[]", id.toString());
+      });
+
+      // Mảng variants
+      formData.variants?.forEach((variant, i) => {
+        formDataObj.append(`variants[${i}][name]`, variant.name);
+        formDataObj.append(`variants[${i}][price]`, variant.price.toString());
+        formDataObj.append(
+          `variants[${i}][old_price]`,
+          (variant.old_price || 0).toString()
+        );
+        formDataObj.append(`variants[${i}][stock]`, variant.stock.toString());
+      });
+
+      // Mảng attributes
+      formData.attributes?.forEach((attr, i) => {
+        formDataObj.append(`attributes[${i}][name]`, attr.name);
+        formDataObj.append(`attributes[${i}][value]`, attr.value);
+      });
+
+      newImages.forEach((file) => formDataObj.append("images", file));
+
+      deletedImageIds.forEach((file) => {
+        formDataObj.append("deletedImageIds[]", file.toString());
+      });
+
+      for (const pair of formDataObj.entries()) {
+        console.log(pair[0], pair[1]);
+      }
+
+      // Gọi mutation
+      updateMutation.mutate({
+        id: Number(data?.data.result.id),
+        data: formDataObj,
+      });
+    } catch (err) {
+      console.error("Lỗi khi cập nhật sản phẩm:", err);
+    }
+  };
+
+  if (isLoading || !data) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        <span className="ml-2">Đang tải...</span>
+      </div>
+    );
+  }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <div className="grid gap-6 md:grid-cols-2">
-          {/* Basic Information */}
-          <Card>
-            <CardContent className="pt-6">
-              <div className="space-y-4">
-                <h2 className="text-xl font-semibold">Thông tin cơ bản</h2>
+    <div className="container mx-auto py-8">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-bold">Chỉnh sửa sản phẩm</h1>
+        <Button
+          variant="outline"
+          onClick={() => router.push("/dashboard/products/list")}
+        >
+          Quay lại
+        </Button>
+      </div>
 
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Tên sản phẩm</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Nhập tên sản phẩm" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <Tabs defaultValue="basic" className="w-full">
+            <TabsList className="grid w-full grid-cols-4 bg-white">
+              <TabsTrigger value="basic">Thông tin cơ bản</TabsTrigger>
+              <TabsTrigger value="images">Hình ảnh</TabsTrigger>
+              <TabsTrigger value="variants">Biến thể</TabsTrigger>
+              <TabsTrigger value="attributes">Thuộc tính</TabsTrigger>
+            </TabsList>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="price"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Giá (VND)</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Nhập giá" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+            {/* Tab thông tin cơ bản */}
+            <TabsContent value="basic" className="space-y-6">
+              <BasicProductInfoCard form={form} categories={categories} />;
+            </TabsContent>
 
-                  <FormField
-                    control={form.control}
-                    name="discount"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Giảm giá (%)</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Nhập % giảm giá" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <FormField
-                  control={form.control}
-                  name="stock"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Số lượng trong kho</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          placeholder="Nhập số lượng"
-                          {...field}
-                          onChange={(e) =>
-                            field.onChange(Number.parseInt(e.target.value))
-                          }
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <div className="flex space-x-4">
-                  <FormField
-                    control={form.control}
-                    name="status"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <div className="space-y-1 leading-none">
-                          <FormLabel>Hiển thị sản phẩm</FormLabel>
-                          <FormDescription>
-                            Sản phẩm sẽ được hiển thị trên trang web
-                          </FormDescription>
-                        </div>
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="featured"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <div className="space-y-1 leading-none">
-                          <FormLabel>Sản phẩm nổi bật</FormLabel>
-                          <FormDescription>
-                            Sản phẩm sẽ được hiển thị ở mục nổi bật
-                          </FormDescription>
-                        </div>
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Images */}
-          <Card>
-            <CardContent className="pt-6">
-              <div className="space-y-4">
-                <h2 className="text-xl font-semibold">Hình ảnh sản phẩm</h2>
-
-                <div className="grid grid-cols-3 gap-4">
-                  {mockProduct.assets.map((asset) => (
-                    <div key={asset.id} className="relative group">
-                      <Image
-                        src={asset.asset.path || "/placeholder.svg"}
-                        alt="Product image"
-                        width={200}
-                        height={200}
-                        className="rounded-md object-cover w-full aspect-square"
-                      />
-                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-md">
-                        <Button variant="destructive" size="sm">
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                  <div className="border-2 border-dashed border-muted-foreground/20 rounded-md flex items-center justify-center aspect-square cursor-pointer hover:bg-muted/50 transition-colors">
-                    <div className="flex flex-col items-center gap-1 text-muted-foreground">
-                      <Plus className="h-8 w-8" />
-                      <span className="text-xs">Thêm ảnh</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Description */}
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Mô tả sản phẩm</h2>
-
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Nhập mô tả chi tiết về sản phẩm"
-                        className="min-h-[200px]"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+            {/* Tab hình ảnh */}
+            <TabsContent value="images" className="space-y-6">
+              <ProductImagesCard
+                selectedImages={selectedImages}
+                previewUrls={previewUrls}
+                handleImageChange={handleImageChange}
+                removeSelectedImage={removeSelectedImage}
+                removeNewImage={removeNewImage}
               />
-            </div>
-          </CardContent>
-        </Card>
+            </TabsContent>
 
-        {/* Categories */}
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Danh mục</h2>
+            {/* Tab biến thể */}
+            <TabsContent value="variants" className="space-y-6">
+              <ProductVariantsCard
+                form={form}
+                addVariant={addVariant}
+                removeVariant={removeVariant}
+              />
+            </TabsContent>
 
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {mockProduct.categories.map((category) => (
-                  <FormField
-                    key={category.id}
-                    control={form.control}
-                    name="categoryIds"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value?.includes(category.id)}
-                            onCheckedChange={(checked) => {
-                              const currentValues = field.value || [];
-                              if (checked) {
-                                field.onChange([...currentValues, category.id]);
-                              } else {
-                                field.onChange(
-                                  currentValues.filter(
-                                    (value) => value !== category.id
-                                  )
-                                );
-                              }
-                            }}
-                          />
-                        </FormControl>
-                        <div className="space-y-1 leading-none">
-                          <FormLabel>{category.name}</FormLabel>
-                        </div>
-                      </FormItem>
-                    )}
-                  />
-                ))}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            {/* Tab thuộc tính */}
+            <TabsContent value="attributes" className="space-y-6">
+              <ProductAttributeCard
+                form={form}
+                addAttribute={addAttribute}
+                removeAttribute={removeAttribute}
+              />
+            </TabsContent>
+          </Tabs>
 
-        {/* Variants */}
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold">Biến thể sản phẩm</h2>
-                <Button type="button" variant="outline" onClick={addVariant}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Thêm biến thể
-                </Button>
-              </div>
-
-              {form.watch("variants")?.map((_, index) => (
-                <div
-                  key={index}
-                  className="grid grid-cols-5 gap-4 items-end border-b pb-4"
-                >
-                  <FormField
-                    control={form.control}
-                    name={`variants.${index}.name`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Tên biến thể</FormLabel>
-                        <FormControl>
-                          <Input placeholder="VD: 2L" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name={`variants.${index}.price`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Giá</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Nhập giá" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name={`variants.${index}.old_price`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Giá cũ</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Nhập giá cũ" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name={`variants.${index}.SKU`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>SKU</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Nhập SKU" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    size="icon"
-                    onClick={() => removeVariant(index)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Attributes */}
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold">Thuộc tính sản phẩm</h2>
-                <Button type="button" variant="outline" onClick={addAttribute}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Thêm thuộc tính
-                </Button>
-              </div>
-
-              {form.watch("attributes")?.map((_, index) => (
-                <div
-                  key={index}
-                  className="grid grid-cols-3 gap-4 items-end border-b pb-4"
-                >
-                  <FormField
-                    control={form.control}
-                    name={`attributes.${index}.name`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Tên thuộc tính</FormLabel>
-                        <FormControl>
-                          <Input placeholder="VD: Xuất xứ" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name={`attributes.${index}.value`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Giá trị</FormLabel>
-                        <FormControl>
-                          <Input placeholder="VD: Việt Nam" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    size="icon"
-                    onClick={() => removeAttribute(index)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Submit Button */}
-        <div className="flex justify-end">
-          <Button
-            type="submit"
-            disabled={isSaving}
-            className="w-full md:w-auto"
-          >
-            {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Lưu thay đổi
-          </Button>
-        </div>
-      </form>
-    </Form>
+          <div className="flex justify-end space-x-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => router.push("/dashboard/products/list")}
+              disabled={isLoading}
+            >
+              Hủy
+            </Button>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading && (
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+              )}
+              Lưu thay đổi
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </div>
   );
 }

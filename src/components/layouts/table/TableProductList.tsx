@@ -85,17 +85,6 @@ const TableProductList: React.FC<IProps> = ({
     }
   };
 
-  // const handlePageSizeChange = (value: string) => {
-  //   if (setPageSize) {
-  //     setPageSize(Number(value));
-  //     if (setCurrent) {
-  //       setCurrent(1);
-  //     }
-  //     setCurrentPage(1);
-  //   }
-  // };
-
-  // Generate pagination items
   const renderPaginationItems = () => {
     const items = [];
     const maxVisiblePages = 5;
@@ -129,7 +118,7 @@ const TableProductList: React.FC<IProps> = ({
 
   return (
     <Card className="mt-5 w-full mb-2 ">
-      <CardContent>
+      <CardContent className="p-0">
         <div className="w-full overflow-x-auto ">
           <Table>
             <TableHeader>

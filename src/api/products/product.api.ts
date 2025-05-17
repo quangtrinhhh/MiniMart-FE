@@ -116,3 +116,10 @@ export const getSuggestProducts = async (limit: number) => {
     `/api/v1/products/suggestions?limit=${limit}`
   );
 };
+
+export const updateProduct = async (id: number, productData: FormData) => {
+  return apiClient.patch<ProductResponse>(
+    `/api/v1/products/${id}`,
+    productData
+  );
+};

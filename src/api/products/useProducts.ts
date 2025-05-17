@@ -1,13 +1,16 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  deleteProduct,
   findAllWithFilter,
   getDiscountedProducts,
   getOnlyProduct,
   getProductBySlugCategory,
   getProductsByCategory,
   getSuggestProducts,
+  updateProduct,
 } from "./product.api";
 import { useMemo } from "react";
+import { toast } from "react-toastify";
 
 export const useProductBySlugCategory = (
   slug: string,
@@ -142,4 +145,40 @@ export const useProductsByCategory = (idCategory: number) => {
     isLoading,
     error,
   };
+};
+
+export const useDeleteProduct = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: number) => deleteProduct(id),
+    onSuccess: () => {
+      // Invalidate cache hoặc cập nhật lại danh sách sản phẩm
+      queryClient.invalidateQueries({
+        queryKey: ["findAllWithFilter"],
+      });
+      toast.success("Xóa sản phẩm thành công");
+    },
+    onError: (error) => {
+      toast.error(`Lỗi khi xóa sản phẩm: ${error.message}`);
+    },
+  });
+};
+
+export const useUpdateProduct = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: number; data: FormData }) =>
+      updateProduct(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["products", "findAllWithFilter"],
+      });
+      toast.success("Cập nhật sản phẩm thành công");
+    },
+    onError: (error) => {
+      toast.error(`Lỗi khi cập nhật sản phẩm: ${error.message}`);
+    },
+  });
 };
