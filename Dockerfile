@@ -1,21 +1,14 @@
-# Chọn image Node chính thức
-FROM node:18-alpine
-
-# Đặt thư mục làm việc trong container
+FROM node:18-alpine AS builder
 WORKDIR /app
-
-# Copy package.json và cài dependencies
-COPY package*.json ./
-RUN npm install --legacy-peer-deps
-
-# Copy toàn bộ mã nguồn vào container
-COPY . .
-
-# Build ứng dụng (nếu cần, ví dụ Next.js hoặc NestJS)
+COPY frontend/package*.json ./
+RUN npm install
+COPY frontend/ .
 RUN npm run build
 
-# Expose cổng ứng dụng (tùy theo dự án của bạn)
-EXPOSE 3000
-
-# Command để chạy app
+FROM node:18-alpine
+WORKDIR /app
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY frontend/package*.json ./
+RUN npm install --only=production
 CMD ["npm", "start"]

@@ -2,7 +2,7 @@ import { ProductEditContent } from "@/components/layouts/product/product-edit-co
 import NotFound from "@/components/ui/not-found";
 
 type PageProps = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
 export default async function Page({ params }: PageProps) {

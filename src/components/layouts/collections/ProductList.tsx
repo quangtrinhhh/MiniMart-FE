@@ -1,6 +1,6 @@
 import CardProduct from "@/components/layouts/product/CardProduct";
 import { Product } from "@/types/backend";
-import Pagination from "../admin/Pagination";
+import Pagination from "../admin/pagination";
 
 interface IProps {
   dataList?: Product[];
