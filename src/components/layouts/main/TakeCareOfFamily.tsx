@@ -19,6 +19,7 @@ const TakeCareOfFamily: React.FC = () => {
   const categoryTabs = productsByCategoryList.map(
     (category) => category.categoryName
   );
+  console.log("productsByCategoryList", data);
 
   // State lưu tab đang chọn, mặc định lấy tab đầu tiên (nếu có dữ liệu)
   const [selectedTab, setSelectedTab] = useState<string>("");
@@ -56,13 +57,13 @@ const TakeCareOfFamily: React.FC = () => {
           {productsByCategoryList
             .find((category) => category.categoryName === selectedTab)
             ?.products.map((product, index) => (
-              <CardProduct key={index} product={product.product} />
+              <CardProduct key={index} product={product} />
             ))}
         </div>
       </div>
 
       <Link
-        href="/"
+        href="/collections"
         className="bg-white w-full text-center py-2 mt-5 rounded-md flex justify-center items-center gap-1 text-[#016735]"
       >
         Xem tất cả

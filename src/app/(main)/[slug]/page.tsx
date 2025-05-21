@@ -39,17 +39,10 @@ export default async function Page({ params }: PageProps) {
   const { slug } = await params;
 
   if (!slug) {
-    return <NotFound />; // Ensure this is a component call
+    return <NotFound />;
   }
 
   try {
-    const productResponse = await getOnlyProduct(slug);
-    const product = productResponse.data.result;
-
-    if (!product) {
-      return <NotFound />; // Return NotFound component if product does not exist
-    }
-
     return (
       <div>
         <ProductDetail slug={slug} />

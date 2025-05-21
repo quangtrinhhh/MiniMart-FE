@@ -57,7 +57,7 @@ const ProductsOfInterest: React.FC = () => {
           {productsByCategoryList
             .find((category) => category.categoryName === selectedTab)
             ?.products.map((product, index) => (
-              <CardProduct key={index} product={product.product} />
+              <CardProduct key={index} product={product} />
             ))}
         </div>
       </div>

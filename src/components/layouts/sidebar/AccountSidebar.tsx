@@ -1,6 +1,7 @@
 "use client";
 
-import { signOut, useSession } from "next-auth/react";
+import { useUsers } from "@/api/users/useUsers";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 
 interface AccountSidebarProps {
@@ -12,13 +13,16 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({
   activeSection,
   setActiveSection,
 }) => {
-  const { data: session } = useSession();
-
+  const { user } = useUsers();
   return (
     <div className="lg:border-r border-neutral-300 pr-6">
       <h5 className="text-lg font-semibold text-secondary">Trang tài khoản</h5>
       <p className="text-gray-600">
-        Xin chào, <span className="font-semibold">{session?.user.name}</span>!
+        Xin chào,{" "}
+        <span className="font-semibold">
+          {user?.first_name + " " + user?.last_name}
+        </span>
+        !
       </p>
       <ul className="space-y-3 mt-5 list-disc pl-4 text-sm">
         {[
@@ -42,8 +46,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({
         ))}
 
         {/* Xử lý riêng cho Đăng xuất */}
-        {(session?.user.role === "ADMIN" ||
-          session?.user.role === "MANAGER") && (
+        {(user?.role === "ADMIN" || user?.role === "MANAGER") && (
           <li>
             <Link
               href="/dashboard"

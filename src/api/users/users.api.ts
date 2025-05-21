@@ -1,5 +1,5 @@
 import { apiClient } from "@/lib/apiClient";
-import { User } from "@/types/backend";
+import { APIResponse, User } from "@/types/backend";
 import { useQuery } from "@tanstack/react-query";
 
 export const getUsers = async (
@@ -26,4 +26,8 @@ export const useUsers = (search: string, current: number, pageSize: number) => {
     isLoading,
     isError,
   };
+};
+
+export const getUser = async () => {
+  return apiClient.get<APIResponse<User>>(`/api/v1/users/profile`);
 };

@@ -162,12 +162,9 @@ interface CartItem {
 interface ProductCategory {
   categoryId: number;
   categoryName: string;
-  products: ProductTwo[];
+  products: Product[];
 }
-interface ProductTwo {
-  id: number;
-  product: Product;
-}
+
 interface OrderItem {
   id: number;
   name: string;

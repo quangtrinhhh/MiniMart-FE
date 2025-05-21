@@ -24,8 +24,12 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "i.imgur.com",
       },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
     ],
-    domains: ["fonts.googleapis.com"],
+    domains: ["fonts.googleapis.com", "res.cloudinary.com"],
   },
   webpack(config) {
     config.resolve.alias = {
