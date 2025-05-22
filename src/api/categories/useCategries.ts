@@ -5,14 +5,10 @@ import {
   getCategoryMenu,
 } from "./category.api";
 
-export const useCategories = (
-  filter: string,
-  current: number,
-  pageSize: number
-) => {
+export const useCategories = (current: number, pageSize: number) => {
   return useQuery({
-    queryKey: ["categories", filter, current, pageSize],
-    queryFn: () => getCategories(filter, current, pageSize),
+    queryKey: ["categories", current, pageSize],
+    queryFn: () => getCategories(current, pageSize),
     staleTime: 5000,
     placeholderData: (previousData) => previousData, // Giữ dữ liệu cũ tránh flickering
   });
@@ -34,6 +30,18 @@ export const useAllParentCategories = () => {
   });
   return {
     data: data?.data.result,
+    isLoading,
+    error,
+  };
+};
+
+export const useCategory = (id: number) => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["category", id],
+    queryFn: () => getCategories(id, 1),
+  });
+  return {
+    data: data?.data,
     isLoading,
     error,
   };

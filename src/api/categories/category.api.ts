@@ -11,12 +11,8 @@ interface CategoryResponse {
 /**
  * 🟢 Lấy danh sách danh mục
  */
-export const getCategories = async (
-  search: string,
-  current: number,
-  pageSize: number
-) =>
-  apiClient.get<CategoryResponse>(`/api/v1/category`, {
+export const getCategories = async (current: number, pageSize: number) =>
+  apiClient.get<IModelPaginate<Category>>(`/api/v1/category`, {
     current,
     pageSize,
   });

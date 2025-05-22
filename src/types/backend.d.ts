@@ -47,7 +47,7 @@ declare global {
       pages: number;
       total: number;
     };
-    result: T[];
+    data: T[];
   }
   interface ILogin {
     user: {
@@ -191,4 +191,18 @@ interface Order {
   consignee_name: string;
   created_at: Data;
   orderItems: OrderItem[];
+}
+
+interface CouponFormValues {
+  id: number;
+  coupon_code: string;
+  coupon_type: CouponType;
+  coupon_value: number;
+  coupon_start_date: string;
+  coupon_end_date: string;
+  coupon_min_spend: number;
+  coupon_max_spend: number;
+  coupon_uses_per_customer: number;
+  coupon_uses_per_coupon: number;
+  coupon_status: CouponStatus;
 }

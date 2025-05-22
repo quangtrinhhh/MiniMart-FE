@@ -12,34 +12,20 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Card, CardContent } from "@/components/ui/card";
-
-interface Coupon {
-  id: number;
-  code: string;
-  type: string;
-  value: number;
-  status: string;
-  startDate: string;
-  endDate: string;
-}
-
-const fakeCoupons: Coupon[] = Array.from({ length: 30 }, (_, i) => ({
-  id: i + 1,
-  code: `COUPON${i + 1}`,
-  type: i % 2 === 0 ? "Fixed Discount" : "Percentage Discount",
-  value: ((i % 5) + 1) * 10,
-  status: i % 3 === 0 ? "Active" : "Expired",
-  startDate: "2025-04-01",
-  endDate: "2025-04-30",
-}));
+import { CouponFormValues } from "@/types/backend";
+import { useDeleteCoupon, useGetAllCoupons } from "@/api/coupons/useCoupon";
+import Link from "next/link";
+import { formatCurrency } from "@/ulils/currency";
 
 const ListCouponPage = () => {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
-
-  const filteredCoupons = fakeCoupons.filter((coupon) =>
-    coupon.code.toLowerCase().includes(search.toLowerCase())
+  const { data } = useGetAllCoupons(currentPage, itemsPerPage);
+  const { mutate: deleteCoupon } = useDeleteCoupon();
+  const filteredCoupons = (data?.data ?? []).filter(
+    (coupon: CouponFormValues) =>
+      coupon.coupon_code.toLowerCase().includes(search.toLowerCase())
   );
 
   const totalPages = Math.ceil(filteredCoupons.length / itemsPerPage);
@@ -47,6 +33,9 @@ const ListCouponPage = () => {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+  const onDeleteCoupon = (id: number) => {
+    deleteCoupon(id);
+  };
 
   return (
     <Card>
@@ -77,15 +66,21 @@ const ListCouponPage = () => {
             {displayedCoupons.map((coupon) => (
               <TableRow key={coupon.id}>
                 <TableCell>{coupon.id}</TableCell>
-                <TableCell>{coupon.code}</TableCell>
-                <TableCell>{coupon.type}</TableCell>
-                <TableCell>{coupon.value}</TableCell>
-                <TableCell>{coupon.status}</TableCell>
-                <TableCell>{coupon.startDate}</TableCell>
-                <TableCell>{coupon.endDate}</TableCell>
+                <TableCell>{coupon.coupon_code}</TableCell>
+                <TableCell>{coupon.coupon_type}</TableCell>
+                <TableCell>{formatCurrency(coupon.coupon_value)}</TableCell>
+                <TableCell>{coupon.coupon_status}</TableCell>
+                <TableCell>{coupon.coupon_start_date}</TableCell>
+                <TableCell>{coupon.coupon_end_date}</TableCell>
                 <TableCell>
-                  <Button variant="outline">Sửa</Button>
-                  <Button variant="destructive" className="ml-2">
+                  <Link href={`/dashboard/coupon/edit/${coupon.id}`}>
+                    <Button variant="outline">Sửa</Button>
+                  </Link>
+                  <Button
+                    variant="destructive"
+                    className="ml-2"
+                    onClick={() => onDeleteCoupon(coupon.id)}
+                  >
                     Xóa
                   </Button>
                 </TableCell>
